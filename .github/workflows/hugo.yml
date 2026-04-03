@@ -1,5 +1,8 @@
 name: Deploy Hugo site to GitHub Pages
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches:
@@ -16,7 +19,7 @@ jobs:
       HUGO_VERSION: 0.134.3
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
 
