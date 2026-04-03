@@ -1,8 +1,5 @@
 name: Deploy Hugo site to GitHub Pages
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 on:
   push:
     branches:
@@ -23,19 +20,41 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: ${{ env.HUGO_VERSION }}
-          extended: true
+      - name: Install Hugo
+        run: |
+          set -euo pipefail
+          curl -fsSL -o hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          tar -xzf hugo.tar.gz hugo
+          sudo mv hugo /usr/local/bin/hugo
+          hugo version
 
       - name: Build with Hugo
         run: hugo --gc --minify
 
       - name: Deploy to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          publish_branch: gh-pages
-          force_orphan: true
+        run: |
+          set -euo pipefail
+          if [ -z "$(ls -A public)" ]; then
+            echo "Build output is empty."
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin gh-pages || true
+          rm -rf .gh-pages
+          git worktree add -B gh-pages .gh-pages origin/gh-pages || git worktree add -B gh-pages .gh-pages
+
+          find .gh-pages -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a public/. .gh-pages/
+          touch .gh-pages/.nojekyll
+
+          cd .gh-pages
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "Deploy from ${GITHUB_SHA}"
+            git push origin gh-pages --force
+          else
+            echo "No changes to deploy."
+          fi
