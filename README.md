@@ -236,11 +236,11 @@ The site is configured for **bilingual support**:
 
 ### GitHub Pages
 
-The site is configured to deploy automatically with GitHub Actions:
+The site is configured to deploy automatically with GitHub Actions to the `gh-pages` branch:
 
 1. Push your changes to the `main` branch.
-2. GitHub Actions workflow at `.github/workflows/hugo.yml` will build and deploy the site.
-3. In repository settings, ensure **Pages** is set to **Build and deployment: GitHub Actions** (the workflow also attempts automatic enablement).
+2. GitHub Actions workflow at `.github/workflows/hugo.yml` will build and publish the static site to `gh-pages`.
+3. In repository settings, set **Pages** source to **Deploy from a branch** and choose `gh-pages` / `/ (root)`.
 4. Access at: `https://superziggs.github.io/Internship-report/`
 
 ### Alternative Hosting Platforms
