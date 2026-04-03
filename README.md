@@ -30,7 +30,7 @@ This project serves as an internship report documentation portal for the FCJ (FP
 - **Hands-on workshop guides** and tutorials
 - **Self-evaluation** and feedback sections
 
-**Student:** Le Nguyen Thien Danh  
+**Student:** Truong Dinh Loc
 **Position:** FCJ Cloud Intern  
 **Company:** Amazon Web Services Vietnam Co., Ltd.  
 **Duration:** From January 5, 2026  
@@ -236,16 +236,12 @@ The site is configured for **bilingual support**:
 
 ### GitHub Pages
 
-The site is configured to deploy to GitHub Pages:
+The site is configured to deploy automatically with GitHub Actions:
 
-1. Build the site:
-   ```bash
-   hugo
-   ```
-
-2. Push the `public/` directory to your GitHub repository's `gh-pages` branch
-
-3. Access at: `https://superziggs.github.io/Internship-report/`
+1. Push your changes to the `main` branch.
+2. GitHub Actions workflow at `.github/workflows/hugo.yml` will build and deploy the site.
+3. In repository settings, ensure **Pages** is set to **Build and deployment: GitHub Actions** (the workflow also attempts automatic enablement).
+4. Access at: `https://superziggs.github.io/Internship-report/`
 
 ### Alternative Hosting Platforms
 
@@ -265,7 +261,7 @@ This Hugo site can be deployed to:
 
 ## 👤 Author
 
-**Le Nguyen Thien Danh**
+**Truong Dinh Loc**
 
 - **Email**: dinhloc.truong2005@gmail.com
 - **University**: FPT University
