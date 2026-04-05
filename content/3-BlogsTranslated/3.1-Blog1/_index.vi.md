@@ -1,14 +1,10 @@
 ---
-title: "Blog 1"
+title: "Blog 1: Tổng hợp tuần AWS: AWS AI/ML Scholars, Agent Plugin cho AWS Serverless, và các cập nhật khác (30 Mar 2026)"
 date: 2026-03-30
-weight: 3
+weight: 1
 chapter: false
 pre: " <b> 3.1. </b> "
 ---
-
-{{% notice info %}}
-Bản dịch tiếng Việt phục vụ mục đích học tập. Bài gốc: "AWS Weekly Roundup: AWS AI/ML Scholars program, Agent Plugin for AWS Serverless, and more (March 30, 2026)" by Prasad Rao — https://aws.amazon.com/blogs/aws/aws-weekly-roundup-aws-ai-ml-scholars-program-agent-plugin-for-aws-serverless-and-more-march-30-2026/
-{{% /notice %}}
 
 # Tổng hợp tuần AWS: AWS AI/ML Scholars, Agent Plugin cho AWS Serverless, và các cập nhật khác (30 Mar 2026)
 

@@ -1,5 +1,5 @@
 ---
-title: "Blog 2"
+title: "Blog 2: Deploy AWS Applications and Access AWS Accounts Across Multiple Regions with IAM Identity Center"
 date: 2026-03-15
 weight: 2
 chapter: false

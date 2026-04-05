@@ -1,7 +1,7 @@
 ---
-title: "Blog 1"
+title: "Blog 1: AWS Weekly Roundup: AWS AI/ML Scholars program, Agent Plugin for AWS Serverless, and more (March 30, 2026)"
 date: 2026-03-30
-weight: 3
+weight: 1
 chapter: false
 pre: " <b> 3.1. </b> "
 ---

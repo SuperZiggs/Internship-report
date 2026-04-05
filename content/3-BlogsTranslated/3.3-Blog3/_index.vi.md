@@ -1,5 +1,5 @@
 ---
-title: "Blog 3"
+title: "Blog 3: Hai mươi năm Amazon S3 và xây dựng những gì tiếp theo"
 date: 2026-03-13
 weight: 3
 chapter: false

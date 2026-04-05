@@ -1,7 +1,7 @@
 ---
-title: "Blog 4"
+title: "Blog 4: Introducing Amazon Nova Forge: Build Your Own Frontier Models Using Nova"
 date: 2025-12-02
-weight: 1
+weight: 4
 chapter: false
 pre: " <b> 3.4. </b> "
 ---

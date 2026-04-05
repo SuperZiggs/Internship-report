@@ -1,5 +1,5 @@
 ---
-title: "Blog 2"
+title: "Blog 2: Triển khai ứng dụng AWS và truy cập tài khoản AWS trên nhiều Region với IAM Identity Center"
 date: 2026-03-15
 weight: 2
 chapter: false
