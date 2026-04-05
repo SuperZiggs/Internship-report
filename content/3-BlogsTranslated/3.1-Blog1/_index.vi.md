@@ -1,100 +1,52 @@
 ---
 title: "Blog 1"
-date: 2025-12-02
-weight: 1
+date: 2026-03-30
+weight: 3
 chapter: false
 pre: " <b> 3.1. </b> "
 ---
 
-# Giới thiệu Amazon Nova Forge: Xây dựng Frontier Model của riêng bạn với Nova
+{{% notice info %}}
+Bản dịch tiếng Việt phục vụ mục đích học tập. Bài gốc: "AWS Weekly Roundup: AWS AI/ML Scholars program, Agent Plugin for AWS Serverless, and more (March 30, 2026)" by Prasad Rao — https://aws.amazon.com/blogs/aws/aws-weekly-roundup-aws-ai-ml-scholars-program-agent-plugin-for-aws-serverless-and-more-march-30-2026/
+{{% /notice %}}
 
-Các tổ chức ngày càng áp dụng AI sinh (generative AI) trong nhiều phần của hoạt động vận hành, từ các công cụ tăng năng suất nội bộ đến những ứng dụng chuyên sâu theo từng lĩnh vực. Khi mức độ áp dụng tăng lên, các hạn chế của những foundation model dùng chung cũng trở nên rõ ràng hơn. Nhiều kịch bản trong doanh nghiệp yêu cầu mô hình phải hiểu sâu hơn về kiến thức nội bộ, thuật ngữ riêng của tổ chức, workflow chuyên biệt và các yêu cầu nghiệp vụ đặc thù — những thứ mà chỉ dùng prompt thông thường khó có thể đáp ứng.
+# Tổng hợp tuần AWS: AWS AI/ML Scholars, Agent Plugin cho AWS Serverless, và các cập nhật khác (30 Mar 2026)
 
-Các phương pháp tùy biến phổ biến như **prompt engineering** và **Retrieval-Augmented Generation (RAG)** hữu ích trong nhiều ứng dụng, nhưng chúng không thực sự thay đổi cách mô hình biểu diễn tri thức bên trong. Những phương pháp này chủ yếu giúp mô hình phản hồi tốt hơn ở thời điểm suy luận (inference time), thay vì thay đổi sâu những gì mô hình đã học. Những cách khác như **supervised fine-tuning** và **reinforcement learning** cũng giúp tùy chỉnh mô hình, nhưng chúng thường được áp dụng sau khi mô hình đã được huấn luyện hoàn chỉnh. Ở giai đoạn đó, việc điều chỉnh mô hình theo các domain rất cụ thể trở nên khó khăn hơn.
+Tuần trước, điều làm tôi hào hứng nhất là [sự ra mắt chương trình 2026 AWS AI and ML Scholars](https://www.linkedin.com/posts/swaminathansivasubramanian_excited-to-share-that-applications-are-ugcPost-7442263176475410433-8c8k?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAUt4OcBCLB3u7KY4pbSog9XZD5vI10JCzU) do [Swami Sivasubramanian](https://www.linkedin.com/in/swaminathansivasubramanian/), VP of AWS Agentic AI, công bố, với mục tiêu cung cấp giáo dục AI miễn phí cho tối đa 100.000 học viên trên toàn thế giới. Chương trình gồm hai giai đoạn: giai đoạn Challenge để học nền tảng generative AI, sau đó là học bổng toàn phần chương trình Udacity Nanodegree kéo dài ba tháng dành cho 4.500 người có kết quả cao nhất. Bất kỳ ai từ 18 tuổi trở lên đều có thể đăng ký, không yêu cầu kinh nghiệm trước đó về AI hoặc ML. Hạn nộp hồ sơ là ngày 24/06/2026. Truy cập [trang AWS AI and ML Scholars](https://aws.amazon.com/about-aws/our-impact/scholars/?utm_source=linkedin&utm_medium=s-post&utm_campaign=launch) để tìm hiểu thêm và đăng ký.
 
-Đối với các tổ chức muốn mức độ tùy biến mạnh hơn, **Continued Pre-Training (CPT)** có thể là một giải pháp tự nhiên. Tuy nhiên, nếu CPT chỉ được thực hiện trên dữ liệu độc quyền của doanh nghiệp, mô hình có thể gặp vấn đề **catastrophic forgetting** — tức là mô hình trở nên tốt hơn ở domain mới nhưng lại mất đi những năng lực nền tảng đã học trước đó. Ngoài ra, việc huấn luyện một frontier model từ đầu vẫn quá tốn kém và tiêu tốn tài nguyên đối với hầu hết tổ chức, vì nó yêu cầu dataset cực lớn, hạ tầng tính toán đáng kể và chuyên môn huấn luyện nâng cao. AWS đã giới thiệu **Amazon Nova Forge** để thu hẹp khoảng cách này. Với Nova Forge, khách hàng có thể bắt đầu từ các checkpoint sớm của Amazon Nova, kết hợp dataset riêng với dữ liệu huấn luyện được Amazon Nova tuyển chọn, và xây dựng frontier model tùy chỉnh được host an toàn trên AWS. AWS định vị đây là cách dễ hơn và tiết kiệm chi phí hơn để xây dựng frontier model theo domain cụ thể.
+![The AWS AI and ML Scholars Program is back](https://d2908q01vomqb2.cloudfront.net/da4b9237bacccdf19c0760cab7aec4a8359010b0/2026/03/27/AWS-AIML.png)
 
----
+Tôi cũng rất háo hức khi mùa [AWS Summit](https://aws.amazon.com/events/summits/) bắt đầu, mở màn với AWS Summit Paris vào ngày 1/4, tiếp theo là London vào ngày 22/4. AWS Summits là các sự kiện trực tiếp miễn phí, nơi builder và innovator có thể tìm hiểu về Cloud và AI, mở rộng tư duy và kết nối mới. Hãy [khám phá AWS Summits](https://aws.amazon.com/events/summits/#empowering-you-to-innovate-with-aws) gần bạn và tham gia trực tiếp.
 
-## Các trường hợp sử dụng và ứng dụng
+Bây giờ, chúng ta cùng điểm qua các tin AWS tuần này.
 
-Amazon Nova Forge được thiết kế cho các tổ chức đã có sẵn dữ liệu độc quyền, kiến thức chuyên ngành hoặc thông tin vận hành đặc thù và muốn biến những tài sản này thành năng lực AI mạnh hơn. Thay vì chỉ dựa vào một mô hình generic, các tổ chức này có thể tạo ra mô hình phù hợp hơn với thực tế domain của họ.
+## Các cập nhật nổi bật tuần trước
 
-AWS đưa ra một số kịch bản ví dụ. Trong **manufacturing và automation**, các tổ chức có thể xây dựng mô hình hiểu rõ hơn các quy trình công nghiệp chuyên biệt, dữ liệu máy móc, quy trình vận hành và workflow liên quan đến thiết bị. Trong **research and development**, các công ty có thể tạo mô hình được huấn luyện trên tài liệu nghiên cứu nội bộ, tập dữ liệu riêng và chuyên môn domain mà dataset công khai không có. Trong **content và media**, các team có thể phát triển mô hình phù hợp với giọng điệu thương hiệu, tiêu chuẩn nội dung nội bộ và các yêu cầu moderation. Trong **các ngành chuyên biệt** nói chung, Nova Forge có thể dùng để huấn luyện mô hình hiểu ngôn ngữ chuyên ngành, quy định, best practice và các quy ước kỹ thuật của từng lĩnh vực.
+Dưới đây là những thông báo thu hút sự chú ý của tôi trong tuần qua:
 
-Tùy vào mục tiêu kinh doanh, Nova Forge có thể giúp tổ chức tạo ra năng lực mô hình khác biệt, cải thiện hiệu năng cho task cụ thể, giảm độ trễ trong môi trường production và giảm chi phí tổng thể so với các phương pháp yêu cầu retraining lớn hoặc pipeline thích nghi mô hình bên ngoài.
+- [Announcing Amazon Aurora PostgreSQL serverless database creation in seconds](https://aws.amazon.com/blogs/aws/announcing-amazon-aurora-postgresql-serverless-database-creation-in-seconds/) - Amazon Aurora PostgreSQL hiện có express configuration, một cách thiết lập tinh gọn với cấu hình mặc định dựng sẵn để tạo và kết nối cơ sở dữ liệu chỉ trong vài giây. Chỉ với hai lần nhấp, bạn có thể khởi tạo Aurora PostgreSQL serverless database. Bạn vẫn có thể chỉnh một số thiết lập trong hoặc sau khi tạo.
+- [Amazon Aurora PostgreSQL now available with the AWS Free Tier](https://aws.amazon.com/about-aws/whats-new/2026/03/amazon-aurora-postgresql-aws-free-tier/) - Amazon Aurora PostgreSQL hiện đã có trên AWS Free Tier. Nếu bạn mới dùng AWS, bạn nhận $100 tín dụng khi đăng ký và có thể nhận thêm $100 khi sử dụng các dịch vụ như Amazon Relational Database Service (Amazon RDS).
+- [Announcing Agent Plugin for AWS Serverless](https://aws.amazon.com/about-aws/whats-new/2026/03/agent-plugin-aws-serverless/) - Với Agent Plugin for AWS Serverless mới, bạn có thể dễ dàng xây dựng, triển khai, xử lý sự cố, và quản lý ứng dụng serverless bằng các AI coding assistant như Kiro, Claude Code, và Cursor. Plugin này mở rộng trợ lý AI bằng khả năng có cấu trúc thông qua việc đóng gói skills, sub-agents, và Model Context Protocol (MCP) servers thành một module thống nhất. Nó tự động nạp hướng dẫn và chuyên môn cần thiết xuyên suốt quá trình phát triển để xây dựng ứng dụng serverless sẵn sàng production trên AWS.
+- [Amazon SageMaker Studio now supports Kiro and Cursor IDEs as remote IDEs](https://aws.amazon.com/about-aws/whats-new/2026/03/amazon-sagemaker-studio-kiro-cursor/) - Bạn có thể kết nối từ Kiro và Cursor IDE tới Amazon SageMaker Studio theo mô hình remote IDE. Điều này giúp bạn dùng chính thiết lập Kiro/Cursor hiện tại, bao gồm spec-driven development, conversational coding, và automated feature generation, trong khi vẫn tận dụng tài nguyên tính toán mở rộng của Amazon SageMaker Studio.
+- [Introducing visual customization capability in AWS Management Console](https://aws.amazon.com/blogs/aws/customize-your-aws-management-console-experience-with-visual-settings-including-account-color-region-and-service-visibility/) - Bạn có thể tùy chỉnh AWS Management Console bằng các thiết lập trực quan như màu tài khoản, và kiểm soát Region/dịch vụ hiển thị. Việc ẩn Region và dịch vụ không dùng giúp bạn tập trung tốt hơn và làm việc nhanh hơn nhờ giảm tải nhận thức và thao tác cuộn không cần thiết.
+- [Announcing Aurora DSQL connector to simplify building Ruby applications](https://aws.amazon.com/about-aws/whats-new/2026/03/aurora-dsql-connector-for-ruby/) - Bạn có thể dùng Aurora DSQL Connector cho Ruby (pg gem) để dễ dàng xây dựng ứng dụng Ruby trên Aurora DSQL. Connector này đơn giản hóa xác thực và tăng cường bảo mật bằng cách tự động sinh token cho mỗi kết nối, giảm rủi ro của mật khẩu truyền thống trong khi vẫn tương thích đầy đủ với các tính năng hiện có của pg gem.
+- [AWS Lambda increases the file descriptor limit for functions running on Lambda Managed Instances](https://aws.amazon.com/about-aws/whats-new/2026/03/aws-Lambda-file-descriptors-increase-4096/) - AWS Lambda tăng giới hạn file descriptor từ 1.024 lên 4.096 (tăng 4 lần) cho các hàm chạy trên Lambda Managed Instances (LMI). Nhờ đó bạn có thể chạy các workload I/O-intensive như dịch vụ web đồng thời cao hoặc pipeline xử lý dữ liệu nhiều tệp mà không gặp giới hạn file descriptor.
+- [AWS Lambda now supports up to 32 GB of memory and 16 vCPUs for Lambda Managed Instances](https://aws.amazon.com/about-aws/whats-new/2026/03/lambda-32-gb-memory-16-vcpus/) - Lambda trên Lambda Managed Instances nay hỗ trợ tới 32 GB RAM và 16 vCPU. Bạn có thể chạy workload tính toán nặng như xử lý dữ liệu, media transcoding, hoặc mô phỏng khoa học mà không cần tự quản lý hạ tầng. Đồng thời bạn có thể điều chỉnh tỉ lệ memory/vCPU (2:1, 4:1, hoặc 8:1) theo nhu cầu workload.
+- [Announcing Bidirectional Streaming API for Amazon Polly](https://aws.amazon.com/blogs/machine-learning/introducing-amazon-polly-bidirectional-streaming-real-time-speech-synthesis-for-conversational-ai/) - Các API text-to-speech truyền thống dùng mô hình request-response. Bidirectional Streaming API mới của Amazon Polly được thiết kế cho ứng dụng AI hội thoại sinh text hoặc audio theo từng phần, ví dụ phản hồi từ LLM. Điều này cho phép bắt đầu tổng hợp âm thanh trước khi có toàn bộ văn bản hoàn chỉnh.
 
----
+Để xem đầy đủ danh sách thông báo từ AWS, hãy theo dõi [News Blog](https://aws.amazon.com/blogs/aws/) và [What's New with AWS](https://aws.amazon.com/new/).
 
-## Cách thức hoạt động của Nova Forge
+## Sự kiện AWS sắp diễn ra
 
-Amazon Nova Forge được thiết kế để giải quyết các hạn chế của việc tùy chỉnh mô hình truyền thống bằng cách cho phép tổ chức bắt đầu phát triển từ **các checkpoint sớm** trong vòng đời của mô hình. Thay vì chỉ làm việc với một mô hình đã hoàn chỉnh, khách hàng có thể bắt đầu từ các checkpoint **pre-training**, **mid-training** hoặc **post-training**. Điều này mang lại sự linh hoạt lớn hơn trong cách mô hình được điều chỉnh cho một domain chuyên biệt.
+Hãy kiểm tra lịch và đăng ký các sự kiện AWS sắp tới:
 
-Một năng lực cốt lõi của Nova Forge là **data blending**. Các tổ chức có thể kết hợp dataset độc quyền của mình với **dữ liệu được Amazon Nova tuyển chọn** trong tất cả các giai đoạn huấn luyện. AWS cho biết quá trình training này có thể chạy bằng các recipe đã được kiểm chứng trên hạ tầng được quản lý hoàn toàn trong **Amazon SageMaker AI**. Điều này có nghĩa là khách hàng không cần tự xây dựng toàn bộ training stack từ đầu. Thay vào đó, họ có thể sử dụng tooling và workflow do AWS quản lý, trong khi vẫn định hình mô hình bằng dữ liệu riêng của mình.
+- [AWS Summits](https://aws.amazon.com/events/summits/) - Như đã đề cập ở trên, hãy tham gia AWS Summits 2026, các sự kiện trực tiếp miễn phí để khám phá công nghệ Cloud và AI mới nổi, học best practices, và kết nối với chuyên gia cũng như cộng đồng cùng ngành. Các Summit sắp tới gồm Paris (1/4), London (22/4), Bengaluru (23-24/4), Singapore (6/5), Tel Aviv (6/5), và Stockholm (7/5).
+- [AWS Community Days](https://aws.amazon.com/developer/community/community-days/) - Các hội nghị do cộng đồng tổ chức, với nội dung được cộng đồng lên kế hoạch và trình bày, bao gồm thảo luận kỹ thuật, workshop, và hands-on lab. Sự kiện sắp tới gồm San Francisco (10/4) và Romania (23-24/4).
 
-Chiến lược trộn dữ liệu này đặc biệt quan trọng vì nó giúp giảm hiện tượng catastrophic forgetting so với việc chỉ huấn luyện trên dữ liệu độc quyền thô. Theo AWS, việc kết hợp dữ liệu curated với dữ liệu đặc thù của tổ chức giúp giữ lại các kỹ năng nền tảng như khả năng suy luận chung, khả năng làm theo instruction và các đặc tính an toàn tích hợp sẵn, trong khi vẫn cho phép mô hình hấp thụ kiến thức chuyên biệt của doanh nghiệp. Về thực tế, Nova Forge cố gắng cân bằng hai mục tiêu: giữ lại tính hữu dụng rộng của foundation model mạnh và đồng thời thích nghi sâu hơn với một domain cụ thể.
+Tham gia [AWS Builder Center](https://builder.aws.com/) để kết nối với cộng đồng builder, chia sẻ giải pháp, và truy cập nội dung hỗ trợ quá trình phát triển. Bạn cũng có thể xem [AWS Events and Webinars](https://aws.amazon.com/events/) để cập nhật các sự kiện trực tiếp/online do AWS tổ chức và các sự kiện hướng đến nhà phát triển.
 
----
+Đó là tất cả cho tuần này. Hẹn gặp lại vào thứ Hai tuần tới với một bản [Weekly Roundup](https://aws.amazon.com/blogs/aws/tag/week-in-review/?trk=7c8639c6-87c6-47d6-9bd0-a5812eecb848&sc_channel=el) mới.
 
-## **Học tăng cường trong các môi trường độc quyền**
+- [Prasad](https://www.linkedin.com/in/kprasadrao/)
 
-Nova Forge cũng hỗ trợ **reinforcement learning (RL)** sử dụng reward function được định nghĩa trong môi trường riêng của tổ chức. Điều này cho phép mô hình học từ feedback được tạo ra trong điều kiện gần với use case thực tế hơn so với các benchmark chung.
-
-Khả năng này hữu ích trong những tình huống mà thành công phụ thuộc vào chuỗi quyết định liên tiếp, feedback đặc thù môi trường hoặc logic reward do doanh nghiệp định nghĩa. AWS giải thích rằng khách hàng có thể sử dụng orchestrator riêng của họ để quản lý **multi-turn rollouts**, cho phép hỗ trợ các workflow RL nâng cao hơn, bao gồm hành vi agent phức tạp và các bài toán ra quyết định tuần tự.
-
-AWS đưa ra ví dụ như sử dụng công cụ hóa học để đánh giá thiết kế phân tử, hoặc mô phỏng robotics nơi hệ thống được thưởng khi hoàn thành nhiệm vụ hiệu quả và bị phạt khi có hành vi không an toàn như va chạm. Những ví dụ này cho thấy Nova Forge không chỉ giới hạn ở việc thích nghi mô hình cho text. Thay vào đó, nó có thể được sử dụng trong những môi trường mà việc cải thiện mô hình phụ thuộc vào tương tác với các công cụ chuyên biệt, simulator hoặc môi trường đánh giá nội bộ. Điều này khiến Nova Forge phù hợp với các ngành nghiên cứu chuyên sâu và hệ thống AI vận hành nâng cao cần nhiều hơn fine-tuning thông thường.
-
----
-
-## **AI có trách nhiệm và cấu hình an toàn**
-
-Ngoài việc huấn luyện và tùy chỉnh mô hình, Nova Forge còn bao gồm **bộ công cụ responsible AI** tích hợp sẵn. Bộ công cụ này cho phép tổ chức cấu hình hành vi **safety** và **content moderation** của các mô hình tùy chỉnh.
-
-AWS cho biết khách hàng có thể điều chỉnh các thiết lập này để phù hợp với nhu cầu kinh doanh cụ thể trong các lĩnh vực như an toàn, bảo mật và xử lý nội dung nhạy cảm.
-
-Đây là một phần quan trọng của nền tảng vì việc triển khai AI trong doanh nghiệp không chỉ liên quan đến chất lượng mô hình hay hiệu năng benchmark. Trong nhiều tổ chức, việc sẵn sàng đưa vào production còn phụ thuộc vào governance, chính sách moderation và kiểm soát rủi ro nội dung. Bằng cách tích hợp các tùy chọn này trực tiếp trong Nova Forge, AWS cung cấp một framework nơi các tổ chức có thể làm việc cả về tùy chỉnh mô hình lẫn trách nhiệm mô hình trong cùng một môi trường.
-
----
-
-## **Bắt đầu với Nova Forge**
-
-
-AWS cho biết Nova Forge tích hợp với các workflow AI hiện có trên AWS, đặc biệt là những workflow xoay quanh **Amazon SageMaker AI** và **Amazon Bedrock**. Khách hàng có thể sử dụng các công cụ và hạ tầng quen thuộc trong SageMaker AI để chạy training job, sau đó import các Nova model tùy chỉnh vào Amazon Bedrock dưới dạng **private models**.
-
-Sự tích hợp này quan trọng vì nó cho phép tổ chức tiếp tục sử dụng cùng một môi trường AWS cho bảo mật, API và vận hành. Thay vì xây dựng một hệ thống cho training và một stack khác cho serving, các team có thể đi từ phát triển mô hình đến triển khai ứng dụng bằng các service đã được kết nối sẵn trong hệ sinh thái AWS. AWS nhấn mạnh rằng điều này mang lại cùng một mô hình bảo mật, API nhất quán và khả năng tích hợp rộng giống như các model khác trong Amazon Bedrock.
-
-Trong **Amazon SageMaker Studio**, người dùng hiện có thể xây dựng frontier model bằng Amazon Nova. Workflow ở mức cao mà AWS mô tả khá đơn giản. Trước tiên, người dùng chọn checkpoint mà họ muốn bắt đầu, chẳng hạn như **pre-trained**, **mid-trained** hoặc **post-trained** checkpoint. Sau đó họ có thể upload dataset của riêng mình hoặc sử dụng dataset đã có sẵn trong workflow.
-
-Sau khi chọn checkpoint và nguồn dữ liệu, người dùng có thể trộn dữ liệu training của mình với các dataset curated do Nova cung cấp. AWS cho biết các dataset curated này được phân loại theo domain và nhằm giúp giữ hiệu năng chung của mô hình đồng thời giảm nguy cơ overfitting hoặc catastrophic forgetting. Đây là bước trung tâm trong cách Nova Forge cân bằng giữa specialization và khả năng tổng quát.
-
-AWS cũng cho biết người dùng có thể tùy chọn áp dụng **Reinforcement Fine-Tuning (RFT)**. Theo bài blog, kỹ thuật này có thể được dùng để cải thiện độ chính xác về mặt factual và giảm hallucination trong các domain cụ thể. Sau khi training hoàn tất, mô hình kết quả có thể được import vào Amazon Bedrock và sử dụng trong các ứng dụng downstream.
-
----
-
-## **Những điều cần biết**
-
-Tại thời điểm ra mắt, **Amazon Nova Forge** có sẵn trong AWS Region **US East (N. Virginia)**. AWS cho biết dịch vụ này bao gồm quyền truy cập nhiều Nova model checkpoint, recipe để trộn dữ liệu độc quyền với dữ liệu huấn luyện được Amazon Nova tuyển chọn, các recipe huấn luyện đã được thiết lập sẵn, và tích hợp với cả Amazon SageMaker AI và Amazon Bedrock.
-
-Đối với người dùng muốn tìm hiểu sâu hơn về dịch vụ, AWS đề xuất bắt đầu với **Amazon Nova User Guide** và **Amazon SageMaker AI console**. AWS cũng lưu ý rằng các tổ chức cần hỗ trợ sâu hơn hoặc chuyên biệt hơn có thể liên hệ **Generative AI Innovation Center** để được hỗ trợ trong các dự án phát triển mô hình.
-
----
-
-## **Tại sao lần ra mắt này quan trọng**
-
-Amazon Nova Forge là một bước phát triển đáng chú ý cho các tổ chức muốn kiểm soát nhiều hơn quá trình tạo mô hình mà không phải gánh toàn bộ chi phí huấn luyện frontier model từ đầu. Trong nhiều môi trường doanh nghiệp, giải pháp lý tưởng không phải là một mô hình hoàn toàn generic cũng không phải là một mô hình custom hoàn toàn từ số 0. Thay vào đó, con đường phù hợp thường là một mô hình lai: bắt đầu với một mô hình mạnh có sẵn, thích nghi nó sớm hơn và sâu hơn so với fine-tuning thông thường, giữ lại các năng lực cốt lõi, và triển khai nó trên một nền tảng sẵn sàng cho production.
-
-Nova Forge được thiết kế chính xác cho khoảng trung gian đó. Nó cung cấp quyền truy cập các Nova checkpoint, khả năng trộn dữ liệu curated, hạ tầng training do AWS quản lý, hỗ trợ reinforcement learning trong môi trường riêng, cấu hình responsible AI linh hoạt và triển khai thông qua Amazon Bedrock. Khi kết hợp lại, những khả năng này khiến Nova Forge không chỉ đơn giản là một tính năng fine-tuning. Nó được định vị như một framework rộng hơn để xây dựng **frontier model nhận thức domain (domain-aware frontier models)** đồng thời vẫn đáp ứng các yêu cầu doanh nghiệp về hiệu năng, an toàn và tích hợp vận hành.
-
----
-
-## Kết luận
-
-Khi các tổ chức tiếp tục áp dụng generative AI, nhu cầu về những mô hình hiểu sâu dữ liệu độc quyền và domain chuyên biệt sẽ ngày càng tăng. Các phương pháp tùy chỉnh tiêu chuẩn vẫn hữu ích, nhưng chúng thường chưa đủ cho những doanh nghiệp có tri thức nội bộ phức tạp, workflow độc đáo hoặc yêu cầu domain có mức độ quan trọng cao.
-
-Amazon Nova Forge giải quyết nhu cầu này bằng cách cho phép khách hàng bắt đầu từ các Nova checkpoint sớm, trộn dữ liệu của họ với dataset curated của Amazon, huấn luyện bằng hạ tầng SageMaker AI được quản lý và triển khai mô hình tùy chỉnh thông qua Amazon Bedrock. AWS giới thiệu đây là cách dễ hơn và tiết kiệm chi phí hơn để xây dựng frontier model kết hợp giữa năng lực nền tảng mạnh và sự phù hợp sâu với domain.
-
-Đối với các doanh nghiệp muốn tiến xa hơn các phương pháp thích nghi nhẹ và hướng tới mức độ chuyên biệt hóa mô hình nghiêm túc hơn, Nova Forge cung cấp một con đường thực tế trong hệ sinh thái AWS. Nó giảm bớt một số rào cản lớn nhất vốn gắn liền với việc phát triển frontier model, đồng thời vẫn cho phép tổ chức kiểm soát đáng kể cách mô hình của họ được huấn luyện, thích nghi, quản trị và triển khai.
-
-## Về tác giả
-
-**Danilo Poccia** làm việc với các startup và các công ty ở nhiều quy mô khác nhau nhằm hỗ trợ đổi mới sáng tạo. Trong vai trò **Chief Evangelist (EMEA) tại Amazon Web Services**, ông giúp mọi người hiện thực hóa các ý tưởng, với trọng tâm đặc biệt vào **kiến trúc serverless**, **lập trình hướng sự kiện (event-driven programming)**, cũng như tác động kỹ thuật và kinh doanh của **machine learning** và **edge computing**. Ông cũng là tác giả của cuốn sách *AWS Lambda in Action*.
+*Bài viết này thuộc chuỗi Weekly Roundup. Hãy quay lại mỗi tuần để xem bản tổng hợp nhanh về các tin tức và thông báo đáng chú ý từ AWS.*

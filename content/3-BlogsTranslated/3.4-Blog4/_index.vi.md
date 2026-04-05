@@ -1,113 +1,100 @@
 ---
 title: "Blog 4"
-date: 2026-03-12
-weight: 4
+date: 2025-12-02
+weight: 1
 chapter: false
 pre: " <b> 3.4. </b> "
 ---
 
-# Bảo mật AI agents với Policy trong Amazon Bedrock AgentCore
+# Giới thiệu Amazon Nova Forge: Xây dựng Frontier Model của riêng bạn với Nova
 
-Việc triển khai AI agent một cách an toàn trong các ngành được quản lý chặt chẽ là một thách thức lớn, bởi vì những hệ thống này có thể truy cập dữ liệu nhạy cảm, gọi các công cụ (tools), và thực hiện những hành động có tác động trong thế giới thực. Khác với phần mềm truyền thống, AI agent không chỉ đơn giản thực thi một chuỗi lệnh cố định. Thay vào đó, nó có thể quyết định nên gọi tool nào, truy xuất dữ liệu gì và phản hồi ra sao dựa trên input của người dùng và bối cảnh môi trường. Sự linh hoạt này khiến agent trở nên mạnh mẽ, nhưng đồng thời cũng tạo ra các rủi ro bảo mật mới như truy cập dữ liệu trái phép, giao dịch ngoài ý muốn, prompt injection và việc lạm dụng các hệ thống được kết nối. Trong bài viết AWS *Secure AI agents with Policy in Amazon Bedrock AgentCore*, các tác giả giải thích cách **Policy trong Amazon Bedrock AgentCore** cung cấp một lớp thực thi bảo mật mang tính xác định (deterministic) để bảo vệ AI agent một cách độc lập với khả năng suy luận của chính agent. 
+Các tổ chức ngày càng áp dụng AI sinh (generative AI) trong nhiều phần của hoạt động vận hành, từ các công cụ tăng năng suất nội bộ đến những ứng dụng chuyên sâu theo từng lĩnh vực. Khi mức độ áp dụng tăng lên, các hạn chế của những foundation model dùng chung cũng trở nên rõ ràng hơn. Nhiều kịch bản trong doanh nghiệp yêu cầu mô hình phải hiểu sâu hơn về kiến thức nội bộ, thuật ngữ riêng của tổ chức, workflow chuyên biệt và các yêu cầu nghiệp vụ đặc thù — những thứ mà chỉ dùng prompt thông thường khó có thể đáp ứng.
 
-Bài viết sử dụng ví dụ cụ thể về một **agent đặt lịch khám bệnh trong hệ thống y tế**. Y tế là một lĩnh vực đặc biệt phù hợp để minh họa vì các agent trong môi trường này có thể xử lý **Protected Health Information (PHI)**, quản lý lịch hẹn và truy cập hồ sơ bệnh nhân. Trong bối cảnh như vậy, chỉ dựa vào bản thân mô hình để hành xử an toàn là chưa đủ. Các tổ chức cần một cơ chế đảm bảo **ai có thể truy cập cái gì, trong điều kiện nào và với những hạn chế nào** được thực thi một cách nhất quán. Policy trong Amazon Bedrock AgentCore được thiết kế để cung cấp chính xác loại kiểm soát này bằng cách hoạt động ở **runtime thông qua gateway layer**.
+Các phương pháp tùy biến phổ biến như **prompt engineering** và **Retrieval-Augmented Generation (RAG)** hữu ích trong nhiều ứng dụng, nhưng chúng không thực sự thay đổi cách mô hình biểu diễn tri thức bên trong. Những phương pháp này chủ yếu giúp mô hình phản hồi tốt hơn ở thời điểm suy luận (inference time), thay vì thay đổi sâu những gì mô hình đã học. Những cách khác như **supervised fine-tuning** và **reinforcement learning** cũng giúp tùy chỉnh mô hình, nhưng chúng thường được áp dụng sau khi mô hình đã được huấn luyện hoàn chỉnh. Ở giai đoạn đó, việc điều chỉnh mô hình theo các domain rất cụ thể trở nên khó khăn hơn.
 
----
-
-## Vì sao AI agents cần thực thi policy từ bên ngoài
-
-Một luận điểm chính của bài blog là việc bảo mật AI agent khó hơn so với bảo mật các ứng dụng truyền thống. Phần mềm truyền thống thường có các **code path rõ ràng**, trong khi agent dựa vào **large language models (LLMs)** có khả năng suy luận theo nhiều hướng mở. Điều này có nghĩa là cùng một mô hình có thể hành xử khác nhau tùy thuộc vào prompt, kết quả từ tool, ngữ cảnh xung quanh hoặc thậm chí input mang tính tấn công. Vì LLM có thể **hallucinate** và không tự phân biệt rõ giữa instruction đáng tin cậy và văn bản không đáng tin cậy, các agent dễ bị tấn công **prompt injection** và các hình thức tấn công tương tự. 
-
-Một cách phổ biến để giảm rủi ro là bọc agent trong code ứng dụng để giới hạn các tool có thể được gọi và điều kiện gọi chúng. Tuy nhiên, cách tiếp cận này có một số nhược điểm. Logic bảo mật bị phân tán trong codebase, khiến việc review, audit và bảo trì trở nên khó khăn hơn. Ngoài ra, tính đúng đắn của wrapper code cũng trở thành một phần của **security boundary**. Nếu code này có bug, agent vẫn có thể thực hiện các thao tác không an toàn. Bài viết của AWS đề xuất một mô hình khác: **đưa việc thực thi policy ra hoàn toàn bên ngoài agent** và áp dụng nó trước khi bất kỳ tool nào được gọi. 
-
-Sự tách biệt này rất quan trọng vì policy vẫn có hiệu lực bất kể agent được prompt như thế nào, agent “tin” điều gì, hay logic ứng dụng có lỗi hay không. Gateway sẽ đánh giá mọi request dựa trên các policy đã định nghĩa trước khi cho phép truy cập tool. Nhờ đó, các quy tắc bảo mật trở nên **minh bạch, có thể audit và độc lập với hành vi của LLM**.
+Đối với các tổ chức muốn mức độ tùy biến mạnh hơn, **Continued Pre-Training (CPT)** có thể là một giải pháp tự nhiên. Tuy nhiên, nếu CPT chỉ được thực hiện trên dữ liệu độc quyền của doanh nghiệp, mô hình có thể gặp vấn đề **catastrophic forgetting** — tức là mô hình trở nên tốt hơn ở domain mới nhưng lại mất đi những năng lực nền tảng đã học trước đó. Ngoài ra, việc huấn luyện một frontier model từ đầu vẫn quá tốn kém và tiêu tốn tài nguyên đối với hầu hết tổ chức, vì nó yêu cầu dataset cực lớn, hạ tầng tính toán đáng kể và chuyên môn huấn luyện nâng cao. AWS đã giới thiệu **Amazon Nova Forge** để thu hẹp khoảng cách này. Với Nova Forge, khách hàng có thể bắt đầu từ các checkpoint sớm của Amazon Nova, kết hợp dataset riêng với dữ liệu huấn luyện được Amazon Nova tuyển chọn, và xây dựng frontier model tùy chỉnh được host an toàn trên AWS. AWS định vị đây là cách dễ hơn và tiết kiệm chi phí hơn để xây dựng frontier model theo domain cụ thể.
 
 ---
 
-## Cedar – nền tảng cho policy mang tính xác định
+## Các trường hợp sử dụng và ứng dụng
 
-Để việc thực thi policy từ bên ngoài trở nên khả thi, Amazon Bedrock AgentCore sử dụng **Cedar**, một ngôn ngữ authorization được thiết kế vừa hiệu quả cho máy xử lý vừa dễ hiểu đối với con người. Cedar policy mô tả ba thành phần chính: **principal** (ai đang thực hiện request), **action** (hành động đang được yêu cầu), và **resource** (tài nguyên được truy cập). Các điều kiện có thể được thêm vào thông qua mệnh đề `when` để đánh giá ngữ cảnh runtime. 
+Amazon Nova Forge được thiết kế cho các tổ chức đã có sẵn dữ liệu độc quyền, kiến thức chuyên ngành hoặc thông tin vận hành đặc thù và muốn biến những tài sản này thành năng lực AI mạnh hơn. Thay vì chỉ dựa vào một mô hình generic, các tổ chức này có thể tạo ra mô hình phù hợp hơn với thực tế domain của họ.
 
-Bài blog của AWS nhấn mạnh một số lý do khiến Cedar phù hợp cho bảo mật agent. Thứ nhất, nó có cơ chế **default-deny**, nghĩa là mọi request sẽ bị từ chối trừ khi có rule cho phép rõ ràng. Thứ hai, **forbid rule luôn ghi đè permit rule**, cho phép đội bảo mật chặn hoàn toàn các pattern nguy hiểm ngay cả khi tồn tại quyền truy cập rộng hơn. Thứ ba, Cedar được thiết kế **không có side effects và không có vòng lặp**, giúp việc đánh giá nhanh, dự đoán được và dễ phân tích bằng các phương pháp hình thức. Những đặc tính này hỗ trợ việc thực thi policy mang tính xác định, đặc biệt quan trọng trong môi trường AI agent có hành vi rất động. 
+AWS đưa ra một số kịch bản ví dụ. Trong **manufacturing và automation**, các tổ chức có thể xây dựng mô hình hiểu rõ hơn các quy trình công nghiệp chuyên biệt, dữ liệu máy móc, quy trình vận hành và workflow liên quan đến thiết bị. Trong **research and development**, các công ty có thể tạo mô hình được huấn luyện trên tài liệu nghiên cứu nội bộ, tập dữ liệu riêng và chuyên môn domain mà dataset công khai không có. Trong **content và media**, các team có thể phát triển mô hình phù hợp với giọng điệu thương hiệu, tiêu chuẩn nội dung nội bộ và các yêu cầu moderation. Trong **các ngành chuyên biệt** nói chung, Nova Forge có thể dùng để huấn luyện mô hình hiểu ngôn ngữ chuyên ngành, quy định, best practice và các quy ước kỹ thuật của từng lĩnh vực.
 
-Blog cũng giải thích rằng policy trong AgentCore có thể được tạo theo nhiều cách. Developer và đội bảo mật có thể viết Cedar trực tiếp để kiểm soát chi tiết, tạo Cedar từ mô tả policy bằng ngôn ngữ tự nhiên, hoặc sử dụng các công cụ dạng form để định nghĩa rule. Sự linh hoạt này giúp giảm rào cản áp dụng trong khi vẫn giữ được semantics thực thi chính xác. 
-
----
-
-## Policy trong Amazon Bedrock AgentCore
-
-Policy trong Amazon Bedrock AgentCore hoạt động bằng cách đánh giá mọi request từ agent tới tool thông qua một **policy engine** đã được định nghĩa. Engine này là tập hợp các Cedar policy được gắn với **AgentCore Gateway**. Ở runtime, gateway sẽ chặn request, đánh giá nó dựa trên policy và quyết định có cho phép hay từ chối. Như vậy gateway trở thành **điểm thực thi bảo mật** giữa agent và các tool mà nó muốn gọi. 
-
-Theo bài viết, dịch vụ không chỉ hỗ trợ viết Cedar trực tiếp mà còn hỗ trợ tạo Cedar từ các policy mô tả bằng tiếng Anh đơn giản. Các policy được tạo ra sẽ được kiểm tra tính hợp lệ cú pháp, xác minh với schema của gateway và phân tích các vấn đề tiềm ẩn như quá permissive hoặc quá restrictive. Khả năng này giúp các team chuyển đổi **business rules thành các kiểm soát thực thi được**, đồng thời giảm nguy cơ cấu hình sai. 
-
-Một lợi ích thực tế của mô hình này là tổ chức có thể gắn policy engine ở chế độ **LOG_ONLY** trước. Ở chế độ này, họ có thể quan sát policy sẽ hoạt động ra sao mà không chặn traffic production. Khi xác nhận rằng policy hoạt động đúng như mong muốn, họ có thể chuyển sang chế độ enforcement để thực thi policy thật sự. Cách triển khai theo từng bước này rất hữu ích cho các doanh nghiệp muốn áp dụng kiểm soát nghiêm ngặt mà không làm gián đoạn hệ thống quan trọng. 
+Tùy vào mục tiêu kinh doanh, Nova Forge có thể giúp tổ chức tạo ra năng lực mô hình khác biệt, cải thiện hiệu năng cho task cụ thể, giảm độ trễ trong môi trường production và giảm chi phí tổng thể so với các phương pháp yêu cầu retraining lớn hoặc pipeline thích nghi mô hình bên ngoài.
 
 ---
 
-## Ví dụ agent đặt lịch khám bệnh
+## Cách thức hoạt động của Nova Forge
 
-Bài blog minh họa các ý tưởng trên bằng một agent đặt lịch khám bệnh trong hệ thống y tế. Agent này hỗ trợ nhiều tool khác nhau, bao gồm:
+Amazon Nova Forge được thiết kế để giải quyết các hạn chế của việc tùy chỉnh mô hình truyền thống bằng cách cho phép tổ chức bắt đầu phát triển từ **các checkpoint sớm** trong vòng đời của mô hình. Thay vì chỉ làm việc với một mô hình đã hoàn chỉnh, khách hàng có thể bắt đầu từ các checkpoint **pre-training**, **mid-training** hoặc **post-training**. Điều này mang lại sự linh hoạt lớn hơn trong cách mô hình được điều chỉnh cho một domain chuyên biệt.
 
-- `getPatient` để lấy thông tin hồ sơ bệnh nhân  
-- `searchImmunization` để truy vấn lịch sử tiêm chủng  
-- `bookAppointment` để đặt lịch khám  
-- `getSlots` để lấy danh sách khung giờ khám còn trống
+Một năng lực cốt lõi của Nova Forge là **data blending**. Các tổ chức có thể kết hợp dataset độc quyền của mình với **dữ liệu được Amazon Nova tuyển chọn** trong tất cả các giai đoạn huấn luyện. AWS cho biết quá trình training này có thể chạy bằng các recipe đã được kiểm chứng trên hạ tầng được quản lý hoàn toàn trong **Amazon SageMaker AI**. Điều này có nghĩa là khách hàng không cần tự xây dựng toàn bộ training stack từ đầu. Thay vào đó, họ có thể sử dụng tooling và workflow do AWS quản lý, trong khi vẫn định hình mô hình bằng dữ liệu riêng của mình.
 
-Vì các tool này cung cấp khả năng truy cập dữ liệu nhạy cảm, agent phải được quản lý rất cẩn thận. Các tác giả cho thấy nhiều pattern policy có thể kết hợp với nhau để tạo thành một tập policy **an toàn và có thể audit**.
-
-### Policy dựa trên danh tính
-
-Pattern đầu tiên là **identity-scoped access**. Trong hệ thống y tế, bệnh nhân chỉ nên truy cập hồ sơ của chính họ. Ví dụ, khi agent gọi `getPatient`, `patient_id` trong request phải trùng với ID của người dùng đã được xác thực. Một rule tương tự áp dụng cho việc tìm kiếm dữ liệu tiêm chủng. Điều này đảm bảo người dùng không thể yêu cầu agent truy cập hồ sơ của người khác chỉ bằng cách thay đổi giá trị input. 
-
-Blog giải thích rằng các rule như vậy có thể viết trực tiếp bằng Cedar hoặc sinh ra từ mô tả policy bằng ngôn ngữ tự nhiên. Trong cả hai trường hợp, policy cuối cùng sẽ so sánh identity đã xác thực với tham số request và chỉ cho phép hành động nếu chúng khớp nhau. 
-
-### Tách quyền đọc và ghi
-
-Pattern thứ hai là **phân tách quyền read và write dựa trên scope**. Trong nhiều hệ thống y tế, quyền đọc thường rộng hơn quyền ghi. Người dùng có thể được phép xem thông tin nếu có scope như `fhir:read`, trong khi đặt lịch hoặc thay đổi dữ liệu có thể yêu cầu scope riêng như `appointment:write`. Bằng cách tách quyền như vậy, tổ chức có thể giảm nguy cơ thay đổi dữ liệu trái phép trong khi vẫn cho phép truy cập thông tin cần thiết.
-
-Bài viết cũng minh họa cách sử dụng giao diện tạo policy dạng form để xây dựng các rule như vậy bằng cách xác định effect, principal, resource, action và conditions. Điều này hữu ích cho các team muốn viết policy có cấu trúc mà không cần viết Cedar thủ công.
-
-### Kiểm soát rủi ro trong việc đặt lịch
-
-Pattern thứ ba là sử dụng **risk control rõ ràng** để chặn các request nguy hiểm hoặc có khả năng bị lạm dụng. Ví dụ, policy có thể giới hạn việc truy cập khung giờ khám chỉ trong khoảng **9 AM đến 9 PM UTC**. Những request ngoài khoảng thời gian này sẽ bị từ chối. Loại rule này không chỉ liên quan đến authorization mà còn mã hóa **business constraint và cơ chế chống lạm dụng** trực tiếp trong lớp thực thi runtime.
-
-Đây là nơi mô hình **forbid-wins** của Cedar phát huy tác dụng. Ngay cả khi tồn tại permit rule tổng quát hơn, forbid rule vẫn có thể chặn các thao tác rủi ro cao. Điều này giúp tạo ra cơ chế bảo vệ nhiều lớp vừa dễ hiểu cho auditor vừa có thể thực thi trực tiếp ở runtime.
+Chiến lược trộn dữ liệu này đặc biệt quan trọng vì nó giúp giảm hiện tượng catastrophic forgetting so với việc chỉ huấn luyện trên dữ liệu độc quyền thô. Theo AWS, việc kết hợp dữ liệu curated với dữ liệu đặc thù của tổ chức giúp giữ lại các kỹ năng nền tảng như khả năng suy luận chung, khả năng làm theo instruction và các đặc tính an toàn tích hợp sẵn, trong khi vẫn cho phép mô hình hấp thụ kiến thức chuyên biệt của doanh nghiệp. Về thực tế, Nova Forge cố gắng cân bằng hai mục tiêu: giữ lại tính hữu dụng rộng của foundation model mạnh và đồng thời thích nghi sâu hơn với một domain cụ thể.
 
 ---
 
-## Kiểm thử mô hình thực thi
+## **Học tăng cường trong các môi trường độc quyền**
 
-Các tác giả AWS cũng trình bày một số kịch bản kiểm thử để minh họa cách hệ thống hoạt động. Trong một test, người dùng đã xác thực là `adult-patient-001` và yêu cầu agent lấy thông tin của chính ID đó. Vì request khớp với identity đã xác thực, quyết định policy là **ALLOW** và hồ sơ bệnh nhân được trả về. 
+Nova Forge cũng hỗ trợ **reinforcement learning (RL)** sử dụng reward function được định nghĩa trong môi trường riêng của tổ chức. Điều này cho phép mô hình học từ feedback được tạo ra trong điều kiện gần với use case thực tế hơn so với các benchmark chung.
 
-Trong test tiếp theo, cùng người dùng đó yêu cầu thông tin cho `pediatric-patient-001`. Agent, model và tool không thay đổi, nhưng tham số request không còn khớp với identity. Kết quả là gateway từ chối request vì không có permit policy nào phù hợp. Điều này chứng minh rằng **security boundary được thực thi tại gateway**, độc lập với quá trình suy luận của agent.
+Khả năng này hữu ích trong những tình huống mà thành công phụ thuộc vào chuỗi quyết định liên tiếp, feedback đặc thù môi trường hoặc logic reward do doanh nghiệp định nghĩa. AWS giải thích rằng khách hàng có thể sử dụng orchestrator riêng của họ để quản lý **multi-turn rollouts**, cho phép hỗ trợ các workflow RL nâng cao hơn, bao gồm hành vi agent phức tạp và các bài toán ra quyết định tuần tự.
 
-Một cặp test khác kiểm tra kiểm soát đặt lịch theo thời gian. Khi người dùng yêu cầu khung giờ trong khoảng hợp lệ, ví dụ **2 PM UTC**, forbid condition không khớp nên request được cho phép nếu có permit rule. Nhưng khi request được thực hiện lúc **3 AM UTC**, forbid rule sẽ khớp và request bị từ chối. Các test này cho thấy cách **permit dựa trên identity và forbid dựa trên thời gian** kết hợp để tạo ra kết quả bảo mật mang tính xác định.
+AWS đưa ra ví dụ như sử dụng công cụ hóa học để đánh giá thiết kế phân tử, hoặc mô phỏng robotics nơi hệ thống được thưởng khi hoàn thành nhiệm vụ hiệu quả và bị phạt khi có hành vi không an toàn như va chạm. Những ví dụ này cho thấy Nova Forge không chỉ giới hạn ở việc thích nghi mô hình cho text. Thay vào đó, nó có thể được sử dụng trong những môi trường mà việc cải thiện mô hình phụ thuộc vào tương tác với các công cụ chuyên biệt, simulator hoặc môi trường đánh giá nội bộ. Điều này khiến Nova Forge phù hợp với các ngành nghiên cứu chuyên sâu và hệ thống AI vận hành nâng cao cần nhiều hơn fine-tuning thông thường.
 
 ---
 
-## Triển khai và vận hành
+## **AI có trách nhiệm và cấu hình an toàn**
 
-Để thử ví dụ này, bài blog hướng dẫn clone repository **amazon-bedrock-agentcore-samples** và truy cập vào sample healthcare appointment agent. Repository bao gồm hướng dẫn setup, cấu hình môi trường AWS, triển khai stack và gọi agent end-to-end.
+Ngoài việc huấn luyện và tùy chỉnh mô hình, Nova Forge còn bao gồm **bộ công cụ responsible AI** tích hợp sẵn. Bộ công cụ này cho phép tổ chức cấu hình hành vi **safety** và **content moderation** của các mô hình tùy chỉnh.
 
-Bài viết cũng liệt kê một số điều kiện cần thiết, bao gồm tài khoản AWS đang hoạt động, sử dụng Region hỗ trợ Policy trong AgentCore và quyền IAM phù hợp để tạo và quản lý policy engine, Cedar policies, tài nguyên tạo policy và gateway association. AWS khuyến nghị trong môi trường production nên giới hạn quyền truy cập vào các resource cụ thể thay vì dùng wildcard rộng.
-Về vận hành, quy trình được khuyến nghị là: tạo policy engine, viết policy bằng một trong các phương pháp hỗ trợ, gắn engine vào gateway ở chế độ **LOG_ONLY**, quan sát hành vi qua log, và sau đó chuyển sang chế độ enforcement khi đã xác nhận policy hoạt động đúng. Quy trình này giúp các team áp dụng policy-based enforcement một cách **an toàn và có hệ thống**.
+AWS cho biết khách hàng có thể điều chỉnh các thiết lập này để phù hợp với nhu cầu kinh doanh cụ thể trong các lĩnh vực như an toàn, bảo mật và xử lý nội dung nhạy cảm.
+
+Đây là một phần quan trọng của nền tảng vì việc triển khai AI trong doanh nghiệp không chỉ liên quan đến chất lượng mô hình hay hiệu năng benchmark. Trong nhiều tổ chức, việc sẵn sàng đưa vào production còn phụ thuộc vào governance, chính sách moderation và kiểm soát rủi ro nội dung. Bằng cách tích hợp các tùy chọn này trực tiếp trong Nova Forge, AWS cung cấp một framework nơi các tổ chức có thể làm việc cả về tùy chỉnh mô hình lẫn trách nhiệm mô hình trong cùng một môi trường.
+
+---
+
+## **Bắt đầu với Nova Forge**
+
+
+AWS cho biết Nova Forge tích hợp với các workflow AI hiện có trên AWS, đặc biệt là những workflow xoay quanh **Amazon SageMaker AI** và **Amazon Bedrock**. Khách hàng có thể sử dụng các công cụ và hạ tầng quen thuộc trong SageMaker AI để chạy training job, sau đó import các Nova model tùy chỉnh vào Amazon Bedrock dưới dạng **private models**.
+
+Sự tích hợp này quan trọng vì nó cho phép tổ chức tiếp tục sử dụng cùng một môi trường AWS cho bảo mật, API và vận hành. Thay vì xây dựng một hệ thống cho training và một stack khác cho serving, các team có thể đi từ phát triển mô hình đến triển khai ứng dụng bằng các service đã được kết nối sẵn trong hệ sinh thái AWS. AWS nhấn mạnh rằng điều này mang lại cùng một mô hình bảo mật, API nhất quán và khả năng tích hợp rộng giống như các model khác trong Amazon Bedrock.
+
+Trong **Amazon SageMaker Studio**, người dùng hiện có thể xây dựng frontier model bằng Amazon Nova. Workflow ở mức cao mà AWS mô tả khá đơn giản. Trước tiên, người dùng chọn checkpoint mà họ muốn bắt đầu, chẳng hạn như **pre-trained**, **mid-trained** hoặc **post-trained** checkpoint. Sau đó họ có thể upload dataset của riêng mình hoặc sử dụng dataset đã có sẵn trong workflow.
+
+Sau khi chọn checkpoint và nguồn dữ liệu, người dùng có thể trộn dữ liệu training của mình với các dataset curated do Nova cung cấp. AWS cho biết các dataset curated này được phân loại theo domain và nhằm giúp giữ hiệu năng chung của mô hình đồng thời giảm nguy cơ overfitting hoặc catastrophic forgetting. Đây là bước trung tâm trong cách Nova Forge cân bằng giữa specialization và khả năng tổng quát.
+
+AWS cũng cho biết người dùng có thể tùy chọn áp dụng **Reinforcement Fine-Tuning (RFT)**. Theo bài blog, kỹ thuật này có thể được dùng để cải thiện độ chính xác về mặt factual và giảm hallucination trong các domain cụ thể. Sau khi training hoàn tất, mô hình kết quả có thể được import vào Amazon Bedrock và sử dụng trong các ứng dụng downstream.
+
+---
+
+## **Những điều cần biết**
+
+Tại thời điểm ra mắt, **Amazon Nova Forge** có sẵn trong AWS Region **US East (N. Virginia)**. AWS cho biết dịch vụ này bao gồm quyền truy cập nhiều Nova model checkpoint, recipe để trộn dữ liệu độc quyền với dữ liệu huấn luyện được Amazon Nova tuyển chọn, các recipe huấn luyện đã được thiết lập sẵn, và tích hợp với cả Amazon SageMaker AI và Amazon Bedrock.
+
+Đối với người dùng muốn tìm hiểu sâu hơn về dịch vụ, AWS đề xuất bắt đầu với **Amazon Nova User Guide** và **Amazon SageMaker AI console**. AWS cũng lưu ý rằng các tổ chức cần hỗ trợ sâu hơn hoặc chuyên biệt hơn có thể liên hệ **Generative AI Innovation Center** để được hỗ trợ trong các dự án phát triển mô hình.
+
+---
+
+## **Tại sao lần ra mắt này quan trọng**
+
+Amazon Nova Forge là một bước phát triển đáng chú ý cho các tổ chức muốn kiểm soát nhiều hơn quá trình tạo mô hình mà không phải gánh toàn bộ chi phí huấn luyện frontier model từ đầu. Trong nhiều môi trường doanh nghiệp, giải pháp lý tưởng không phải là một mô hình hoàn toàn generic cũng không phải là một mô hình custom hoàn toàn từ số 0. Thay vào đó, con đường phù hợp thường là một mô hình lai: bắt đầu với một mô hình mạnh có sẵn, thích nghi nó sớm hơn và sâu hơn so với fine-tuning thông thường, giữ lại các năng lực cốt lõi, và triển khai nó trên một nền tảng sẵn sàng cho production.
+
+Nova Forge được thiết kế chính xác cho khoảng trung gian đó. Nó cung cấp quyền truy cập các Nova checkpoint, khả năng trộn dữ liệu curated, hạ tầng training do AWS quản lý, hỗ trợ reinforcement learning trong môi trường riêng, cấu hình responsible AI linh hoạt và triển khai thông qua Amazon Bedrock. Khi kết hợp lại, những khả năng này khiến Nova Forge không chỉ đơn giản là một tính năng fine-tuning. Nó được định vị như một framework rộng hơn để xây dựng **frontier model nhận thức domain (domain-aware frontier models)** đồng thời vẫn đáp ứng các yêu cầu doanh nghiệp về hiệu năng, an toàn và tích hợp vận hành.
 
 ---
 
 ## Kết luận
 
-Thông điệp chính của bài blog AWS là **AI agent chỉ đáng tin cậy khi các ranh giới xung quanh nó được thiết lập rõ ràng**. Vì agent có thể suy luận linh hoạt và gọi các tool mạnh mẽ, các kiểm soát bảo mật phải được thực thi **bên ngoài mô hình**. Policy trong Amazon Bedrock AgentCore giải quyết thách thức này bằng cách đặt một lớp policy mang tính xác định và có thể audit tại gateway, nơi mọi tool call được đánh giá trước khi thực thi.
+Khi các tổ chức tiếp tục áp dụng generative AI, nhu cầu về những mô hình hiểu sâu dữ liệu độc quyền và domain chuyên biệt sẽ ngày càng tăng. Các phương pháp tùy chỉnh tiêu chuẩn vẫn hữu ích, nhưng chúng thường chưa đủ cho những doanh nghiệp có tri thức nội bộ phức tạp, workflow độc đáo hoặc yêu cầu domain có mức độ quan trọng cao.
 
-Bằng cách kết hợp Cedar policy, cơ chế default-deny, semantics forbid-overrides và thực thi runtime tại gateway, các tổ chức có thể xây dựng hệ thống agentic **an toàn hơn, minh bạch hơn và dễ audit hơn**. Ví dụ về hệ thống đặt lịch khám bệnh cho thấy cách rule dựa trên identity, phân tách scope và kiểm soát rủi ro theo business có thể phối hợp để bảo vệ các hệ thống nhạy cảm. Với các doanh nghiệp hoạt động trong lĩnh vực được quản lý chặt chẽ, việc tách biệt **khả năng của agent** và **cơ chế thực thi bảo mật** là nền tảng vững chắc cho các AI agent ở cấp độ production.
+Amazon Nova Forge giải quyết nhu cầu này bằng cách cho phép khách hàng bắt đầu từ các Nova checkpoint sớm, trộn dữ liệu của họ với dataset curated của Amazon, huấn luyện bằng hạ tầng SageMaker AI được quản lý và triển khai mô hình tùy chỉnh thông qua Amazon Bedrock. AWS giới thiệu đây là cách dễ hơn và tiết kiệm chi phí hơn để xây dựng frontier model kết hợp giữa năng lực nền tảng mạnh và sự phù hợp sâu với domain.
 
----
+Đối với các doanh nghiệp muốn tiến xa hơn các phương pháp thích nghi nhẹ và hướng tới mức độ chuyên biệt hóa mô hình nghiêm túc hơn, Nova Forge cung cấp một con đường thực tế trong hệ sinh thái AWS. Nó giảm bớt một số rào cản lớn nhất vốn gắn liền với việc phát triển frontier model, đồng thời vẫn cho phép tổ chức kiểm soát đáng kể cách mô hình của họ được huấn luyện, thích nghi, quản trị và triển khai.
 
 ## Về tác giả
 
-**Bharathi Srinivasan** là Generative AI Data Scientist tại AWS Worldwide Specialist Organization. Cô phát triển các giải pháp Responsible AI với trọng tâm là fairness của thuật toán, độ tin cậy của LLM, khả năng giải thích và governance của agent.
-
-**Anil Nadiminti** là Senior Solutions Architect tại AWS tập trung vào lĩnh vực FinTech. Anh làm việc với các tổ chức tài chính doanh nghiệp và các công ty blockchain để cung cấp giải pháp kỹ thuật và chiến lược trong Web3 và DeFi.
-
-**Pushpinder Dua** là Software Development Manager tại AWS Agentic AI. Anh lãnh đạo các sáng kiến liên quan đến governance của hệ thống agentic và sự phát triển của các agentic protocol nhằm cải thiện tính an toàn và độ tin cậy của hệ sinh thái agent.
-
-**Jean-Baptiste Tristan** là Principal Applied Scientist tại AWS Agentic AI. Công việc của ông tập trung vào **an toàn và bảo mật của agentic systems**, kết hợp automated reasoning với generative AI.
+**Danilo Poccia** làm việc với các startup và các công ty ở nhiều quy mô khác nhau nhằm hỗ trợ đổi mới sáng tạo. Trong vai trò **Chief Evangelist (EMEA) tại Amazon Web Services**, ông giúp mọi người hiện thực hóa các ý tưởng, với trọng tâm đặc biệt vào **kiến trúc serverless**, **lập trình hướng sự kiện (event-driven programming)**, cũng như tác động kỹ thuật và kinh doanh của **machine learning** và **edge computing**. Ông cũng là tác giả của cuốn sách *AWS Lambda in Action*.

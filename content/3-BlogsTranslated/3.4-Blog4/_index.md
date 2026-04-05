@@ -1,114 +1,97 @@
 ---
 title: "Blog 4"
-date: 2026-03-12
-weight: 4
+date: 2025-12-02
+weight: 1
 chapter: false
 pre: " <b> 3.4. </b> "
 ---
 
-# Secure AI agents with Policy in Amazon Bedrock AgentCore
+# Introducing Amazon Nova Forge: Build Your Own Frontier Models Using Nova
 
-Deploying AI agents safely in regulated industries is a major challenge because these systems can access sensitive data, call tools, and take actions with real-world impact. Unlike traditional software, an AI agent does not simply follow a fixed sequence of instructions. Instead, it can decide which tools to call, what data to retrieve, and how to respond based on user input and environmental context. This flexibility makes agents powerful, but it also introduces new security risks such as unauthorized data access, unintended transactions, prompt injection, and misuse of connected systems. In the AWS blog post *Secure AI agents with Policy in Amazon Bedrock AgentCore*, the authors explain how **Policy in Amazon Bedrock AgentCore** provides a deterministic enforcement layer that secures AI agents independently of the agent’s own reasoning. 
+Organizations are increasingly adopting generative AI in many parts of their operations, from internal productivity tools to advanced domain-specific applications. As this adoption grows, the limitations of general-purpose foundation models become more visible. Many enterprise scenarios require models that can understand private knowledge, internal terminology, specialized workflows, and business-specific requirements at a much deeper level than standard prompting can provide.
 
-The post uses a **healthcare appointment scheduling agent** as a concrete example. Healthcare is a highly relevant domain because agents in this environment may handle protected health information (PHI), appointment scheduling, and access to patient records. In such a setting, it is not enough to rely on the model itself to behave safely. Instead, organizations need a mechanism that consistently enforces who can access what, under which conditions, and with what restrictions. Policy in Amazon Bedrock AgentCore is designed to provide exactly that kind of control by operating at runtime through the gateway layer. 
+Common customization approaches such as **prompt engineering** and **Retrieval-Augmented Generation (RAG)** are useful for many applications, but they still do not fundamentally reshape the model’s internal representation of knowledge. They mainly help the model respond better at inference time rather than altering what the model has learned in a deeper sense. Other approaches like **supervised fine-tuning** and **reinforcement learning** also help customize a model, but these methods are often applied after the model has already been fully trained. At that stage, the model is harder to steer toward very specific domains of interest.
 
----
-
-## Why AI agents need external policy enforcement
-
-A key argument in the blog is that securing AI agents is more difficult than securing conventional applications. Traditional software usually has clearly defined code paths, while agents rely on large language models (LLMs) that can reason in open-ended ways. This means the same model might behave differently depending on prompts, tool results, surrounding context, or even adversarial input. Since LLMs can hallucinate and do not inherently separate trusted instructions from untrusted text, agents are vulnerable to prompt injection and related attacks. 
-
-One common way to reduce risk is to wrap agents in application code that limits which tools can be called and under what circumstances. However, this approach has drawbacks. Security logic becomes scattered across the codebase, making it harder to review, audit, and maintain. It also means that the correctness of the wrapper code itself becomes part of the security boundary. If there is a bug in that code, the agent may still perform unsafe operations. The AWS post proposes a different model: move policy enforcement completely outside the agent and enforce it before any tool invocation takes place. 
-
-This separation is important because it means the policy remains in effect regardless of how the agent is prompted, what the agent “believes,” or whether the application logic contains flaws. The gateway evaluates every request against defined policies before allowing access to tools. As a result, security rules become explicit, auditable, and independent of the LLM’s behavior. 
+For organizations that want stronger customization, **Continued Pre-Training (CPT)** may appear to be a natural solution. However, if CPT is done only on proprietary enterprise data, the model can experience **catastrophic forgetting**, where it becomes better at the new domain but loses foundational capabilities learned earlier. On top of that, training a frontier model from the beginning remains too expensive and resource-intensive for most organizations because it requires very large datasets, substantial computing infrastructure, and advanced training expertise. AWS introduced **Amazon Nova Forge** as a way to close this gap. With Nova Forge, customers can start from early Amazon Nova checkpoints, combine their own datasets with Amazon Nova-curated training data, and build custom frontier models hosted securely on AWS. AWS positions this as an easier and more cost-effective way to build domain-specific frontier models. 
 
 ---
 
-## Cedar as the foundation for deterministic policies
+## Use Cases and Applications
 
-To make external policy enforcement practical, Amazon Bedrock AgentCore uses **Cedar**, an authorization language designed to be both machine-efficient and understandable by humans. Cedar policies describe three core elements: the **principal** (who is making the request), the **action** (what operation is being attempted), and the **resource** (what is being accessed). Conditions can then be added in a `when` clause to evaluate runtime context. 
+Amazon Nova Forge is designed for organizations that already have access to proprietary data, industry-specific knowledge, or specialized operational information and want to turn those assets into stronger AI capabilities. Rather than relying only on a generic model, these organizations can create models that are more aligned with the reality of their domain.
 
-The AWS blog highlights several reasons Cedar is a strong fit for agent security. First, it has a **default-deny** posture, which means any request is denied unless there is an explicit rule allowing it. Second, **forbid rules override permit rules**, which gives security teams a powerful way to hard-stop dangerous patterns even when broader permissions exist. Third, Cedar is designed to be side-effect free and loop-free, which makes evaluation fast, predictable, and easier to analyze formally. These properties support deterministic enforcement, something that is especially valuable when working with highly dynamic AI agents.
+AWS highlights several example scenarios. In **manufacturing and automation**, organizations can build models that better understand specialized industrial processes, machine data, operational procedures, and equipment-related workflows. In **research and development**, companies can create models trained on internal research materials, private data collections, and domain-specific expertise that may not be captured by public datasets. In **content and media**, teams can develop models that align with a company’s brand voice, internal content standards, and moderation requirements. In **specialized industries** more broadly, Nova Forge can be used to train models that understand sector-specific language, regulations, best practices, and technical conventions.
 
-The blog also explains that policies in AgentCore can be authored in multiple ways. Developers and security teams can write Cedar directly for fine-grained control, generate Cedar from natural-language policy descriptions, or use form-based tools to define the required rules. This flexibility lowers the barrier to adoption while still preserving precise enforcement semantics.
-
----
-
-## Policy in Amazon Bedrock AgentCore
-
-Policy in Amazon Bedrock AgentCore works by evaluating every agent-to-tool request against a defined **policy engine**. This engine is a collection of Cedar policies attached to an **AgentCore Gateway**. At runtime, the gateway intercepts requests and decides whether they should be allowed or denied. This means the gateway becomes the enforcement point between the agent and the tools it wants to call. 
-
-According to the post, the service supports not only direct Cedar authoring, but also generation of Cedar from plain English policy statements. The generated policies are checked for syntactic correctness, validated against the gateway schema, and analyzed for potential problems such as being overly permissive or overly restrictive. This capability helps teams convert business rules into enforceable controls while reducing the chance of misconfiguration. 
-
-A practical benefit of this model is that organizations can first attach a policy engine in **LOG_ONLY** mode. In that mode, they can observe how policies would behave without actually blocking production traffic. Once they confirm the policies produce the intended behavior, they can switch to enforcement mode and actively govern runtime access. This staged rollout is useful for enterprises that want to introduce strict controls without disrupting critical systems. 
+Depending on the business objective, Nova Forge can help organizations create differentiated model capabilities, improve task-specific performance, reduce latency in production settings, and lower overall cost compared with approaches that require more extensive retraining or external model adaptation pipelines. 
 
 ---
 
-## Healthcare appointment scheduling agent example
+## How Nova Forge Works
 
-The blog demonstrates these ideas with a healthcare appointment scheduling agent. This agent supports several tools, including:
+Amazon Nova Forge is designed to address the limitations of traditional model customization by allowing organizations to start development from **early checkpoints** in the model lifecycle. Instead of only working with a fully completed model, customers can begin from **pre-training**, **mid-training**, or **post-training** checkpoints. This provides much more flexibility in how a model is adapted to a specialized domain.
 
-- `getPatient` to retrieve a patient record
-- `searchImmunization` to query immunization records
-- `bookAppointment` to schedule an appointment
-- `getSlots` to retrieve available appointment slots
+A core capability of Nova Forge is **data blending**. Organizations can combine their proprietary datasets with **Amazon Nova-curated data** across all training phases. AWS states that this training can be run using proven recipes on fully managed infrastructure in **Amazon SageMaker AI**. This means that customers do not need to assemble the entire training stack from scratch. Instead, they can rely on AWS-managed tooling and workflows while still shaping the model using their own data.
 
-Because these tools expose sensitive capabilities, the agent must be governed carefully. The authors show how multiple policy patterns can be combined into a secure and auditable policy set.
-
-### Identity-based policies
-
-The first pattern is **identity-scoped access**. In a healthcare system, a patient should only be able to access their own records. For example, when the agent calls `getPatient`, the `patient_id` supplied in the request must match the authenticated user’s patient ID. A similar rule applies to immunization searches. This ensures that users cannot ask the agent to access someone else’s medical records simply by changing an input value. 
-
-The blog explains that such rules can be written directly in Cedar or generated from natural-language descriptions. In both cases, the final policy compares the authenticated identity with the request parameters and only permits the action if they match.
-
-### Read versus write separation
-
-The second pattern is **scope-based separation of read and write access**. In many healthcare systems, read operations are broader than write operations. A user may be allowed to view certain information if they have a scope such as `fhir:read`, while booking appointments or modifying data may require a separate scope such as `appointment:write`. By separating permissions in this way, organizations can minimize the risk of unauthorized changes while still supporting necessary access to information. 
-
-The post shows how a form-based policy creation flow can be used to create such rules by specifying the effect, principal, resource, action, and conditions. This is useful for teams that want structured policy authoring without writing Cedar manually from scratch.
-
-### Risk controls on scheduling
-
-The third pattern is the use of **explicit risk controls** to block dangerous or abusive requests. The blog gives an example policy that restricts access to appointment slots to a specific time range, such as between **9 AM and 9 PM UTC**. Requests made outside that window are denied. This kind of rule is not just about authorization; it also encodes business constraints and abuse prevention directly into the runtime enforcement layer.
-
-This is where Cedar’s **forbid-wins** model becomes especially useful. Even if a more general permit rule exists, a targeted forbid rule can still block high-risk operations. That makes it easier to create layered protection that is both readable for auditors and enforceable at runtime.
+This data-mixing strategy is especially important because it helps reduce catastrophic forgetting compared with training only on raw proprietary data. According to AWS, blending curated data with organization-specific data helps preserve foundational skills such as core intelligence, general instruction-following ability, and built-in safety characteristics, while still enabling the model to absorb specialized enterprise knowledge. In practical terms, Nova Forge tries to balance two goals at once: retaining the broad usefulness of a powerful foundation model and adapting it more deeply to a specific domain. 
 
 ---
 
-## Testing the enforcement model
+## Reinforcement Learning in Proprietary Environments
 
-The AWS authors also walk through policy testing scenarios to show how the system behaves in practice. In one test, the authenticated user is `adult-patient-001` and asks the agent to retrieve information for the same patient ID. Because the request matches the authenticated identity, the policy decision is **ALLOW** and the patient record is returned.
+Nova Forge also supports **reinforcement learning (RL)** using reward functions defined in an organization’s own environment. This allows models to learn from feedback generated under conditions that match real use cases more closely than generic benchmark settings.
 
-In the next test, the same authenticated user requests patient information for `pediatric-patient-001`. The agent, model, and tool are unchanged, but the request parameter no longer matches the user’s identity. As a result, the gateway denies the request because no matching permit policy exists. This demonstrates that the security boundary is enforced consistently at the gateway, independent of the agent’s reasoning.
+This capability is useful in situations where success depends on sequential decisions, environment-specific feedback, or business-defined reward logic. AWS explains that customers can use their own orchestrator to manage **multi-turn rollouts**, which makes it possible to support more advanced RL workflows, including complex agent behavior and sequential decision-making tasks.
 
-A second pair of tests examines time-based scheduling control. When a user requests appointment slots during permitted hours, such as **2 PM UTC**, the relevant forbid condition does not match, so the request is allowed if a permit rule applies. But when the same request is made at **3 AM UTC**, the forbid rule matches and the request is denied. These tests illustrate how identity-based permits and time-based forbids can work together to create deterministic security outcomes.
+AWS gives examples such as using chemistry tools to evaluate molecular designs or robotics simulations that reward efficient task completion while penalizing unsafe behavior like collisions. These examples show that Nova Forge is not limited to text-only adaptation. Instead, it can be used in settings where model improvement depends on interaction with specialized tools, simulators, or internal evaluation environments. That makes it relevant for research-heavy industries and advanced operational AI systems that need more than standard fine-tuning. 
 
 ---
 
-## Implementation and operational considerations
+## Responsible AI and Safety Configuration
 
-To try the example, the blog instructs readers to clone the **amazon-bedrock-agentcore-samples** repository and navigate to the healthcare appointment agent sample. The sample includes setup and deployment instructions for configuring the AWS environment, deploying the stack, and invoking the agent end to end.
+Beyond training and customization, Nova Forge also includes a built-in **responsible AI toolkit**. This toolkit allows organizations to configure the **safety** and **content moderation** behavior of their custom models. AWS notes that customers can adjust these settings to match specific business needs in areas such as safety, security, and the handling of sensitive content.
 
-The post also lists prerequisites, including an active AWS account, use of a Region where Policy in AgentCore is available, and appropriate IAM permissions for creating and managing policy engines, Cedar policies, policy generation resources, and gateway associations. AWS recommends scoping these permissions to specific resources in production rather than using broad wildcards.
+This is a meaningful part of the platform because enterprise AI deployment is not only about model quality or benchmark performance. In many organizations, production readiness also depends on governance, moderation policies, and content risk controls. By including these options directly in Nova Forge, AWS provides a framework where organizations can work on model customization and model responsibility within the same broader environment. 
 
-Operationally, the recommended sequence is to create a policy engine, author policies using one of the supported methods, attach the engine to a gateway in LOG_ONLY mode, observe behavior through logs, and then move to full enforcement once the behavior is verified. This process helps teams adopt policy-based enforcement safely and systematically.
+---
+
+## Getting Started with Nova Forge
+
+AWS explains that Nova Forge integrates with existing AWS AI workflows, especially those built around **Amazon SageMaker AI** and **Amazon Bedrock**. Customers can use familiar tools and infrastructure in SageMaker AI to run training jobs, then import the resulting custom Nova models into Amazon Bedrock as **private models**.
+
+This integration matters because it allows organizations to continue using the same broader AWS environment for security, APIs, and operational consistency. Instead of building one system for training and another separate stack for serving, teams can move from model development to application deployment using services that are already connected within the AWS ecosystem. AWS specifically notes that this gives customers the same security model, consistent APIs, and broader integrations available to other models in Amazon Bedrock. 
+
+In **Amazon SageMaker Studio**, users can now build frontier models using Amazon Nova. The high-level workflow described by AWS is straightforward. First, users choose which checkpoint they want to start from, such as a **pre-trained**, **mid-trained**, or **post-trained** checkpoint. They can then upload their own dataset or work with existing datasets already available in their workflow.
+
+After selecting the starting checkpoint and data sources, users can blend their training data with curated datasets provided by Nova. AWS notes that these curated datasets are categorized by domain and are intended to help preserve general model performance while reducing the risk of overfitting or catastrophic forgetting. This stage is central to how Nova Forge balances specialization with retention of broad capability.
+
+AWS also notes that users can optionally apply **Reinforcement Fine-Tuning (RFT)**. According to the blog, this can be used to improve factual accuracy and reduce hallucinations in specific domains. After training is complete, the resulting model can be imported into Amazon Bedrock and used in downstream applications. 
+
+---
+
+## Things to Know
+
+At launch, **Amazon Nova Forge** is available in the **US East (N. Virginia)** AWS Region. AWS states that the offering includes access to multiple Nova model checkpoints, recipes for mixing proprietary data with Amazon Nova-curated training data, established training recipes, and integration with both Amazon SageMaker AI and Amazon Bedrock.
+
+For users who want to explore the service further, AWS points to the **Amazon Nova User Guide** and the **Amazon SageMaker AI console** as primary starting points. AWS also notes that organizations looking for deeper or more specialized support can contact the **Generative AI Innovation Center** for assistance with model development initiatives. 
+
+---
+
+## Why This Launch Is Important
+
+Amazon Nova Forge represents a significant development for organizations that want more control over model creation without taking on the full burden of frontier-model training from scratch. In many enterprise settings, the ideal solution is not a completely generic model and not a fully custom model built from zero. Instead, the ideal path is often a hybrid one: begin with a strong existing model, adapt it earlier and more deeply than standard fine-tuning allows, preserve its core capabilities, and then deploy it within a production-ready platform.
+
+Nova Forge is designed around exactly that middle ground. It provides access to Amazon Nova checkpoints, curated data mixing, AWS-managed training infrastructure, reinforcement learning support in proprietary environments, configurable responsible AI settings, and deployment through Amazon Bedrock. Taken together, these capabilities make Nova Forge more than just a fine-tuning feature. It is positioned as a broader framework for building **domain-aware frontier models** that remain aligned with enterprise requirements for performance, safety, and operational integration. 
 
 ---
 
 ## Conclusion
 
-The main message of the AWS blog is that AI agents are only as trustworthy as the boundaries surrounding them. Because agents can reason flexibly and invoke powerful tools, security controls must be enforced outside the model itself. Policy in Amazon Bedrock AgentCore addresses this challenge by placing a deterministic, auditable policy layer at the gateway, where every tool call is evaluated before execution.
+As organizations continue to adopt generative AI, the need for models that deeply understand proprietary data and specialized domains will continue to grow. Standard customization methods remain useful, but they often do not go far enough for enterprises with complex internal knowledge, unique workflows, or high-stakes domain requirements.
 
-By combining Cedar policies, default-deny behavior, forbid-overrides semantics, and runtime gateway enforcement, organizations can build agentic systems that are safer, more transparent, and easier to audit. The healthcare scheduling example shows how identity-based rules, scope separation, and business-risk controls can work together to protect sensitive systems. For enterprises operating in regulated domains, this separation between agent capability and security enforcement is a strong foundation for production-grade AI agents.
+Amazon Nova Forge addresses this need by allowing customers to start from early Nova checkpoints, blend their data with Amazon-curated datasets, train using managed SageMaker AI infrastructure, and deploy custom models through Amazon Bedrock. AWS presents this as an easier and more cost-effective way to build frontier models that combine broad foundational capability with deeper domain alignment.
 
----
+For enterprises that want to move beyond lightweight adaptation and toward more serious model specialization, Nova Forge offers a practical path inside the AWS ecosystem. It reduces some of the biggest barriers traditionally associated with frontier-model development while still giving organizations meaningful control over how their models are trained, adapted, governed, and deployed.
 
-## About the Authors
+## About the Author
 
-**Bharathi Srinivasan** is a Generative AI Data Scientist at the AWS Worldwide Specialist Organization. She develops Responsible AI solutions with a focus on algorithmic fairness, large language model veracity, explainability, and governance of agents. She also advises internal AWS teams and customers on their Responsible AI journey and has presented her work at multiple machine learning conferences. 
-
-**Anil Nadiminti** is a Senior Solutions Architect at AWS focused on the FinTech segment. He works with enterprise financial institutions and blockchain-native companies to deliver technical and strategic solutions across Web3 and decentralized finance. He is also passionate about Agentic AI and contributes to the AWS community through conferences, workshops, and open-source projects.
-
-**Pushpinder Dua** is a Software Development Manager at AWS Agentic AI. He leads initiatives related to governance of agentic systems and the evolution of agentic protocols that aim to improve safety, reliability, and interoperability across agentic ecosystems.
-
-**Jean-Baptiste Tristan** is a Principal Applied Scientist at AWS Agentic AI. His work focuses on agentic safety and security, combining automated reasoning with generative AI.
+**Danilo Poccia** works with startups and companies of different sizes to support innovation. In his role as **Chief Evangelist (EMEA) at Amazon Web Services**, he helps people bring ideas to life, with particular focus on **serverless architectures**, **event-driven programming**, and the technical and business impact of **machine learning** and **edge computing**. He is also the author of *AWS Lambda in Action*.
