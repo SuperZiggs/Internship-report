@@ -1,1 +1,179 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Worklog on Internship Report</title><link>https://superziggs.github.io/Internship-report/1-worklog/</link><description>Recent content in Worklog on Internship Report</description><generator>Hugo</generator><language>en</language><lastBuildDate/><atom:link href="https://superziggs.github.io/Internship-report/1-worklog/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Worklog on Internship Report</title><link>https://superziggs.github.io/Internship-report/1-worklog/</link><description>Recent content in Worklog on Internship Report</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate><atom:link href="https://superziggs.github.io/Internship-report/1-worklog/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://superziggs.github.io/Internship-report/1-worklog/timeline/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://superziggs.github.io/Internship-report/1-worklog/timeline/</guid><description>&lt;h1 id="project-timeline---myfit-12-tuần">Project Timeline - myFit (12 tuần)&lt;/h1>
+&lt;h2 id="1-tổng-quan-kế-hoạch">1) Tổng quan kế hoạch&lt;/h2>
+&lt;ul>
+&lt;li>Thời gian dự án: 12 tuần (01/2026 - 04/2026)&lt;/li>
+&lt;li>Sản phẩm: myFit (Spring Boot + React Native), tích hợp AWS Cognito, S3, Bedrock&lt;/li>
+&lt;li>Mục tiêu cuối kỳ:
+&lt;ul>
+&lt;li>Hoàn thiện ứng dụng full-stack phục vụ theo dõi tập luyện, dinh dưỡng và sức khỏe&lt;/li>
+&lt;li>Đảm bảo bảo mật, khả năng vận hành và tài liệu bàn giao đầy đủ&lt;/li>
+&lt;li>Trình bày demo cuối kỳ và nộp báo cáo thực tập&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="2-kế-hoạch-theo-giai-đoạn">2) Kế hoạch theo giai đoạn&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th style="text-align: left">Giai đoạn&lt;/th>
+ &lt;th style="text-align: left">Tuần&lt;/th>
+ &lt;th style="text-align: left">Trọng tâm&lt;/th>
+ &lt;th style="text-align: left">Kết quả đầu ra chính&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td style="text-align: left">Khởi tạo nền tảng&lt;/td>
+ &lt;td style="text-align: left">1-2&lt;/td>
+ &lt;td style="text-align: left">Setup hệ thống, auth, profile&lt;/td>
+ &lt;td style="text-align: left">Skeleton backend/frontend, Cognito login, UserProfile&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Xây tính năng cốt lõi&lt;/td>
+ &lt;td style="text-align: left">3-6&lt;/td>
+ &lt;td style="text-align: left">GoalType, workout plans, session/log&lt;/td>
+ &lt;td style="text-align: left">Luồng kế hoạch tập và phiên tập hoạt động end-to-end&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Mở rộng nghiệp vụ&lt;/td>
+ &lt;td style="text-align: left">7-9&lt;/td>
+ &lt;td style="text-align: left">Media, dinh dưỡng, chỉ số sức khỏe&lt;/td>
+ &lt;td style="text-align: left">S3 media, meal tracking, BMI/BMR/TDEE dashboard&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tăng tốc chất lượng&lt;/td>
+ &lt;td style="text-align: left">10-11&lt;/td>
+ &lt;td style="text-align: left">AI chat, tối ưu UX, test và tài liệu&lt;/td>
+ &lt;td style="text-align: left">Chat Bedrock, Home/Profile hoàn thiện, E2E + docs&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Chốt dự án&lt;/td>
+ &lt;td style="text-align: left">12&lt;/td>
+ &lt;td style="text-align: left">Thuyết trình, phản hồi, bàn giao&lt;/td>
+ &lt;td style="text-align: left">Demo cuối, báo cáo thực tập, tổng kết dự án&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;h2 id="3-timeline-chi-tiết-theo-tuần">3) Timeline chi tiết theo tuần&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th style="text-align: left">Tuần&lt;/th>
+ &lt;th style="text-align: left">Mục tiêu chính&lt;/th>
+ &lt;th style="text-align: left">Hạng mục thực hiện&lt;/th>
+ &lt;th style="text-align: left">Deliverable&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 1&lt;/td>
+ &lt;td style="text-align: left">Khởi động dự án và thiết lập nền tảng kỹ thuật&lt;/td>
+ &lt;td style="text-align: left">Tạo repo backend/frontend, setup Docker PostgreSQL, thiết kế ERD, setup Redux + React Query&lt;/td>
+ &lt;td style="text-align: left">Nền tảng kỹ thuật chạy local ổn định&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 2&lt;/td>
+ &lt;td style="text-align: left">Tích hợp xác thực AWS Cognito&lt;/td>
+ &lt;td style="text-align: left">Cấu hình Spring Security JWT, map role từ Cognito, hoàn thiện LoginScreen PKCE, secure token storage&lt;/td>
+ &lt;td style="text-align: left">Luồng đăng nhập và phân quyền hoạt động&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 3&lt;/td>
+ &lt;td style="text-align: left">Chuẩn hóa backend common layer và navigation app&lt;/td>
+ &lt;td style="text-align: left">Global exception handling, CORS, module GoalType, RootNavigator + Onboarding đa bước&lt;/td>
+ &lt;td style="text-align: left">Luồng auth -&amp;gt; onboarding -&amp;gt; main app thông suốt&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 4&lt;/td>
+ &lt;td style="text-align: left">Xây module bài tập hệ thống&lt;/td>
+ &lt;td style="text-align: left">MuscleGroup, Exercise, WorkoutPlan, WorkoutPlanExercise; màn gợi ý giáo án và picker bài tập&lt;/td>
+ &lt;td style="text-align: left">Kho dữ liệu bài tập + giáo án mẫu sẵn sàng&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 5&lt;/td>
+ &lt;td style="text-align: left">Quản lý kế hoạch tập cá nhân&lt;/td>
+ &lt;td style="text-align: left">UserWorkoutPlan CRUD, clone từ system plan, logic active plan duy nhất, màn tạo/sửa kế hoạch&lt;/td>
+ &lt;td style="text-align: left">User có thể tự tạo và vận hành giáo án riêng&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 6&lt;/td>
+ &lt;td style="text-align: left">Theo dõi buổi tập thực tế&lt;/td>
+ &lt;td style="text-align: left">UserWorkoutSession + WorkoutLog, PlanDetail, WorkoutSessionScreen, state session qua Redux&lt;/td>
+ &lt;td style="text-align: left">Luồng tập luyện realtime hoàn chỉnh&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 7&lt;/td>
+ &lt;td style="text-align: left">Tích hợp media và lịch sử phiên tập&lt;/td>
+ &lt;td style="text-align: left">Image module, AWS S3 config, SessionDetail + SessionCalendar, media caching&lt;/td>
+ &lt;td style="text-align: left">Hình ảnh hiển thị xuyên suốt các màn hình liên quan&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 8&lt;/td>
+ &lt;td style="text-align: left">Theo dõi dinh dưỡng&lt;/td>
+ &lt;td style="text-align: left">Food/Meal/MealFood/DailyNutrition, DietScreen + DietHistoryScreen&lt;/td>
+ &lt;td style="text-align: left">Theo dõi calo và macro hàng ngày&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 9&lt;/td>
+ &lt;td style="text-align: left">Dashboard chỉ số sức khỏe&lt;/td>
+ &lt;td style="text-align: left">BodyMetric + HealthCalculation, BMI/BMR/TDEE API, charts sức khỏe&lt;/td>
+ &lt;td style="text-align: left">Bộ chỉ số sức khỏe và biểu đồ theo thời gian&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 10&lt;/td>
+ &lt;td style="text-align: left">Tích hợp AI và tối ưu chất lượng sản phẩm&lt;/td>
+ &lt;td style="text-align: left">ChatScreen + Bedrock, ProfileScreen, HomeScreen, unit test backend, bug fix, token refresh queue&lt;/td>
+ &lt;td style="text-align: left">Tăng trải nghiệm người dùng và độ ổn định hệ thống&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 11&lt;/td>
+ &lt;td style="text-align: left">Kiểm thử tổng thể và chuẩn bị bàn giao&lt;/td>
+ &lt;td style="text-align: left">E2E test 6 user journeys, cập nhật README/guide, cleanup code backend/frontend&lt;/td>
+ &lt;td style="text-align: left">Bản release sẵn sàng demo và bàn giao&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td style="text-align: left">Tuần 12&lt;/td>
+ &lt;td style="text-align: left">Hoàn thiện chương trình thực tập&lt;/td>
+ &lt;td style="text-align: left">Thuyết trình cuối kỳ, tự đánh giá, feedback, nộp báo cáo, tổng kết&lt;/td>
+ &lt;td style="text-align: left">Hoàn tất deliverable và đóng dự án&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;h2 id="4-mốc-quan-trọng-milestones">4) Mốc quan trọng (Milestones)&lt;/h2>
+&lt;ul>
+&lt;li>M1 (Cuối Tuần 2): Hoàn thành luồng xác thực và hồ sơ người dùng&lt;/li>
+&lt;li>M2 (Cuối Tuần 4): Hoàn thiện hệ thống bài tập và giáo án mẫu&lt;/li>
+&lt;li>M3 (Cuối Tuần 6): Hoàn tất luồng tập luyện thực tế end-to-end&lt;/li>
+&lt;li>M4 (Cuối Tuần 9): Hoàn thiện tính năng dinh dưỡng + dashboard sức khỏe&lt;/li>
+&lt;li>M5 (Cuối Tuần 11): Hoàn tất kiểm thử tích hợp, tài liệu, và release candidate&lt;/li>
+&lt;li>M6 (Tuần 12): Demo cuối kỳ, nộp báo cáo và bàn giao&lt;/li>
+&lt;/ul>
+&lt;h2 id="5-phụ-thuộc-và-rủi-ro-chính">5) Phụ thuộc và rủi ro chính&lt;/h2>
+&lt;ul>
+&lt;li>Phụ thuộc:
+&lt;ul>
+&lt;li>AWS services (Cognito, S3, Bedrock) và cấu hình IAM/secret đúng chuẩn&lt;/li>
+&lt;li>Môi trường chạy đồng bộ giữa backend, frontend và database&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Rủi ro:
+&lt;ul>
+&lt;li>Lỗi token/auth ảnh hưởng luồng người dùng&lt;/li>
+&lt;li>Độ trễ hoặc quota của dịch vụ AI khi gọi Bedrock&lt;/li>
+&lt;li>Chậm tiến độ nếu E2E và bug fix dồn vào cuối kỳ&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Kế hoạch giảm thiểu:
+&lt;ul>
+&lt;li>Chốt API contract sớm, kiểm thử định kỳ theo tuần&lt;/li>
+&lt;li>Theo dõi logging/healthcheck liên tục bằng checklist vận hành&lt;/li>
+&lt;li>Dành buffer tuần 10-11 cho fix lỗi và hardening&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="6-tiêu-chí-hoàn-thành-dự-án">6) Tiêu chí hoàn thành dự án&lt;/h2>
+&lt;ul>
+&lt;li>100% luồng nghiệp vụ chính chạy ổn định: Auth, Workout, Nutrition, Health, AI Chat&lt;/li>
+&lt;li>Tài liệu đầy đủ: setup, API, kiến trúc, hướng dẫn bàn giao&lt;/li>
+&lt;li>Hoàn thành demo cuối kỳ, self-evaluation, feedback và internship report&lt;/li>
+&lt;/ul></description></item></channel></rss>
