@@ -8,51 +8,51 @@ pre: " <b> 1.2. </b> "
 
 ### Mục tiêu tuần 2:
 
-* **Backend**: Tích hợp luồng xác thực bảo mật chuẩn Enterprise với **Amazon Cognito User Pools** vào Spring Security. Xây dựng module `UserProfile`.
-* **Frontend**: Triển khai luồng xác thực hoàn chỉnh bằng **PKCE (Proof Key for Code Exchange)** — từ màn hình đăng nhập đến lưu trữ token và quản lý trạng thái.
-* Thiết lập pattern quản lý vòng đời token an toàn, bao gồm tự động làm mới và xử lý thu hồi quyền (Token Revocation).
+* **Backend**: Tích hợp luồng xác thực bảo mật chuẩn Enterprise sử dụng **Amazon Cognito User Pools** kết hợp cùng Spring Security. Khởi tạo và xây dựng module `UserProfile`.
+* **Frontend**: Triển khai toàn diện luồng xác thực qua giao thức **PKCE (Proof Key for Code Exchange)** — bao trùm từ bước hiển thị màn hình đăng nhập, lưu trữ token an toàn đến việc quản lý trạng thái (state) người dùng.
+* Thiết lập cơ chế (pattern) quản lý vòng đời của token một cách tối ưu, bao gồm khả năng tự động làm mới (auto-refresh) và xử lý triệt để các tình huống thu hồi quyền truy cập (Token Revocation).
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 | --- | --------- | ------------ | --------------- | -------------- |
-| 2   | - Nghiên cứu khái niệm AWS Cognito User Pools <br>&emsp; + Cấu hình User Pool: password policy, app clients, PKCE <br>&emsp; + Phân biệt ID Token và Access Token <br>&emsp; + JWT claims: `sub`, `cognito:groups`, `token_use` | 13/01/2026 | 13/01/2026 | <https://docs.aws.amazon.com/cognito/> |
-| 3   | - Triển khai **Spring Security** cấu hình JWT <br>&emsp; + Thêm `spring-security-oauth2-resource-server` <br>&emsp; + Cấu hình `SecurityConfig`: stateless, CSRF disabled, CORS enabled <br>&emsp; + Cài đặt Cognito issuer-uri trong `application.properties` <br>&emsp; + Viết `OAuth2TokenValidator` tự định nghĩa — từ chối token có `token_use != "access"` | 14/01/2026 | 14/01/2026 | <https://docs.spring.io/spring-security/> |
-| 3   | - Triển khai trích xuất role từ JWT <br>&emsp; + Đọc claim `cognito:groups` → chuyển thành `ROLE_<GROUP>` <br>&emsp; + Cấu hình `@PreAuthorize("hasRole('ADMIN')")` cho admin endpoints <br>&emsp; + Quy tắc phân quyền: public, authenticated, admin-only | 14/01/2026 | 14/01/2026 | |
-| 4   | - Xây dựng **UserProfile** entity & repository <br>&emsp; + Các trường: `cognitoId (UNIQUE)`, `email (UNIQUE)`, `username`, `name`, `gender`, `birthdate`, `phoneNumber`, `picture`, `emailVerified` <br>&emsp; + `UserProfileRepository` kế thừa `JpaRepository` | 15/01/2026 | 15/01/2026 | |
-| 4   | - Xây dựng **UserProfileService** & **UserProfileController** <br>&emsp; + `POST /user/sync` — upsert profile từ Cognito claims (an toàn IDOR: `cognitoSub` từ JWT `sub`) <br>&emsp; + `GET /user/{id}`, `PUT /user/{id}`, `DELETE /user/{id}` | 15/01/2026 | 15/01/2026 | |
-| 5   | - Xây dựng **LoginScreen** cho Frontend <br>&emsp; + Nút "Đăng nhập với AWS Cognito" duy nhất <br>&emsp; + Khởi động PKCE flow qua `expo-auth-session` + `expo-web-browser` <br>&emsp; + Xử lý redirect callback: đổi code → tokens <br>&emsp; + Giải mã ID Token bằng `jwt-decode` để lấy thông tin user | 16/01/2026 | 16/01/2026 | <https://docs.expo.dev/guides/authentication/> |
-| 6   | - Xây dựng **authSlice** (Redux) và lưu trữ token <br>&emsp; + State: `isAuthenticated`, `user`, `token`, `refreshToken`, `hasCompletedOnboarding` <br>&emsp; + Actions: `login`, `logout`, `completeOnboarding`, `updateUserProfile` <br>&emsp; + Lưu token vào `expo-secure-store` (mobile) / `localStorage` (web) qua `utils/storage.ts` <br> - Kết nối Axios **request interceptor**: tự động gắn `Authorization: Bearer <token>` | 17/01/2026 | 17/01/2026 | |
+| 2   | - Nghiên cứu chuyên sâu về AWS Cognito User Pools <br>&emsp; + Thiết lập User Pool: cấu hình chính sách mật khẩu (password policy), app clients và chuẩn PKCE <br>&emsp; + Phân tích và làm rõ sự khác biệt giữa ID Token và Access Token <br>&emsp; + Tìm hiểu các JWT claims quan trọng: `sub`, `cognito:groups`, `token_use` | 13/01/2026 | 13/01/2026 | <https://docs.aws.amazon.com/cognito/> |
+| 3   | - Tích hợp và cấu hình JWT cho **Spring Security** <br>&emsp; + Bổ sung thư viện `spring-security-oauth2-resource-server` <br>&emsp; + Thiết lập `SecurityConfig`: áp dụng cơ chế stateless, vô hiệu hóa CSRF, kích hoạt CORS <br>&emsp; + Khai báo Cognito issuer-uri tại file `application.properties` <br>&emsp; + Tùy biến `OAuth2TokenValidator` nhằm từ chối nghiêm ngặt các token có `token_use != "access"` | 14/01/2026 | 14/01/2026 | <https://docs.spring.io/spring-security/> |
+| 3   | - Phát triển cơ chế trích xuất phân quyền (role) từ JWT <br>&emsp; + Đọc dữ liệu claim `cognito:groups` và ánh xạ sang định dạng `ROLE_<GROUP>` <br>&emsp; + Áp dụng `@PreAuthorize("hasRole('ADMIN')")` để bảo vệ các admin endpoints <br>&emsp; + Chuẩn hóa quy tắc phân quyền: khu vực public, yêu cầu xác thực (authenticated) và dành riêng cho quản trị viên (admin-only) | 14/01/2026 | 14/01/2026 | |
+| 4   | - Thiết kế **UserProfile** entity và repository <br>&emsp; + Định nghĩa các trường dữ liệu: `cognitoId (UNIQUE)`, `email (UNIQUE)`, `username`, `name`, `gender`, `birthdate`, `phoneNumber`, `picture`, `emailVerified` <br>&emsp; + Khởi tạo `UserProfileRepository` mở rộng từ interface `JpaRepository` | 15/01/2026 | 15/01/2026 | |
+| 4   | - Phát triển **UserProfileService** và **UserProfileController** <br>&emsp; + API `POST /user/sync` — thực hiện upsert profile dựa trên Cognito claims (đảm bảo an toàn trước lỗi IDOR bằng cách dùng `cognitoSub` từ JWT `sub`) <br>&emsp; + Cung cấp các API chuẩn: `GET /user/{id}`, `PUT /user/{id}`, `DELETE /user/{id}` | 15/01/2026 | 15/01/2026 | |
+| 5   | - Thiết kế giao diện **LoginScreen** trên Frontend <br>&emsp; + Bố trí nút "Đăng nhập với AWS Cognito" làm phương thức xác thực duy nhất <br>&emsp; + Kích hoạt luồng PKCE thông qua sự kết hợp giữa `expo-auth-session` và `expo-web-browser` <br>&emsp; + Bắt và xử lý redirect callback: quy đổi mã code lấy token <br>&emsp; + Sử dụng thư viện `jwt-decode` để giải mã ID Token, phục vụ việc trích xuất thông tin người dùng | 16/01/2026 | 16/01/2026 | <https://docs.expo.dev/guides/authentication/> |
+| 6   | - Triển khai **authSlice** (Redux Toolkit) và cơ chế lưu trữ token <br>&emsp; + Cấu trúc State: `isAuthenticated`, `user`, `token`, `refreshToken`, `hasCompletedOnboarding` <br>&emsp; + Khai báo Actions: `login`, `logout`, `completeOnboarding`, `updateUserProfile` <br>&emsp; + Quản lý lưu trữ token linh hoạt: sử dụng `expo-secure-store` cho mobile và `localStorage` cho web thông qua module `utils/storage.ts` <br> - Thiết lập **request interceptor** trong Axios: tự động đính kèm header `Authorization: Bearer <token>` vào mọi truy vấn | 17/01/2026 | 17/01/2026 | |
 
 ### Kết quả đạt được tuần 2:
 
-* **Backend — Security**:
-  * Spring Security cấu hình hoàn chỉnh với **Amazon Cognito** làm JWT issuer, áp dụng phân quyền RBAC chuẩn Enterprise.
-  * `OAuth2TokenValidator` tự định nghĩa chặn ID token — chỉ Access Token được chấp nhận tại API.
-  * Phân quyền theo role hoạt động: `cognito:groups` map chuẩn xác thành `ROLE_ADMIN` cấp quyền admin.
-  * Các quy tắc bảo mật được định nghĩa: public health check, authenticated routes, admin-only `/admin/**`.
-* **Backend — Module UserProfile**:
-  * `POST /user/sync` upsert user từ Cognito JWT claims an toàn, không có lỗ hổng IDOR.
-  * Full CRUD (`GET`, `PUT`, `DELETE`) trên `/user/{id}` với kiểm tra phân quyền.
-  * Entity `UserProfile` lưu thành công vào PostgreSQL qua JPA.
-* **Frontend — Xác thực**:
-  * `LoginScreen` hiển thị đúng; nhấn nút mở an toàn Cognito Hosted UI trong trình duyệt hệ thống.
-  * **PKCE code exchange** hoạt động end-to-end qua `expo-auth-session`, loại bỏ hoàn toàn việc lưu Secret Key ở client.
-  * `authSlice` chuyển được `isAuthenticated`; `RootNavigator` điều hướng đúng stack.
-  * Axios interceptor tự gắn Bearer token và **quản lý vòng đời Token** (tự động làm mới background, force logout khi token bị thu hồi).
+* **Backend — Bảo mật (Security)**:
+  * Hoàn thiện cấu hình Spring Security tích hợp **Amazon Cognito** dưới vai trò JWT issuer, vận hành trơn tru cơ chế phân quyền RBAC theo tiêu chuẩn doanh nghiệp.
+  * Triển khai thành công `OAuth2TokenValidator` tùy biến để ngăn chặn việc sử dụng ID Token sai mục đích — hệ thống API hiện chỉ chấp thuận Access Token.
+  * Tính năng phân quyền theo role hoạt động chính xác: claim `cognito:groups` được ánh xạ mượt mà thành `ROLE_ADMIN`, đảm bảo cấp quyền quản trị đúng đối tượng.
+  * Thiết lập chặt chẽ các ranh giới bảo mật: phân định rõ vùng public cho health check, vùng yêu cầu xác thực chung và khu vực `/admin/**` chỉ dành cho quản trị viên.
+* **Backend — Phân hệ UserProfile**:
+  * Endpoint `POST /user/sync` thực hiện upsert dữ liệu người dùng từ Cognito JWT claims một cách an toàn, vá triệt để rủi ro liên quan đến lỗ hổng IDOR.
+  * Cung cấp đầy đủ bộ thao tác CRUD (`GET`, `PUT`, `DELETE`) thông qua đường dẫn `/user/{id}`, kèm theo các lớp kiểm tra phân quyền nghiêm ngặt.
+  * Thực thể `UserProfile` đã được ánh xạ và lưu trữ thành công vào cơ sở dữ liệu PostgreSQL thông qua JPA.
+* **Frontend — Luồng xác thực**:
+  * Giao diện `LoginScreen` render chuẩn xác; thao tác nhấn nút kích hoạt thành công quy trình mở Cognito Hosted UI an toàn trên trình duyệt mặc định của hệ thống.
+  * Cơ chế **PKCE code exchange** vận hành trơn tru từ đầu đến cuối (end-to-end) nhờ `expo-auth-session`, giúp loại bỏ hoàn toàn rủi ro bảo mật do việc phải lưu trữ Secret Key tại client.
+  * Module `authSlice` cập nhật trạng thái `isAuthenticated` linh hoạt, hỗ trợ `RootNavigator` điều hướng chính xác giữa các luồng giao diện (stack).
+  * Axios interceptor tự động đính kèm Bearer token vào header và xử lý mượt mà việc **quản lý vòng đời Token** (hỗ trợ làm mới ngầm tự động và bắt buộc đăng xuất khi token không còn hiệu lực).
 
 ### Kiến thức AWS đã học:
 
-* Nghiên cứu sâu Cognito User Pool: app client, callback URL, logout URL, OAuth scope và thời hạn token phù hợp cho ứng dụng mobile.
-* Hiểu trọn vẹn luồng PKCE với `code_verifier`, `code_challenge`, `S256`, và lý do đây là cơ chế bắt buộc cho public client.
-* Phân biệt rõ ID token và Access token trong bối cảnh API thực tế, nhấn mạnh backend chỉ nên authorize bằng Access token.
-* Nắm quy trình validate JWT đầy đủ gồm `iss`, `aud`, `exp`, `nbf`, `token_use` và chữ ký JWK của Cognito.
-* Biết map claim `cognito:groups` sang role nội bộ như `ROLE_ADMIN` và `ROLE_USER` để triển khai RBAC an toàn.
-* Hiểu cách quản lý refresh token phía mobile: lưu an toàn, xử lý rotation, và force logout khi refresh thất bại.
-* Củng cố nguyên tắc dùng `sub` làm định danh người dùng bất biến xuyên suốt tất cả module backend.
+* Đào sâu vào kiến trúc thiết lập của Cognito User Pool, bao gồm: cấu hình app client, các URL cho callback và logout, tối ưu hóa OAuth scope, cũng như chiến lược thiết lập thời hạn token sao cho tối ưu nhất đối với môi trường ứng dụng mobile.
+* Nắm vững toàn bộ chu trình hoạt động của giao thức PKCE (từ `code_verifier`, `code_challenge` đến thuật toán băm `S256`), đồng thời hiểu rõ tính tất yếu của cơ chế này khi triển khai trên các public client.
+* Phân định rạch ròi vai trò của ID Token và Access Token khi ứng dụng vào API thực tế, thấm nhuần nguyên tắc cốt lõi: Backend chỉ sử dụng Access Token để cấp quyền (authorize).
+* Nắm bắt trọn vẹn quy trình thẩm định (validate) JWT, từ việc đối chiếu các claims tiêu chuẩn như `iss`, `aud`, `exp`, `nbf`, `token_use` cho đến thao tác xác minh chữ ký JWK cung cấp bởi Cognito.
+* Thành thạo kỹ thuật ánh xạ (map) claim `cognito:groups` sang các phân quyền nội bộ (ví dụ: `ROLE_ADMIN`, `ROLE_USER`), làm tiền đề vững chắc cho việc áp dụng mô hình bảo mật RBAC.
+* Hiểu sâu về nghệ thuật quản lý refresh token trên nền tảng di động: từ việc lưu trữ bảo mật, cơ chế xoay vòng token (rotation), đến chiến lược xử lý đăng xuất bắt buộc (force logout) khi quá trình làm mới gặp sự cố.
+* Khẳng định và củng cố nguyên tắc thiết kế bất di bất dịch: Sử dụng claim `sub` làm định danh độc nhất và không đổi của người dùng trên toàn bộ các module thuộc Backend.
 
-Tóm lại, tuần 2 giúp liên kết kiến thức AWS Identity với cách xây dựng authentication và authorization thực chiến cho dự án.
+Tóm lại, tuần 2 đã giúp liên kết chặt chẽ các kiến thức nền tảng về AWS Identity với tư duy xây dựng hệ thống authentication và authorization thực chiến cho dự án.
 
 ### Kế hoạch tuần tiếp theo:
 
-* **Backend**: Xây dựng lớp cơ sở hạ tầng — `GlobalExceptionHandler`, `CorsConfig`. Triển khai module `GoalType`.
-* **Frontend**: Xây dựng nền tảng navigation — `RootNavigator`, `AuthStack`, `MainTabs` với custom tab bar, `OnboardingStack`.
+* **Backend**: Tập trung xây dựng các lớp nền tảng vững chắc cho hệ thống, bao gồm `GlobalExceptionHandler` để quản lý lỗi tập trung và `CorsConfig`. Bắt tay vào thiết kế và phát triển module `GoalType`.
+* **Frontend**: Xây dựng bộ khung điều hướng (navigation) hoàn chỉnh cho ứng dụng, bao gồm `RootNavigator`, `AuthStack`, hệ thống `MainTabs` tích hợp thanh điều hướng tùy chỉnh (custom tab bar), và luồng giới thiệu `OnboardingStack`.

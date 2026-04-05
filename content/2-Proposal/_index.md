@@ -1,115 +1,260 @@
 ---
+
 title: "Proposal"
-date: 2024-01-01
+date: 2026-04-03
 weight: 2
 chapter: false
 pre: " <b> 2. </b> "
+--------------------
+
+## 1. Project Overview
+
+MyFit is a comprehensive technology platform designed to support users throughout their health management and fitness journey. To deliver a smooth and reliable experience, the system is built on three core foundations:
+
+* **User Experience (Frontend):** An intuitive and user-friendly interface that allows users to easily track progress, personal metrics, and interact with features.
+* **Core Processing System (Backend):** A powerful data processing platform ensuring accuracy, real-time synchronization, and maximum data security.
+* **Cloud Infrastructure:** Fully deployed on AWS cloud infrastructure.
+
+By leveraging Cloud Managed Services, MyFit:
+
+* Optimizes operational costs
+* Ensures 24/7 system availability
+* Supports seamless scalability as user demand grows
+
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
-In this section, you need to summarize the contents of the workshop that you **plan** to conduct.
+## 2. Objectives
 
-# IoT Weather Platform for Lab Research
-## A Unified AWS Serverless Solution for Real-Time Weather Monitoring
+### 2.1 Overall Objectives:
 
-### 1. Executive Summary
-The IoT Weather Platform is designed for the ITea Lab team in Ho Chi Minh City to enhance weather data collection and analysis. It supports up to 5 weather stations, with potential scalability to 10-15, utilizing Raspberry Pi edge devices with ESP32 sensors to transmit data via MQTT. The platform leverages AWS Serverless services to deliver real-time monitoring, predictive analytics, and cost efficiency, with access restricted to 5 lab members via Amazon Cognito.
+* Build a fitness application supporting both mobile and web platforms.
+* Ensure stable operation on AWS infrastructure.
+* Guarantee availability and scalability based on cloud resources.
+* Provide a seamless user experience from login to health tracking.
+* Establish a clear, repeatable deployment process to reduce operational errors.
 
-### 2. Problem Statement
-### What’s the Problem?
-Current weather stations require manual data collection, becoming unmanageable with multiple units. There is no centralized system for real-time data or analytics, and third-party platforms are costly and overly complex.
+### 2.2 Specific Deliverables:
 
-### The Solution
-The platform uses AWS IoT Core to ingest MQTT data, AWS Lambda and API Gateway for processing, Amazon S3 for storage (including a data lake), and AWS Glue Crawlers and ETL jobs to extract, transform, and load data from the S3 data lake to another S3 bucket for analysis. AWS Amplify with Next.js provides the web interface, and Amazon Cognito ensures secure access. Similar to Thingsboard and CoreIoT, users can register new devices and manage connections, though this platform operates on a smaller scale and is designed for private use. Key features include real-time dashboards, trend analysis, and low operational costs.
+* Backend API secured using JWT and Cognito
+* Frontend served via CloudFront for fast and stable delivery
+* Health and workout tracking dashboard
+* Separate deployment pipelines for infrastructure and application with rollout monitoring
 
-### Benefits and Return on Investment
-The solution establishes a foundational resource for lab members to develop a larger IoT platform, serving as a study resource, and provides a data foundation for AI enthusiasts for model training or analysis. It reduces manual reporting for each station via a centralized platform, simplifying management and maintenance, and improves data reliability. Monthly costs are $0.66 USD per the AWS Pricing Calculator, with a 12-month total of $7.92 USD. All IoT equipment costs are covered by the existing weather station setup, eliminating additional development expenses. The break-even period of 6-12 months is achieved through significant time savings from reduced manual work.
+---
 
-### 3. Solution Architecture
-The platform employs a serverless AWS architecture to manage data from 5 Raspberry Pi-based stations, scalable to 15. Data is ingested via AWS IoT Core, stored in an S3 data lake, and processed by AWS Glue Crawlers and ETL jobs to transform and load it into another S3 bucket for analysis. Lambda and API Gateway handle additional processing, while Amplify with Next.js hosts the dashboard, secured by Cognito. The architecture is detailed below:
+## 3. Problems to Solve
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+Key challenges addressed in this project:
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+* **Integration:** Synchronizing configurations across frontend, backend, and infrastructure
+* **Security:** Preventing credential leaks, controlling API access, minimizing unnecessary public exposure
+* **Operations:** Monitoring logs and system health to detect issues early
+* **Scalability:** Ensuring system performance under increasing user load
 
-### AWS Services Used
-- **AWS IoT Core**: Ingests MQTT data from 5 stations, scalable to 15.
-- **AWS Lambda**: Processes data and triggers Glue jobs (two functions).
-- **Amazon API Gateway**: Facilitates web app communication.
-- **Amazon S3**: Stores raw data in a data lake and processed outputs (two buckets).
-- **AWS Glue**: Crawlers catalog data, and ETL jobs transform and load it.
-- **AWS Amplify**: Hosts the Next.js web interface.
-- **Amazon Cognito**: Secures access for lab users.
+---
 
-### Component Design
-- **Edge Devices**: Raspberry Pi collects and filters sensor data, sending it to IoT Core.
-- **Data Ingestion**: AWS IoT Core receives MQTT messages from the edge devices.
-- **Data Storage**: Raw data is stored in an S3 data lake; processed data is stored in another S3 bucket.
-- **Data Processing**: AWS Glue Crawlers catalog the data, and ETL jobs transform it for analysis.
-- **Web Interface**: AWS Amplify hosts a Next.js app for real-time dashboards and analytics.
-- **User Management**: Amazon Cognito manages user access, allowing up to 5 active accounts.
+## 4. Solution Architecture
 
-### 4. Technical Implementation
-**Implementation Phases**
-This project has two parts—setting up weather edge stations and building the weather platform—each following 4 phases:
-- Build Theory and Draw Architecture: Research Raspberry Pi setup with ESP32 sensors and design the AWS serverless architecture (1 month pre-internship)
-- Calculate Price and Check Practicality: Use AWS Pricing Calculator to estimate costs and adjust if needed (Month 1).
-- Fix Architecture for Cost or Solution Fit: Tweak the design (e.g., optimize Lambda with Next.js) to stay cost-effective and usable (Month 2).
-- Develop, Test, and Deploy: Code the Raspberry Pi setup, AWS services with CDK/SDK, and Next.js app, then test and release to production (Months 2-3).
+### 4.1 Idea and Objectives
 
-**Technical Requirements**
-- Weather Edge Station: Sensors (temperature, humidity, rainfall, wind speed), a microcontroller (ESP32), and a Raspberry Pi as the edge device. Raspberry Pi runs Raspbian, handles Docker for filtering, and sends 1 MB/day per station via MQTT over Wi-Fi.
-- Weather Platform: Practical knowledge of AWS Amplify (hosting Next.js), Lambda (minimal use due to Next.js), AWS Glue (ETL), S3 (two buckets), IoT Core (gateway and rules), and Cognito (5 users). Use AWS CDK/SDK to code interactions (e.g., IoT Core rules to S3). Next.js reduces Lambda workload for the fullstack web app.
+**Context and Problem**
 
-### 5. Timeline & Milestones
-**Project Timeline**
-- Pre-Internship (Month 0): 1 month for planning and old station review.
-- Internship (Months 1-3): 3 months.
-    - Month 1: Study AWS and upgrade hardware.
-    - Month 2: Design and adjust architecture.
-    - Month 3: Implement, test, and launch.
-- Post-Launch: Up to 1 year for research.
+The system is designed to manage personal health and workout planning.
 
-### 6. Budget Estimation
-You can find the budget estimation on the [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01).  
-Or you can download the [Budget Estimation File](../attachments/budget_estimation.pdf).
+**System Capabilities:**
 
-### Infrastructure Costs
-- AWS Services:
-    - AWS Lambda: $0.00/month (1,000 requests, 512 MB storage).
-    - S3 Standard: $0.15/month (6 GB, 2,100 requests, 1 GB scanned).
-    - Data Transfer: $0.02/month (1 GB inbound, 1 GB outbound).
-    - AWS Amplify: $0.35/month (256 MB, 500 ms requests).
-    - Amazon API Gateway: $0.01/month (2,000 requests).
-    - AWS Glue ETL Jobs: $0.02/month (2 DPUs).
-    - AWS Glue Crawlers: $0.07/month (1 crawler).
-    - MQTT (IoT Core): $0.08/month (5 devices, 45,000 messages).
+* Manage user profiles and authentication data
+* Track body metrics and calculate health indicators
+* Manage workout plans, sessions, and logs
+* Manage nutrition data by meal and by day
 
-Total: $0.7/month, $8.40/12 months
+**Target Users:**
 
-- Hardware: $265 one-time (Raspberry Pi 5 and sensors).
+* Individuals tracking health and fitness
 
-### 7. Risk Assessment
-#### Risk Matrix
-- Network Outages: Medium impact, medium probability.
-- Sensor Failures: High impact, low probability.
-- Cost Overruns: Medium impact, low probability.
+**Problems Addressed:**
 
-#### Mitigation Strategies
-- Network: Local storage on Raspberry Pi with Docker.
-- Sensors: Regular checks and spares.
-- Cost: AWS budget alerts and optimization.
+* Centralize health data in a single platform
+* Reduce manual operations via APIs and real-time features
+* Ensure deployability, operability, and scalability on AWS
 
-#### Contingency Plans
-- Revert to manual methods if AWS fails.
-- Use CloudFormation for cost-related rollbacks.
+**AWS/FCAJ Use-case Alignment:**
 
-### 8. Expected Outcomes
-#### Technical Improvements: 
-Real-time data and analytics replace manual processes.  
-Scalable to 10-15 stations.
-#### Long-term Value
-1-year data foundation for AI research.  
-Reusable for future projects.
+* A clear cloud-native use case leveraging AWS managed services
+* Focused on secure, scalable, and monitored cloud deployment
+
+**Success Criteria**
+
+**Expected Outcomes:**
+
+* Frontend delivered via CloudFront
+* Backend APIs running on ECS Fargate
+* Authentication via Cognito Hosted UI and JWT
+* Centralized logging via CloudWatch
+
+**Success Metrics:**
+
+* Users can log in and access core APIs
+* Core flows (workout, health metrics, nutrition) work end-to-end
+* ECS service rollout completes successfully and remains stable
+* Issues can be quickly traced via logs and health checks
+
+---
+
+### 4.2 System Architecture:
+
+![System Architecture](/images/2-Proposal/image11.png)
+
+---
+
+### 4.3 Main Data Flow:
+
+* **Authentication Layer:** Mobile app connects directly to Amazon Cognito for identity and login management.
+* **Access & Distribution Layer:** Requests go through Route 53 (DNS) to CloudFront (CDN). CloudFront serves frontend from S3 or routes API requests to ALB.
+* **Backend Processing Layer:** ALB balances traffic and forwards requests to Spring Boot containers on ECS Fargate. ECS pulls images from ECR and retrieves secrets from Secrets Manager.
+* **Data Layer:** Fargate handles logic, interacts with RDS PostgreSQL and S3 Media Bucket. Amazon Bedrock is integrated as an AI chatbot.
+
+---
+
+### 4.4 AWS Services and Rationale:
+
+**Services Used:**
+
+* Amazon CloudFront – CDN for low latency and unified public endpoint
+* Amazon S3 – Storage for static frontend and media files
+* Application Load Balancer (ALB) – HTTP/HTTPS load balancing
+* Amazon ECS Fargate – Managed container execution with auto scaling
+* Amazon RDS PostgreSQL – Managed relational database
+* Amazon Bedrock – AI chatbot integration
+* Amazon Cognito – User authentication and identity management
+* Amazon ECR – Container image registry
+* Amazon CloudWatch – Centralized logging and monitoring
+* AWS Route 53 & ACM – DNS and SSL/TLS certificate management
+
+**Why not Lambda/API Gateway:**
+
+* Backend is a Spring Boot monolith suited for container-based deployment
+* Avoids complexity of serverless decomposition in early stages
+* Speeds up delivery and simplifies operations
+
+---
+
+### 4.5 Security and IAM:
+
+**Principles:**
+
+* Least privilege for runtime roles
+* No hard-coded credentials
+* Minimize public exposure of data resources
+
+**Implementation:**
+
+* ECS Task Execution Role for image pulling and logging
+* ECS Task Role limited to required S3 access
+* Database credentials stored in Secrets Manager
+* RDS deployed in private subnet
+* ALB restricted to CloudFront traffic
+* Backend validates Cognito access tokens
+
+---
+
+### 4.6 Scalability and Operations:
+
+**Scaling:**
+
+* ECS auto scaling based on CPU (min 2, max 4 tasks)
+* Independent scaling for frontend and backend
+
+**Monitoring:**
+
+* CloudWatch Logs for containers
+* RDS logs for query monitoring
+* ALB health checks for instance status
+
+---
+
+### 4.7 CI/CD & IaC
+
+To optimize operations and reduce manual errors:
+
+* **Infrastructure as Code (IaC):** AWS CloudFormation for consistent infrastructure management
+* **CI/CD Pipeline:**
+
+  1. Developer pushes code to GitHub
+  2. GitHub Actions builds Docker image and pushes to Amazon ECR
+  3. ECS updates service using rolling deployment with zero downtime
+
+---
+
+## 5. Code Snippet
+
+### 5.1 Dockerfile Backend
+
+![Dockerfile](/images/2-Proposal/image5.png)
+
+---
+
+### 5.2 CDK Route API via CloudFront
+
+![CDK Config](/images/2-Proposal/image4.png)
+
+---
+
+### 5.3 Deploy Script
+
+![Deploy Script](/images/2-Proposal/image2.png)
+![Deploy Script](/images/2-Proposal/image10.png)
+
+---
+
+### 5.4 Stack Initialization
+
+![Stack Init](/images/2-Proposal/image6.png)
+
+---
+
+### 5.5 Application Screens
+![App](/images/2-Proposal/image9.png)
+![App](/images/2-Proposal/image1.png)
+![App](/images/2-Proposal/image8.png)
+![App](/images/2-Proposal/image7.png)
+![App](/images/2-Proposal/image3.png)
+
+---
+
+## 6. Estimated Cost
+
+**Region: us-east-1**
+
+| Category      | Service         | Configuration | Monthly Estimate |
+| ------------- | --------------- | ------------- | ---------------- |
+| Frontend CDN  | CloudFront      | ~10GB         | $1–5             |
+| Storage       | S3              | 2 buckets     | $0.5–2           |
+| Backend       | ECS             | 2 tasks       | $15–20           |
+| Database      | RDS             | t4g.micro     | $30–35           |
+| Registry      | ECR             | 1GB           | $0.1–1           |
+| Logging       | CloudWatch      | logs          | $5–15            |
+| Secrets       | Secrets Manager | 2 secrets     | ~$1              |
+| Load Balancer | ALB             | 1 ALB         | $18–22           |
+| Auth          | Cognito         | free tier     | $0               |
+| DNS + SSL     | Route53 + ACM   |               | $0.5–1           |
+
+**Total: ~$71–100/month**
+
+**Notes:**
+
+* No NAT Gateway → saves ~$32/month
+* Actual cost depends on traffic and usage
+
+
+---
+
+## 7. Risks and Mitigation
+
+| Risk                       | Impact      | Priority | Mitigation           |
+| -------------------------- | ----------- | -------- | -------------------- |
+| Sensitive data exposure    | High        | P0       | Use Secrets Manager  |
+| Wrong deploy path          | Medium-High | P0       | Pre-check scripts    |
+| OAuth mismatch             | High        | P0       | Sync environments    |
+| Health check inconsistency | Medium      | P1       | Standardize endpoint |
+| Cost increase              | Medium      | P1       | Budget alerts        |

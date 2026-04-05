@@ -1,47 +1,42 @@
 ---
 title: "Sharing and Feedback"
-date: 2024-01-01
+date: 2026-04-03
 weight: 7
 chapter: false
 pre: " <b> 7. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
-
-> Here, you can freely share your personal opinions about your experience participating in the First Cloud Journey program. This will help the FCJ team improve any shortcomings based on the following aspects:
-
 ### Overall Evaluation
 
-**1. Working Environment**  
-The working environment is very friendly and open. FCJ members are always willing to help whenever I encounter difficulties, even outside working hours. The workspace is tidy and comfortable, helping me focus better. However, I think it would be nice to have more social gatherings or team bonding activities to strengthen relationships.
+**1. Working Environment** The working environment at FCJ cultivates a seamless convergence of strict professionalism and an open, welcoming ethos—an organizational culture rarely encountered. Mentors transcend mere oversight by proactively monitoring progress and delivering substantial, empathetic support. The workspace is meticulously optimized and maintained, establishing an ideal environment that sustains deep concentration and peak productivity throughout the workday.
 
-**2. Support from Mentor / Team Admin**  
-The mentor provides very detailed guidance, explains clearly when I don’t understand, and always encourages me to ask questions. The admin team supports administrative tasks, provides necessary documents, and creates favorable conditions for me to work effectively. I especially appreciate that the mentor allows me to try and solve problems myself instead of just giving the answer.
+**2. Support from Mentor / Team Admin** The mentor team demonstrates exceptional pedagogical acumen through highly articulate guidance and profound motivational impact. Rather than dispensing immediate solutions, they strategically foster critical thinking and self-directed research capabilities—the fundamental pillars for cultivating battle-tested problem-solving engineering mindsets. Concurrently, the administrative unit operates with remarkable efficiency, ensuring a continuous, frictionless supply of resources and documentation, thereby entirely eliminating operational bottlenecks.
 
-**3. Relevance of Work to Academic Major**  
-The tasks I was assigned align well with the knowledge I learned at university, while also introducing me to new areas I had never encountered before. This allowed me to both strengthen my foundational knowledge and gain practical skills.
+**3. Relevance of Work to Academic Major** The internship trajectory perfectly complements core academic foundations in Software Engineering while aggressively expanding into deep cloud-native ecosystems. Direct, hands-on architectural implementations leveraging core AWS services (including VPC, EC2, RDS, S3, CloudFront, Bedrock, and ECS) allowed me to forge a robust, pragmatic cloud paradigm that academic curricula alone cannot provide. Furthermore, developing the **myFit** project served as an optimal sandbox to elevate my full-stack capabilities, refine enterprise-grade RESTful API designs, and master real-world cloud deployment pipelines.
 
-**4. Learning & Skill Development Opportunities**  
-During the internship, I learned many new skills such as using project management tools, teamwork skills, and professional communication in a corporate environment. The mentor also shared valuable real-world experiences that helped me better plan my career path.
+**4. Learning & Skill Development Opportunities** Beyond the acquisition of hard technical skills, this internship served as a catalyst for refining critical enterprise-level soft skills. I successfully standardized my professional communication, technical documentation drafting, and transparent, structured progress reporting methodologies. Notably, participating in premier technology summits such as the **AWS re:Invent 2025 Recap** and **Cloud Mastery 2026 #1** profoundly expanded my strategic awareness of vanguard megatrends, encompassing Generative AI, Agentic architectures, and Multimodal RAG ecosystems.
 
-**5. Company Culture & Team Spirit**  
-The company culture is very positive: everyone respects each other, works seriously but still keeps things enjoyable. When there are urgent projects, everyone works together and supports one another regardless of their position. This made me feel like a real part of the team, even as an intern.
-
-**6. Internship Policies / Benefits**  
-The company provides an internship allowance and offers flexible working hours when needed. In addition, having the opportunity to join internal training sessions is a big plus.
+**5. Company Culture & Team Spirit** The organizational culture at FCJ is solidly anchored in multi-dimensional respect and a profound sense of ownership. Every individual not only executes their designated role with excellence but also acts as a reliable pillar of support for their peers. Even during high-pressure sprint cycles, a highly constructive collaborative momentum was consistently maintained, transforming the internship from a series of isolated tasks into a deeply connected, synergetic engineering experience.
 
 ---
 
 ### Additional Questions
-- What did you find **most satisfying** during your internship?  
-- What do you think the company **should improve** for future interns?  
-- If recommending to a friend, would you **suggest they intern here**? Why or why not?  
+
+**1. What did you find most satisfying during your internship?** The ultimate source of professional satisfaction was the opportunity to actively participate across the entire software development lifecycle of a fully functional, cloud-native application—**myFit**. Witnessing disparate architectural components (Cognito, S3, CloudFront, Bedrock) coalesce into a smoothly operating production system was a profoundly rewarding achievement. The meticulous guidance from the mentors effectively translated academic theories into actionable execution roadmaps, ensuring I maintained strategic alignment throughout the project.
+
+**2. What do you think the company should improve for future interns?** To further elevate the experience for interns possessing a solid technical baseline, the program could integrate specialized Technical Deep-Dive sessions. Focusing on advanced architectural paradigms such as Infrastructure as Code (Terraform, AWS CDK), pure Serverless architectures, or the intricacies of integrating AI into cloud workflows would be immensely beneficial. This would serve as the perfect bridge, effectively closing the gap between fundamental AWS utilization and enterprise-grade production standards.
+
+**3. If recommending to a friend, would you suggest they intern here? Why or why not?** Absolutely, without hesitation. FCJ delivers a rare internship ecosystem that successfully amalgamates technical depth, exemplary mentorship quality, and authentic exposure to real-world projects. For any individual passionately pursuing a serious career in Cloud Computing or Software Engineering, this environment constitutes an exceptionally robust and highly practical launchpad.
 
 ---
 
 ### Suggestions & Expectations
-- Do you have any suggestions to improve the internship experience?  
-- Would you like to continue this program in the future?  
-- Any other comments (free sharing):
+
+**1. Do you have any suggestions to improve the internship experience?** 
+I highly recommend the formulation of a more granular project roadmap, accompanied by specific, quantifiable delivery milestones right from the initial onboarding phase. A rigidly structured timeline would empower interns to strategically plan resources and optimize effort allocation across the 12-week sprint, while completely mitigating any operational ambiguity during the startup phase.
+
+**2. Would you like to continue this program in the future?** 
+Absolutely. I harbor a strong aspiration to maintain my association with FCJ and continue evolving within the AWS ecosystem. Moving forward, I am eager to tackle more complex architectural challenges, such as designing Multi-Region Architectures, executing FinOps cost-optimization strategies, and engineering AI-centric cloud solutions.
+
+**3. Any other comments (free sharing):** 
+In closing, I wish to express my most profound gratitude to the FCJ leadership and the entire mentor team. Your unwavering dedication, extreme professionalism, and relentless pursuit of creating a holistic development environment have transformed this internship into a spectacular milestone, equipping me with a formidable foundation for my upcoming career journey. Thank you sincerely!

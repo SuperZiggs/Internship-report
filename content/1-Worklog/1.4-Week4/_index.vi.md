@@ -8,45 +8,45 @@ pre: " <b> 1.4. </b> "
 
 ### Mục tiêu tuần 4:
 
-* **Backend**: Xây dựng module System Workout — dữ liệu bài tập và kế hoạch mẫu do admin quản lý.
-* **Frontend**: Xây dựng các màn hình duyệt bài tập — wizard gợi ý kế hoạch và bộ chọn bài tập.
-* Thiết lập mối quan hệ `GoalType` ↔ `WorkoutPlan` ↔ `Exercise` cho tính năng gợi ý kế hoạch.
+* **Backend**: Thiết kế và xây dựng module System Workout — tập trung quản lý kho dữ liệu bài tập chuẩn và các kế hoạch tập luyện mẫu (System Plans) dưới quyền quản trị của Admin.
+* **Frontend**: Phát triển giao diện duyệt và tương tác với bài tập — Wizard đề xuất kế hoạch tập luyện cá nhân hóa và Component hỗ trợ tìm kiếm, lựa chọn bài tập (`PlanExercisePicker`).
+* Định hình và liên kết chặt chẽ mô hình dữ liệu quan hệ giữa `GoalType` ↔ `WorkoutPlan` ↔ `Exercise`, tạo nền tảng logic vững chắc cho thuật toán gợi ý kế hoạch tập luyện.
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 | --- | --------- | ------------ | --------------- | -------------- |
-| 2   | - Xây dựng **MuscleGroup** entity & admin CRUD <br>&emsp; + Entity: `name (UNIQUE, ≤100)`, `description (≤500)` <br>&emsp; + `AdminMuscleGroupController` với `@PreAuthorize("hasRole('ADMIN')")` <br>&emsp; + CRUD đầy đủ: `POST`, `GET /`, `GET /{id}`, `PUT /{id}`, `DELETE /{id}` | 27/01/2026 | 27/01/2026 | |
-| 3   | - Xây dựng **Exercise** entity & admin CRUD <br>&emsp; + Entity: `name (≤150)`, `description`, `equipment`, `muscleGroup (@ManyToOne)` <br>&emsp; + `AdminExerciseController`: full CRUD + filter by muscle group <br>&emsp; + Public: `GET /api/workouts/exercises`, `GET /{id}`, `GET /by-muscle-group/{id}`, `POST /custom` | 28/01/2026 | 28/01/2026 | |
-| 4   | - Xây dựng **WorkoutPlan** & **WorkoutPlanExercise** <br>&emsp; + `WorkoutPlan`: `name`, `description`, `goalType (@ManyToOne)`, `difficultyLevel`, `estimatedDurationMinutes`, `isSystemPlan` <br>&emsp; + `WorkoutPlanExercise`: lịch theo `dayOfWeek (1-7)`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + `AdminWorkoutPlanController`: CRUD đầy đủ + filter theo goal type | 29/01/2026 | 29/01/2026 | |
-| 4   | - Mở các **public workout endpoints** qua `WorkoutController` (`/api/workouts`) <br>&emsp; + `GET /muscle-groups`, `GET /muscle-groups/{id}` <br>&emsp; + `GET /exercises`, `GET /exercises/{id}`, `GET /exercises/by-muscle-group/{id}` <br>&emsp; + `GET /plans`, `GET /plans/{id}`, `GET /plans/by-goal-type/{id}` | 29/01/2026 | 29/01/2026 | |
-| 5   | - Xây dựng **SuggestedPlanScreen** (Frontend) — wizard 3 bước <br>&emsp; + Bước 1: Chọn loại mục tiêu (gọi `GET /api/goal-types`) <br>&emsp; + Bước 2: Duyệt kế hoạch mẫu với hình ảnh và độ khó <br>&emsp; + Bước 3: Xem chi tiết kế hoạch theo ngày → clone qua `cloneFromSystemPlan` | 30/01/2026 | 30/01/2026 | |
-| 6   | - Xây dựng **PlanExercisePicker** screen (Frontend) <br>&emsp; + Liệt kê tất cả bài tập hệ thống với hình ảnh và nhóm cơ <br>&emsp; + Tìm kiếm theo tên <br>&emsp; + Khi chọn: gọi `addExerciseToPlan(planId, dayOfWeek, exerciseId)` <br> - Seed dữ liệu bài tập và nhóm cơ ban đầu qua `DatabaseSeeder` | 31/01/2026 | 31/01/2026 | |
+| 2   | - Khởi tạo thực thể **MuscleGroup** và hệ thống API CRUD dành cho Admin <br>&emsp; + Định nghĩa Entity: `name (UNIQUE, ≤100)`, `description (≤500)` <br>&emsp; + Triển khai `AdminMuscleGroupController` được bảo mật nghiêm ngặt bởi `@PreAuthorize("hasRole('ADMIN')")` <br>&emsp; + Cung cấp đầy đủ các thao tác CRUD: `POST`, `GET /`, `GET /{id}`, `PUT /{id}`, `DELETE /{id}` | 27/01/2026 | 27/01/2026 | |
+| 3   | - Phát triển thực thể **Exercise** và API quản trị tương ứng <br>&emsp; + Định nghĩa Entity: `name (≤150)`, `description`, `equipment`, `muscleGroup (@ManyToOne)` <br>&emsp; + Xây dựng `AdminExerciseController`: hỗ trợ CRUD toàn diện kèm tính năng lọc (filter) theo nhóm cơ <br>&emsp; + Mở các Public Endpoints: `GET /api/workouts/exercises`, `GET /{id}`, `GET /by-muscle-group/{id}`, `POST /custom` | 28/01/2026 | 28/01/2026 | |
+| 4   | - Thiết kế kiến trúc cho **WorkoutPlan** và **WorkoutPlanExercise** <br>&emsp; + `WorkoutPlan`: bao gồm `name`, `description`, `goalType (@ManyToOne)`, `difficultyLevel`, `estimatedDurationMinutes`, `isSystemPlan` <br>&emsp; + `WorkoutPlanExercise`: cấu trúc lịch tập chi tiết theo `dayOfWeek (1-7)`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + Triển khai `AdminWorkoutPlanController`: CRUD toàn diện kết hợp bộ lọc theo `goalType` | 29/01/2026 | 29/01/2026 | |
+| 4   | - Triển khai **Public Workout Endpoints** thông qua `WorkoutController` (`/api/workouts`) <br>&emsp; + Nhóm cơ: `GET /muscle-groups`, `GET /muscle-groups/{id}` <br>&emsp; + Bài tập: `GET /exercises`, `GET /exercises/{id}`, `GET /exercises/by-muscle-group/{id}` <br>&emsp; + Kế hoạch mẫu: `GET /plans`, `GET /plans/{id}`, `GET /plans/by-goal-type/{id}` | 29/01/2026 | 29/01/2026 | |
+| 5   | - Xây dựng giao diện **SuggestedPlanScreen** (Wizard 3 bước) <br>&emsp; + Bước 1: Khảo sát loại mục tiêu (gọi API `GET /api/goal-types`) <br>&emsp; + Bước 2: Hiển thị danh sách kế hoạch mẫu kèm hình ảnh minh họa và mức độ khó <br>&emsp; + Bước 3: Xem trước chi tiết lịch trình theo ngày → hỗ trợ nhân bản dữ liệu qua `cloneFromSystemPlan` | 30/01/2026 | 30/01/2026 | |
+| 6   | - Phát triển màn hình **PlanExercisePicker** <br>&emsp; + Hiển thị danh sách toàn bộ bài tập hệ thống, phân loại theo nhóm cơ cùng hình ảnh trực quan <br>&emsp; + Tích hợp công cụ tìm kiếm bài tập theo tên <br>&emsp; + Xử lý sự kiện lựa chọn: kích hoạt hàm `addExerciseToPlan(planId, dayOfWeek, exerciseId)` <br> - Xây dựng cơ chế **DatabaseSeeder** để khởi tạo dữ liệu mẫu (nhóm cơ, bài tập) ban đầu | 31/01/2026 | 31/01/2026 | |
 
 ### Kết quả đạt được tuần 4:
 
 * **Backend — System Workout**:
-  * Entity `MuscleGroup` + admin CRUD hoạt động; đã seed: Ngực, Lưng, Chân, Vai, Tay, Cơ bụng.
-  * `Exercise` + admin CRUD + public read endpoints hoạt động.
-  * `WorkoutPlan` với `WorkoutPlanExercise` (lịch theo ngày, hỗ trợ multi-week qua `weekIndex`) triển khai xong.
-  * Admin endpoints được bảo vệ bởi `ROLE_ADMIN`; public read truy cập không cần auth.
+  * module cốt lõi `MuscleGroup` cùng bộ API Admin CRUD đã vận hành trơn tru; hoàn tất seed các dữ liệu chuẩn: Ngực, Lưng, Chân, Vai, Tay, Cơ bụng.
+  * Thực thể `Exercise` tích hợp thành công với cả Admin CRUD và các public read endpoints, đáp ứng tốt yêu cầu truy xuất từ phía client.
+  * Cấu trúc phức hợp `WorkoutPlan` và `WorkoutPlanExercise` đã được thiết lập hoàn chỉnh, hỗ trợ phân rã lịch tập chi tiết theo từng ngày và mở rộng linh hoạt lịch tập nhiều tuần thông qua `weekIndex`.
+  * Đảm bảo tính rạch ròi trong phân quyền: toàn bộ Admin endpoints được bảo vệ nghiêm ngặt bằng `ROLE_ADMIN`, trong khi các public endpoints cho phép đọc dữ liệu hoạt động độc lập không yêu cầu xác thực.
 * **Frontend — Duyệt bài tập**:
-  * `SuggestedPlanScreen` hướng dẫn user qua mục tiêu → chọn kế hoạch trong 3 bước rõ ràng.
-  * `PlanExercisePicker` liệt kê bài tập với context nhóm cơ; chọn bài tập thêm vào kế hoạch user.
-* `DatabaseSeeder` xử lý việc đọc file cấu hình JSON (`s3_images_upload.json`) để seed dữ liệu nhóm cơ + bài tập ban đầu, khắc phục triệt để lỗi mapping do ký tự đặc biệt, dấu nháy kép để bảo đảm 100% URL hình ảnh hiển thị khớp với CSDL.
+  * Giao diện `SuggestedPlanScreen` dẫn dắt người dùng qua quy trình 3 bước mượt mà: từ việc xác định mục tiêu đến lúc chọn được kế hoạch phù hợp.
+  * Component `PlanExercisePicker` liệt kê danh sách bài tập một cách trực quan theo ngữ cảnh nhóm cơ, cho phép thao tác chọn và thêm bài tập vào kế hoạch cá nhân một cách dễ dàng.
+* Xây dựng thành công `DatabaseSeeder` tự động đọc file cấu hình JSON (`s3_images_upload.json`) để đồng bộ dữ liệu nhóm cơ và bài tập ban đầu. Đã xử lý triệt để các vấn đề mapping do ký tự đặc biệt hoặc dấu nháy kép, đảm bảo 100% URL hình ảnh được lưu trữ và hiển thị chính xác từ cơ sở dữ liệu.
 
 ### Kiến thức AWS đã học:
 
-* Học cách thiết kế kiến trúc media với Amazon S3 cho file nhị phân và PostgreSQL cho metadata để mỗi hệ thống lưu đúng loại dữ liệu phù hợp.
-* Xây dựng quy ước object key như `workouts/`, `exercises/`, `foods/` để phục vụ tổ chức dữ liệu, cleanup và áp lifecycle policy dễ dàng.
-* Hiểu nguyên tắc private-by-default cho bucket và lý do không nên lạm dụng public ACL với tài nguyên của ứng dụng.
-* Nắm các tùy chọn mã hóa server-side như SSE-S3 và SSE-KMS, cùng tình huống nên dùng KMS để kiểm soát chặt hơn.
-* Hiểu vai trò của S3 versioning trong việc bảo vệ trước các trường hợp ghi đè hoặc xóa nhầm file media.
-* Phân tích được trade-off chi phí lưu trữ và băng thông đối với ảnh, từ đó thấy rõ tầm quan trọng của tối ưu dung lượng file.
-* Chuẩn bị mô hình lưu trữ sẵn sàng để sau này đặt CloudFront trước S3 mà không phải đổi business logic hiện có.
+* Thấu hiểu nguyên lý thiết kế kiến trúc lưu trữ đa phương tiện (media architecture): sử dụng Amazon S3 cho dữ liệu nhị phân (binary files) và PostgreSQL cho siêu dữ liệu (metadata), đảm bảo mỗi thành phần đảm nhiệm đúng chức năng tối ưu của nó.
+* Thiết lập các chuẩn quy ước định danh đối tượng (object key conventions) như `workouts/`, `exercises/`, `foods/` nhằm tối ưu hóa tổ chức không gian lưu trữ, đơn giản hóa quá trình dọn dẹp và áp dụng các chính sách vòng đời (lifecycle policies).
+* Quán triệt nguyên tắc "private-by-default" cho các S3 buckets, nhận thức sâu sắc những rủi ro bảo mật tiềm ẩn khi lạm dụng Public ACL đối với tài nguyên ứng dụng nội bộ.
+* Nắm bắt các phương thức mã hóa dữ liệu tại server (server-side encryption) như SSE-S3 và SSE-KMS, đồng thời phân biệt rõ các kịch bản thực tế đòi hỏi KMS để thắt chặt kiểm soát truy cập.
+* Nắm vững vai trò chiến lược của S3 Versioning như một cơ chế phòng vệ tự động chống lại các rủi ro vô tình ghi đè hoặc xóa nhầm file media quan trọng.
+* Phân tích chuyên sâu bài toán đánh đổi (trade-off) giữa chi phí lưu trữ S3 và băng thông truyền tải đối với hình ảnh, qua đó khẳng định tính cấp thiết của việc tối ưu hóa dung lượng file trước khi tải lên.
+* Kiến tạo mô hình lưu trữ linh hoạt (cloud-ready), sẵn sàng cho việc tích hợp Amazon CloudFront làm CDN (mạng phân phối nội dung) phía trước S3 trong tương lai mà không cần can thiệp hay sửa đổi business logic hiện tại.
 
-Tóm lại, tuần 4 biến kiến thức về S3 thành một định hướng kiến trúc media rõ ràng cho ứng dụng.
+Nhìn chung, tuần 4 đã chuyển hóa những lý thuyết nền tảng về Amazon S3 thành một chiến lược kiến trúc quản lý media bài bản và thực chiến cho ứng dụng.
 
 ### Kế hoạch tuần tiếp theo:
 
-* **Backend**: Xây dựng module `UserWorkoutPlan` với clone kế hoạch từ system template, soft-delete, và logic kích hoạt.
-* **Frontend**: Xây dựng `MyPlansScreen`, `CreatePlanScreen`, và `PlanEditScreen` (trình chỉnh sửa theo ngày).
+* **Backend**: Triển khai module `UserWorkoutPlan` với các tính năng nâng cao: hỗ trợ nhân bản (clone) kế hoạch từ các template chuẩn của hệ thống, thiết lập cơ chế xóa mềm (soft-delete), và xây dựng logic kích hoạt (activate) lịch tập cá nhân.
+* **Frontend**: Xây dựng nhóm giao diện quản lý kế hoạch cá nhân bao gồm `MyPlansScreen`, `CreatePlanScreen` và `PlanEditScreen` (tích hợp trình chỉnh sửa lịch tập chi tiết theo ngày).

@@ -8,59 +8,57 @@ pre: " <b> 1.11. </b> "
 
 ### Mục tiêu Tuần 11:
 
-* Thực hiện **kiểm thử tích hợp end-to-end toàn bộ** ứng dụng myFit (tất cả tính năng, tất cả màn hình).
-* Viết **tài liệu dự án đầy đủ** — README, tài liệu API tham chiếu, tổng quan kiến trúc.
-* **Dọn dẹp code**, loại bỏ các đoạn debug và chuẩn bị dự án cho việc bàn giao.
+* Thực thi chiến dịch **kiểm thử tích hợp toàn trình (End-to-End Integration Testing)** bao phủ toàn bộ hệ sinh thái ứng dụng myFit nhằm cam kết chất lượng đầu ra.
+* Biên soạn **hệ thống tài liệu kỹ thuật chuyên sâu** — bao gồm README Backend, Cẩm nang phát triển Frontend (Development Guide) và Sơ đồ kiến trúc tổng thể.
+* Tiến hành **khử nợ kỹ thuật (Technical Debt Cleanup)**, loại bỏ triệt để các tàn dư debug, tối ưu hóa mã nguồn và đưa dự án vào trạng thái sẵn sàng bàn giao (handover-ready).
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Tài liệu tham khảo |
 | --- | --------- | ------------ | --------------- | ------------------ |
-| 2   | - **Kiểm thử tích hợp end-to-end** — Backend <br>&emsp; + Xác minh tất cả API endpoint với input hợp lệ và không hợp lệ <br>&emsp; + Xác nhận các migration Flyway V1/V2/V3 chạy trên DB mới <br>&emsp; + Docker Compose khởi động lạnh: `db` + `api` trạng thái healthy trong dưới 30s <br>&emsp; + Kiểm tra `application.properties` — đảm bảo không có giá trị chỉ dùng cho dev bị đưa vào production | 03/23/2026 | 03/23/2026 | |
-| 3   | - **Kiểm thử tích hợp end-to-end** — Frontend (6 luồng người dùng) <br>&emsp; + Luồng 1: Đăng ký → Onboard → Home Dashboard <br>&emsp; + Luồng 2: Tạo plan → Clone system plan → Đặt plan hoạt động <br>&emsp; + Luồng 3: Bắt đầu workout session → Ghi lại sets → Rest timer → Hoàn thành → Màn hình thành công <br>&emsp; + Luồng 4: Thêm thực phẩm vào 4 bữa ăn → Kiểm tra tổng lượng calo trong ngày <br>&emsp; + Luồng 5: Nhập chỉ số cơ thể → Tính BMI/BMR/TDEE → Hiển thị biểu đồ <br>&emsp; + Luồng 6: Chat với AI assistant → Bedrock phản hồi bằng tiếng Việt | 03/24/2026 | 03/24/2026 | |
-| 4   | - Viết **Backend README** (`myFit-api/README.md`) <br>&emsp; + Tổng quan dự án & sơ đồ kiến trúc (API ↔ PostgreSQL ↔ Cognito ↔ S3) <br>&emsp; + Tài liệu module: Auth, Food, SystemWorkout, UserWorkoutPlan, Session, UserMetric, Media, GoalType <br>&emsp; + Hướng dẫn cài đặt: prerequisites, biến `.env`, lệnh Docker Compose <br>&emsp; + Bảng tham chiếu API endpoint (tất cả route, method, mô tả, yêu cầu xác thực) | 03/25/2026 | 03/25/2026 | |
-| 4   | - Cập nhật **Frontend** `guide.md` <br>&emsp; + Bảng tóm tắt tech stack <br>&emsp; + Sơ đồ cấu trúc navigation (AuthStack / OnboardingStack / MainTabs) <br>&emsp; + Hướng dẫn cài đặt: `npm install`, biến `.env`, `npx expo start` <br>&emsp; + Danh sách các screen kèm mô tả tính năng <br>&emsp; + Ghi chú cấu hình AWS Cognito PKCE + Bedrock | 03/25/2026 | 03/25/2026 | |
-| 5   | - **Dọn dẹp code** — Backend <br>&emsp; + Xóa tất cả `TODO`, `FIXME`, và các câu lệnh debug `System.out.println` <br>&emsp; + Đảm bảo các phương thức public không tầm thường đều có comment Javadoc <br>&emsp; + Kiểm tra cấu hình bảo mật để tránh việc lộ các route public ngoài ý muốn <br>&emsp; + Build cuối: `mvn clean package -DskipTests` → xác nhận file JAR build thành công | 03/26/2026 | 03/26/2026 | |
-| 5   | - Cải thiện **Response interceptor** + **UX polish** + **Final bug fix** (chuyển tiếp từ Tuần 10) <br>&emsp; + Triển khai token refresh với request queue: các phản hồi `401` đồng thời được xếp hàng, thực hiện một lần refresh, sau đó thử lại tất cả <br>&emsp; + Thêm component `NotificationBox` global alert (thay thế native `Alert.alert` qua `installAlertProxy`) <br>&emsp; + Thêm pull-to-refresh trên `HomeScreen` + sửa trạng thái loading của `HealthDashboardScreen` <br>&emsp; + Thêm tên hiển thị tiếng Việt `ActivityLevelLabels` cho tất cả enum value <br>&emsp; + Đảm bảo loading spinner và error state nhất quán trên tất cả các màn hình | 03/26/2026 | 03/26/2026 | |
-| 6   | - **Dọn dẹp code** — Frontend + **Final bug fix** <br>&emsp; + Xóa tất cả câu lệnh debug `console.log` <br>&emsp; + Chạy `eslint` và sửa các lint warning còn lại <br>&emsp; + Xóa các import không sử dụng <br>&emsp; + Sửa trạng thái trống của `BMITrendChart` (chuyển tiếp từ Tuần 10) <br>&emsp; + Export cuối: `npx expo export` → xác nhận zero TypeScript error <br> - **Đánh giá dự án (retrospective)**: ghi lại bài học rút ra, quyết định công nghệ nhìn lại, các cải tiến tương lai tiềm năng | 03/27/2026 | 03/27/2026 | |
+| 2   | - **Kiểm thử tích hợp End-to-End** — Backend <br>&emsp; + Rà soát toàn bộ API endpoints với các kịch bản dữ liệu hợp lệ (happy path) và dị thường (edge cases) <br>&emsp; + Xác thực tiến trình migration Flyway V1/V2/V3 vận hành trơn tru trên cơ sở dữ liệu trắng <br>&emsp; + Đánh giá hiệu năng khởi động lạnh (cold start) qua Docker Compose: đảm bảo cụm `db` + `api` đạt trạng thái healthy dưới 30s <br>&emsp; + Kiểm toán file `application.properties` — triệt tiêu nguy cơ rò rỉ các cấu hình môi trường dev lên production | 23/03/2026 | 23/03/2026 | |
+| 3   | - **Kiểm thử tích hợp End-to-End** — Frontend (6 user journeys cốt lõi) <br>&emsp; + Luồng 1: Xác thực → Thu thập dữ liệu Onboarding → Dashboard trang chủ <br>&emsp; + Luồng 2: Khởi tạo kế hoạch cá nhân → Nhân bản (clone) template hệ thống → Kích hoạt lịch tập <br>&emsp; + Luồng 3: Mở phiên tập (live-session) → Ghi nhận telemetry từng hiệp → Quản lý rest timer → Hoàn tất buổi tập <br>&emsp; + Luồng 4: Phân bổ thực phẩm vào 4 bữa tiêu chuẩn → Đối chiếu tổng macro/calo trong ngày <br>&emsp; + Luồng 5: Cập nhật nhân trắc học → Xử lý thuật toán BMI/BMR/TDEE → Trực quan hóa qua biểu đồ <br>&emsp; + Luồng 6: Tương tác Bedrock AI Assistant → Kiểm định chất lượng phản hồi ngôn ngữ tự nhiên (tiếng Việt) | 24/03/2026 | 24/03/2026 | |
+| 4   | - Biên soạn **Backend README** (`myFit-api/README.md`) <br>&emsp; + Đặc tả tổng quan dự án & thiết kế kiến trúc (Spring Boot ↔ PostgreSQL ↔ Cognito ↔ S3) <br>&emsp; + Phân tách tài liệu theo module: Auth, Food, SystemWorkout, UserWorkoutPlan, Session, UserMetric, Media, GoalType <br>&emsp; + Chuẩn hóa quy trình bootstrap: prerequisites, thiết lập `.env`, bộ lệnh Docker Compose <br>&emsp; + Xây dựng API Reference: định tuyến, phương thức, payload chuẩn, và yêu cầu authorization | 25/03/2026 | 25/03/2026 | |
+| 4   | - Hoàn thiện **Frontend Development Guide** (`guide.md`) <br>&emsp; + Khái quát hệ sinh thái công nghệ (Tech Stack) <br>&emsp; + Lập bản đồ kiến trúc điều hướng (Navigation Tree: AuthStack / OnboardingStack / MainTabs) <br>&emsp; + Quy trình setup local: cấu hình `.env`, lệnh khởi chạy Expo <br>&emsp; + Mapping chi tiết tính năng theo từng màn hình (Screen Dictionary) <br>&emsp; + Tài liệu hóa cấu hình tích hợp AWS Cognito PKCE và AWS Bedrock | 25/03/2026 | 25/03/2026 | |
+| 5   | - **Dọn dẹp mã nguồn (Code Cleanup)** — Backend <br>&emsp; + Rà quét và loại bỏ toàn bộ các thẻ `TODO`, `FIXME`, cùng các lệnh debug `System.out.println` <br>&emsp; + Bổ sung Javadoc cho các service và logic nghiệp vụ phức tạp <br>&emsp; + Kiểm toán cấu hình Spring Security, ngăn chặn rủi ro mở nhầm các public routes <br>&emsp; + Thẩm định quá trình build: thực thi `mvn clean package -DskipTests` → đảm bảo xuất xưởng artifact JAR hoàn chỉnh | 26/03/2026 | 26/03/2026 | |
+| 5   | - Tối ưu hóa **Response Interceptor** + **UX Polish** + **Final Bug Fix** <br>&emsp; + Hoàn thiện cơ chế Token Refresh đa luồng: đưa các request lỗi `401` đồng thời vào queue, thực thi một phiên refresh duy nhất, sau đó tái kích hoạt (retry) toàn bộ hàng đợi <br>&emsp; + Triển khai `NotificationBox` như một Global Alert Proxy, thay thế hoàn toàn `Alert.alert` native <br>&emsp; + Tích hợp cơ chế Pull-to-refresh cho `HomeScreen` + tinh chỉnh logic hiển thị skeleton loading trên `HealthDashboardScreen` <br>&emsp; + Chuẩn hóa bản địa hóa (localization) cho các giá trị enum (Activity Level, Goal Type) <br>&emsp; + Đồng nhất thiết kế loading spinner và fallback errors trên toàn hệ thống | 26/03/2026 | 26/03/2026 | |
+| 6   | - **Dọn dẹp mã nguồn (Code Cleanup)** — Frontend <br>&emsp; + Purge toàn bộ `console.log` và các debug statements <br>&emsp; + Thực thi Eslint và giải quyết triệt để các cảnh báo (warnings) còn tồn đọng <br>&emsp; + Loại bỏ (tree-shaking) các thư viện và imports dư thừa <br>&emsp; + Vá lỗi hiển thị (empty state) của `BMITrendChart` <br>&emsp; + Thử nghiệm export production: `npx expo export` → xác nhận Zero TypeScript Error <br> - Tổ chức **Retrospective**: đúc kết bài học kỹ thuật, đánh giá các quyết định kiến trúc, và phác thảo lộ trình nâng cấp (Future Roadmap) | 27/03/2026 | 27/03/2026 | |
 
 ### Thành tựu Tuần 11:
 
-* **Kiểm thử tích hợp**:
-  * Tất cả backend API endpoint đều vượt qua kiểm thử thủ công với input hợp lệ và không hợp lệ.
-  * Docker Compose khởi động lạnh ổn định — API healthy trong vòng 25 giây sau khi chạy `docker-compose up`.
-  * Flyway V1, V2, V3 migration chạy thành công trên database PostgreSQL mới.
-  * Tất cả 6 luồng người dùng được kiểm thử end-to-end mà không có lỗi nghiêm trọng.
-* **Tài liệu**:
-  * `myFit-api/README.md` bao gồm hướng dẫn cài đặt đầy đủ, tài liệu biến môi trường và mô tả tất cả endpoint.
-  * Frontend `guide.md` được cập nhật với sơ đồ navigation, danh sách screen và cấu hình dịch vụ AWS.
-  * Tổng quan kiến trúc được tài liệu hóa: Spring Boot API ↔ PostgreSQL ↔ AWS Cognito ↔ AWS S3 ↔ React Native App ↔ AWS Bedrock.
-* **CI/CD & Chất lượng code**:
-  * Tích hợp quy trình GitHub Actions (`.github/workflows`) để tự động hóa lint, test, build và trigger rolling deployment update lên **Amazon ECS Fargate** sau khi merge.
-  * Không còn `console.log` hoặc `System.out.println` trong production path.
-  * Build TypeScript tự động (`npx expo export`) trên CI hoàn thành với zero error.
-  * Maven `mvn clean package` tự động build file JAR cuối cùng thành công trên CI.
-* **Đánh giá dự án — Bài học chính**:
-  * **Phòng chống IDOR** thông qua việc trích xuất `sub` từ JWT là một mẫu bảo mật quan trọng cần được áp dụng nhất quán trong toàn bộ REST API có phạm vi người dùng.
-  * **Soft delete** với `@SQLRestriction` thân thiện với người dùng hơn so với hard delete đối với dữ liệu thuộc về người dùng — cho phép khả năng khôi phục trong tương lai.
-  * Kiến trúc **Stateless JWT** loại bỏ sự phức tạp của session phía server, đổi lại phải xử lý vấn đề thu hồi token (được giải quyết bằng forced logout + refresh queue).
-  * **React Native + NativeWind** là một sự kết hợp mạnh mẽ — cú pháp quen thuộc với TailwindCSS giúp tăng tốc đáng kể việc phát triển UI mobile.
-  * Việc tách trách nhiệm **Redux + React Query** hoạt động hiệu quả: Redux quản lý trạng thái auth/session; React Query quản lý server cache và background refetching.
+* **Kiểm thử tích hợp (Integration Testing)**:
+  * 100% API endpoints của hệ thống vượt qua các kịch bản kiểm thử biên (edge cases) và kiểm thử phá hoại (negative tests).
+  * Quy trình khởi động cụm hạ tầng qua Docker Compose đạt độ ổn định cao — toàn bộ services vào trạng thái ready dưới 25 giây.
+  * Cơ chế quản trị DB schema qua Flyway (V1-V3) chứng minh tính tất định (deterministic) khi chạy mượt mà trên môi trường sạch (clean database).
+  * Toàn bộ 6 luồng trải nghiệm cốt lõi của người dùng đều vận hành trơn tru, không phát sinh bất kỳ block-bug nào.
+* **Tài liệu dự án (Documentation)**:
+  * Hệ thống tài liệu Backend được thiết kế chuyên nghiệp, minh bạch hóa toàn bộ cấu trúc biến môi trường và đặc tả API.
+  * Cẩm nang Frontend cung cấp góc nhìn toàn diện về kiến trúc điều hướng và phương pháp liên kết với các Managed Services của AWS.
+  * Sơ đồ luồng dữ liệu (Data Flow) được ánh xạ rõ ràng: Spring Boot ↔ PostgreSQL ↔ AWS Cognito ↔ AWS S3 ↔ React Native ↔ AWS Bedrock.
+* **CI/CD & Chất lượng mã nguồn**:
+  * Tích hợp thành công GitHub Actions workflows để tự động hóa toàn chu trình: Linting → Testing → Building → Rolling Deployment lên **Amazon ECS Fargate**.
+  * Mã nguồn đạt trạng thái tinh gọn, sạch bóng các tàn dư debug (console log/print).
+  * Tiến trình kiểm định kiểu tĩnh của TypeScript (`npx expo export`) pass hoàn toàn với 0 lỗi cảnh báo.
+  * Pipeline Maven tự động đóng gói và lưu trữ artifact JAR một cách ổn định, sẵn sàng cho khâu containerization.
+* **Đúc kết từ Retrospective — Các bài học lõi**:
+  * **Chống rò rỉ dữ liệu (IDOR Prevention)**: Việc ủy quyền trích xuất trực tiếp `sub` từ JWT payload là chốt chặn bảo mật không thể thỏa hiệp đối với các REST API thao tác trên tài nguyên cá nhân.
+  * **Chiến lược Soft Delete**: Áp dụng `@SQLRestriction` mang lại phương án quản lý vòng đời dữ liệu an toàn, trao quyền khôi phục (recovery) và duy trì tính toàn vẹn lịch sử tốt hơn hẳn so với hard delete.
+  * **Quản trị Stateless JWT**: Mô hình này giải phóng Backend khỏi gánh nặng quản lý session, nhưng đòi hỏi kiến trúc Frontend phải cực kỳ tinh tế trong khâu xử lý thu hồi (force logout) và làm mới token (refresh queue) để không làm vỡ UX.
+  * **Hệ sinh thái React Native + NativeWind**: Sự kết hợp này mang lại vận tốc phát triển (development velocity) vượt trội, đưa sức mạnh của TailwindCSS vào môi trường ứng dụng native.
+  * **Kiến trúc State Management**: Sự phân bổ trách nhiệm rạch ròi giữa **Redux** (quản lý trạng thái tĩnh: Auth/Session) và **React Query** (quản lý server cache, tự động đồng bộ ngầm) đã chứng minh được tính hiệu quả và khả năng mở rộng sâu của Frontend.
 
 ### Kiến thức AWS đã học:
 
-* Thực hiện đánh giá theo phong cách **Well-Architected** dựa trên năm trụ cột: Security, Reliability, Performance Efficiency, Cost Optimization và Operational Excellence.
-* Tài liệu hóa khả năng **độ tin cậy** thông qua kiểm tra health dependency, kế hoạch backup & restore, và các kỳ vọng thực tế về RPO/RTO.
-* Áp dụng tư duy **FinOps** bằng cách rà soát cơ hội right-sizing, lifecycle policies, cảnh báo ngân sách và dọn dẹp tài nguyên không sử dụng.
-* Tổng hợp checklist **tăng cường bảo mật** bao phủ kiểm tra IAM, chính sách token, phạm vi mã hóa, quản lý secret và audit logs.
-* Chuẩn bị **runbook vận hành cloud** cho deployment, rollback, xử lý sự cố và kiểm tra vận hành định kỳ.
-* Xác định tiêu chí **sẵn sàng bàn giao** như: môi trường có thể tái tạo, tài liệu môi trường đầy đủ và ranh giới trách nhiệm rõ ràng.
-* Xây dựng **lộ trình AWS trong tương lai** bao gồm ECS cộng tăng cường ALB, tối ưu CloudFront, cải thiện observability và triển khai production theo từng giai đoạn.
+* Áp dụng khung đánh giá **AWS Well-Architected Framework**, đối chiếu kiến trúc hiện tại qua lăng kính 5 trụ cột cốt lõi: Security, Reliability, Performance Efficiency, Cost Optimization, và Operational Excellence.
+* Thiết lập các tiêu chuẩn **Độ tin cậy (Reliability)** thông qua kịch bản kiểm tra health check chuỗi cung ứng, lập kế hoạch sao lưu/phục hồi (backup/restore), và thiết lập các chỉ tiêu RPO/RTO thực tiễn.
+* Thấm nhuần triết lý **FinOps**: chủ động rà soát, right-sizing tài nguyên, thiết lập lifecycle policies cho S3, cài đặt cảnh báo ngân sách (budget alarms) và dọn dẹp các artifact không sử dụng.
+* Hoàn thiện bộ tiêu chuẩn **Bảo mật chiều sâu (Defense in Depth)**: kiểm toán các ranh giới IAM, thắt chặt token policies, quy hoạch phạm vi mã hóa KMS, và củng cố quản trị log (audit logs).
+* Thiết kế **Cloud Operations Runbook**: chuẩn hóa cẩm nang ứng phó cho các kịch bản deployment, rollback khẩn cấp, khắc phục sự cố (troubleshooting), và bảo trì định kỳ.
+* Xác lập các tiêu chí **Sẵn sàng bàn giao (Handover Readiness)**: bảo đảm tính tái lập của môi trường, minh bạch hóa cấu hình, và vạch rõ lằn ranh trách nhiệm (Shared Responsibility).
+* Kiến tạo **Lộ trình Cloud tương lai (Future Roadmap)**: đề xuất chiến lược tối ưu hóa ECS Auto-scaling, nâng cấp rule WAF trên ALB, cấu hình nâng cao cho CloudFront CDN, và triển khai hệ thống giám sát (observability) toàn diện.
 
-Tóm lại, tuần 11 đã chuyển các kiến thức AWS học được trong dự án thành một bản đánh giá vận hành và kế hoạch bàn giao hệ thống.
+Nhìn chung, tuần 11 là sự hội tụ, chuyển hóa những kiến thức AWS thực chiến thành một quy trình đánh giá chất lượng (quality assurance) và một bản lề vững chắc cho giai đoạn bàn giao hệ thống.
 
 ### Kế hoạch tuần tiếp theo:
 
-* Thực hiện bài thuyết trình cuối cùng cho tất cả các bên liên quan.
-* Hoàn thành phần tự đánh giá và phản hồi.
-* Nộp báo cáo thực tập.
-* Ăn mừng hoàn thành dự án!
+* Hoàn tất quá trình tự đánh giá (Self-assessment) và tiếp thu phản hồi.
+* Hoàn thiện và nộp báo cáo thực tập chính thức.

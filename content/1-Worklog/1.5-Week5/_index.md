@@ -8,50 +8,50 @@ pre: " <b> 1.5. </b> "
 
 ### Week 5 Objectives:
 
-* **Backend**: Build the `UserWorkoutPlan` module — personal plans with cloning from system templates, soft-delete, and one-active-plan enforcement.
-* **Frontend**: Build the plan management screens — `MyPlansScreen`, `CreatePlanScreen`, and `PlanEditScreen` with day-tabbed exercise editing.
-* Allow users to fully own their personal workout schedule with flexibility to create, clone, and customize plans.
+* **Backend**: Architect the `UserWorkoutPlan` module — facilitating personalized workout regimens via system template cloning, implementing soft-delete mechanisms, and enforcing a strict single-active-plan policy.
+* **Frontend**: Construct a comprehensive suite of plan management interfaces — encompassing `MyPlansScreen`, `CreatePlanScreen`, and a `PlanEditScreen` featuring day-tabbed granular exercise modifications.
+* Empower users with full autonomy over their fitness schedules, providing robust flexibility to seamlessly create, clone, and deeply customize personal workout plans.
 
 ### Tasks to be carried out this week:
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | ---- | ---------- | --------------- | ------------------ |
-| 2   | - Build **UserWorkoutPlan** entity <br>&emsp; + Fields: `user (@ManyToOne)`, `name (≤150)`, `description`, `goalTypeId (UUID)`, `isActive (default true)`, `isDeleted (default false)` <br>&emsp; + Soft-delete via `@SQLRestriction("is_deleted = false")` — deleted plans invisible to all Hibernate queries <br>&emsp; + Write Flyway **V1** migration: `user_workout_plan`, `user_workout_plan_exercises` tables | 02/03/2026 | 02/03/2026 | |
-| 2   | - Write Flyway **V2** migration: add `is_deleted BOOLEAN DEFAULT FALSE` to `user_workout_plans` | 02/03/2026 | 02/03/2026 | |
-| 3   | - Build **UserWorkoutPlanExercise** entity <br>&emsp; + Same scheduling fields as system: `dayOfWeek`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + References `Exercise` (system entity), `UserWorkoutPlan` | 02/04/2026 | 02/04/2026 | |
-| 3   | - Implement **UserWorkoutPlanService** key business logic <br>&emsp; + `userId` always extracted from `Jwt.getSubject()` → never from request body (IDOR prevention) <br>&emsp; + **Clone**: deep-copy all `WorkoutPlanExercise` entries into `UserWorkoutPlanExercise` — no FK to source plan retained <br>&emsp; + **Activate**: set `isActive=true` on target plan, set `isActive=false` on all other user plans (one-active rule) | 02/04/2026 | 02/04/2026 | |
-| 4   | - Build **UserWorkoutPlanController** (`/api/user-workout-plans`) <br>&emsp; + `POST /me` — create new plan <br>&emsp; + `POST /me/clone/{systemPlanId}` — clone system template <br>&emsp; + `GET /me` (summary list), `GET /me/active`, `GET /{id}` <br>&emsp; + `PUT /{id}` (update metadata), `PUT /{id}/activate`, `DELETE /{id}` (soft) <br>&emsp; + `POST /{planId}/exercises`, `GET /{planId}/exercises`, `PUT /{planId}/exercises/{id}`, `DELETE /{planId}/exercises/{id}` | 02/05/2026 | 02/05/2026 | |
-| 5   | - Build **MyPlansScreen** (Frontend) <br>&emsp; + Lists all user plans with active indicator badge <br>&emsp; + Activate/deactivate toggle; soft-delete with `ConfirmModal` <br>&emsp; + Navigate to `CreatePlanScreen` or `PlanEditScreen` | 02/06/2026 | 02/06/2026 | |
-| 5   | - Build **CreatePlanScreen** (Frontend) <br>&emsp; + Form: plan name, description, goal type dropdown (fetched from `GET /api/goal-types`) <br>&emsp; + On submit: `createMyPlan` then navigate to `PlanEditScreen` | 02/06/2026 | 02/06/2026 | |
-| 6   | - Build **PlanEditScreen** (Frontend) <br>&emsp; + Day-of-week tab bar (Mon-Sun) to switch exercise view per day <br>&emsp; + List exercises for selected day with reorder (up/down arrows), delete button <br>&emsp; + Navigate to `PlanExercisePicker` to add exercises for a given day <br>&emsp; + All changes call `addExerciseToPlan`, `updatePlanExercise`, `removePlanExercise` APIs | 02/07/2026 | 02/07/2026 | |
+| 2   | - Construct the **UserWorkoutPlan** entity <br>&emsp; + Define schema fields: `user (@ManyToOne)`, `name (≤150 chars)`, `description`, `goalTypeId (UUID)`, `isActive (default true)`, `isDeleted (default false)` <br>&emsp; + Integrate soft-delete functionality via `@SQLRestriction("is_deleted = false")` — ensuring logically deleted records are completely isolated from Hibernate queries <br>&emsp; + Develop Flyway **V1** migration scripts to initialize the `user_workout_plan` and `user_workout_plan_exercises` tables | 02/03/2026 | 02/03/2026 | |
+| 2   | - Execute Flyway **V2** migration: append the `is_deleted BOOLEAN DEFAULT FALSE` column to the `user_workout_plans` table to support soft-deletion operations | 02/03/2026 | 02/03/2026 | |
+| 3   | - Architect the **UserWorkoutPlanExercise** entity <br>&emsp; + Replicate core scheduling attributes: `dayOfWeek`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + Establish foreign key references mapping to the system `Exercise` catalog and the parent `UserWorkoutPlan` | 02/04/2026 | 02/04/2026 | |
+| 3   | - Implement critical business logic within **UserWorkoutPlanService** <br>&emsp; + Mandate `userId` extraction exclusively from the `Jwt.getSubject()` claim — strictly bypassing request payloads to eliminate IDOR vulnerabilities <br>&emsp; + **Clone Strategy**: Execute a deep-copy of all associated `WorkoutPlanExercise` entries into new `UserWorkoutPlanExercise` records — intentionally severing all foreign key ties to the source template <br>&emsp; + **Activation Engine**: Perform transactional state updates to assert `isActive=true` for the target plan while overriding all prior plans to `isActive=false` (enforcing the one-active rule) | 02/04/2026 | 02/04/2026 | |
+| 4   | - Develop the **UserWorkoutPlanController** (`/api/user-workout-plans`) <br>&emsp; + Initialization endpoints: `POST /me` (instantiate standard plan), `POST /me/clone/{systemPlanId}` (clone template) <br>&emsp; + Retrieval endpoints: `GET /me` (aggregation list), `GET /me/active`, `GET /{id}` <br>&emsp; + Mutation/Deletion endpoints: `PUT /{id}` (update metadata), `PUT /{id}/activate`, `DELETE /{id}` (executes soft-delete) <br>&emsp; + Granular exercise management: `POST /{planId}/exercises`, `GET /{planId}/exercises`, `PUT /{planId}/exercises/{id}`, `DELETE /{planId}/exercises/{id}` | 02/05/2026 | 02/05/2026 | |
+| 5   | - Construct the **MyPlansScreen** interface (Frontend) <br>&emsp; + Render an aggregated list of user plans accented with dynamic active/inactive indicator badges <br>&emsp; + Implement state-toggling mechanisms and guarded soft-delete actions utilizing a `ConfirmModal` <br>&emsp; + Facilitate seamless navigation routing to `CreatePlanScreen` and `PlanEditScreen` | 02/06/2026 | 02/06/2026 | |
+| 5   | - Build the **CreatePlanScreen** interface (Frontend) <br>&emsp; + Design a comprehensive input form: plan name, description, and a dynamic goal type dropdown populated via `GET /api/goal-types` <br>&emsp; + Handle submission lifecycle: dispatch `createMyPlan` API call followed by an automatic route transition to the `PlanEditScreen` | 02/06/2026 | 02/06/2026 | |
+| 6   | - Develop the **PlanEditScreen** interface (Frontend) <br>&emsp; + Integrate a chronological day-of-week tab bar (Mon-Sun) to partition and render daily exercise schedules <br>&emsp; + Render contextual exercise lists supporting intuitive reordering (up/down sorting arrows) and deletion capabilities <br>&emsp; + Bridge navigation to the `PlanExercisePicker` for precise daily exercise additions <br>&emsp; + Bind UI interactions to backend state via `addExerciseToPlan`, `updatePlanExercise`, and `removePlanExercise` API integrations | 02/07/2026 | 02/07/2026 | |
 
 ### Week 5 Achievements:
 
 * **Backend — UserWorkoutPlan module**:
-  * Flyway V1 + V2 migrations applied cleanly alongside Hibernate `ddl-auto=create-drop`.
-  * Soft-delete pattern with `@SQLRestriction` works — deleted plans never appear in queries.
-  * Clone endpoint creates a fully independent copy of system plans — verified by checking no FK pointer to source exists, ensuring robust customizability without mutating system data.
-  * One-active-plan rule enforced at service layer — activating plan X correctly deactivates all others for that user.
-  * `userId` always taken from the validated JWT `sub` claim — zero risk of IDOR attacks.
+  * Successfully applied Flyway V1 and V2 migrations in tandem with Hibernate's `ddl-auto=create-drop`, ensuring strict schema consistency.
+  * The soft-delete paradigm employing `@SQLRestriction` operates flawlessly — logically removed plans are securely filtered from all application queries.
+  * The template cloning endpoint generates entirely autonomous deep copies of system plans — rigorously verified by the absence of foreign key pointers, thereby safeguarding core system data from user mutations.
+  * The single-active-plan constraint is robustly enforced at the service level — triggering the activation of a new plan programmatically deactivates all competing user plans via a single database transaction.
+  * User identity (`userId`) is strictly derived from the validated JWT `sub` claim — definitively neutralizing any potential IDOR attack vectors.
 * **Frontend — Plan Management**:
-  * `MyPlansScreen` correctly shows active/inactive state; delete prompts confirmation modal.
-  * `CreatePlanScreen` form validates name/description before submitting.
-  * `PlanEditScreen` day-tab architecture allows intuitive per-day exercise management.
-  * Reorder and remove operations reflect immediately in UI after API calls.
-  * `uiSlice` (`planEditorDay`, `plansReloadKey`) keeps plan editor state in sync across navigator.
+  * The `MyPlansScreen` precisely reflects active/inactive application states and enforces defensive UX patterns via deletion confirmation modals.
+  * The `CreatePlanScreen` rigorously validates input payload structures (name/description) prior to initiating network requests.
+  * The `PlanEditScreen`'s day-tabbed architecture provides an exceptionally intuitive UX for highly granular, daily workout customization.
+  * Array mutations (reordering and removal) immediately synchronize with the UI upon API resolution, ensuring perceived performance.
+  * Redux `uiSlice` state management (`planEditorDay`, `plansReloadKey`) maintains absolute consistency of the plan editor context across the navigation stack.
 
 ### AWS Knowledge Learned:
 
-* Learned core Amazon RDS concepts for PostgreSQL production usage: managed backup, maintenance windows, parameter groups, and service limitations.
-* Understood database isolation through private subnets and security groups that only permit backend services to connect.
-* Studied snapshot and point-in-time recovery concepts to protect user-owned workout data from operator error or faulty releases.
-* Reinforced migration discipline by treating Flyway scripts as deterministic deployment artifacts that must behave safely across environments.
-* Learned why cloud database connections are a finite resource and why application-side connection pooling requires deliberate tuning.
-* Understood the future path toward read scaling through read replicas when reporting or analytics traffic increases.
-* Connected data retention and recovery strategy to product concerns such as auditability, reversibility, and long-term user trust.
+* Mastered fundamental Amazon RDS architectures tailored for PostgreSQL production deployments: configuring managed automated backups, defining non-disruptive maintenance windows, tuning custom parameter groups, and monitoring service quotas.
+* Architected robust database isolation by deploying instances within private subnets, utilizing strict Security Group configurations that exclusively whitelist backend service ingress.
+* Analyzed data protection mechanisms, specifically snapshot lifecycle management and Point-in-Time Recovery (PITR), to safeguard immutable user workout history against operational errors or botched deployments.
+* Solidified database migration discipline by treating Flyway execution scripts as deterministic deployment artifacts, guaranteeing idempotent schema evolutions across environments.
+* Deepened understanding of the finite nature of cloud database connections, highlighting the critical necessity of meticulous application-side connection pool tuning.
+* Explored advanced read-scaling strategies leveraging RDS Read Replicas, preparing the architecture to handle future read-heavy analytics and reporting workloads.
+* Correlated technical data retention and disaster recovery strategies directly with overarching business requirements, such as auditability, operational reversibility, and long-term user trust.
 
 In summary, week 5 linked application data design to AWS-managed relational database practices and recovery planning.
 
 ### Next Week Plan:
 
-* **Backend**: Build the `UserWorkoutSession` and `WorkoutLog` modules for tracking live workout activity.
-* **Frontend**: Build `PlanDetailScreen` (active plan dashboard with day selector) and `WorkoutSessionScreen` (live workout screen with Redux session state).
+* **Backend**: Architect the `UserWorkoutSession` and `WorkoutLog` modules to facilitate real-time tracking and persistence of live workout activities.
+* **Frontend**: Construct the `PlanDetailScreen` (a comprehensive dashboard for the active plan featuring a day selector) and the `WorkoutSessionScreen` (an interactive live-workout interface tightly coupled with Redux session state management).

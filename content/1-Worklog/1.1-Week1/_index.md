@@ -6,52 +6,52 @@ chapter: false
 pre: " <b> 1.1. </b> "
 ---
 
-### Week 1 Objectives:
+### Week 1 Objectives
 
-* Kick off the **myFit** project — a full-stack fitness management application.
-* Initialize project repositories for both Backend (Spring Boot) and Frontend (React Native + Expo).
-* Set up the local development environment: Java 17, PostgreSQL via Docker, Node.js, Expo CLI.
-* Agree on overall system architecture, module breakdown, and technology stack with the team.
+* Kick off the deployment of the **myFit** project — a comprehensive health and fitness management platform.
+* Initialize and configure project repositories for both sides: Backend (using Spring Boot) and Frontend (using React Native integrated with Expo).
+* Set up the local development environment, including: Java 17, Node.js, Expo CLI, and a PostgreSQL database running via Docker.
+* Finalize the overall system architecture, technology stack, and module breakdown structure with the entire team.
 
-### Tasks to be carried out this week:
+### Tasks to be carried out this week
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | ---- | ---------- | --------------- | ------------------ |
-| 2   | - Project kickoff: define scope, features, and MVP requirements <br>&emsp; + Core features: workout plans, nutrition tracking, body metrics, session logging <br>&emsp; + Auth via AWS Cognito <br>&emsp; + Admin panel for exercise & plan management | 01/06/2026 | 01/06/2026 | |
-| 3   | - Initialize **Backend** project with Spring Boot 3 + Maven <br>&emsp; + Scaffold with `spring-boot-starter-web`, `spring-data-jpa`, `spring-security` <br>&emsp; + Configure `pom.xml`: Flyway, Lombok, jjwt 0.11.5, AWS SDK v1 <br>&emsp; + Establish `com.example.fitme` package structure: `common/`, `config/`, `module/` | 01/07/2026 | 01/07/2026 | <https://start.spring.io/> |
-| 4   | - Set up **PostgreSQL** locally with Docker Compose <br>&emsp; + Write `docker-compose.yml` with `postgres:15` service <br>&emsp; + Configure `application.properties`: datasource, JPA `ddl-auto=create-drop`, Flyway <br>&emsp; + Create `.env` / `.env.example` pattern for secrets <br> - Define `EntityBase` `@MappedSuperclass`: `id (UUID)`, `createdAt`, `updatedAt` | 01/08/2026 | 01/08/2026 | <https://docs.docker.com/compose/> |
-| 4   | - Initialize **Frontend** project: React Native + Expo ~54 with TypeScript ~5.9 <br>&emsp; + Scaffold with `npx create-expo-app --template` <br>&emsp; + Configure `tsconfig.json`, `babel.config.js`, `metro.config.js` <br>&emsp; + Install and configure NativeWind v4 + `tailwind.config.js` | 01/08/2026 | 01/08/2026 | <https://docs.expo.dev/> |
-| 5   | - Design system **entity-relationship diagram** <br>&emsp; + Entities: UserProfile, Food, Meal, Exercise, WorkoutPlan, BodyMetric, Session, Image… <br>&emsp; + Agree on relationships and cardinalities <br> - Create uniform **ApiResponse\<T\>** envelope: `code`, `message`, `result`, `timestamp`, `path` | 01/09/2026 | 01/09/2026 | |
-| 6   | - Set up **Redux Toolkit** store on Frontend <br>&emsp; + Install `@reduxjs/toolkit`, `react-redux` <br>&emsp; + Wire `store/index.ts` and `app/providers.tsx` into `App.tsx` <br> - Configure **Axios** client: base URL from `EXPO_PUBLIC_BACKEND_API_URL` <br> - Configure **TanStack React Query** v5 `QueryClient` | 01/10/2026 | 01/10/2026 | <https://redux-toolkit.js.org/> |
+| 2   | - Project kickoff: finalize scope, features, and MVP requirements <br>&emsp; + Core features: workout roadmaps, nutrition management, body metrics tracking, session logging <br>&emsp; + Authentication/Login via AWS Cognito <br>&emsp; + Build an Admin panel to manage exercise data | 01/06/2026 | 01/06/2026 | |
+| 3   | - Set up the **Backend** project using Spring Boot 3 and Maven <br>&emsp; + Add essential dependencies: `spring-boot-starter-web`, `spring-data-jpa`, `spring-security` <br>&emsp; + Customize `pom.xml` to integrate Flyway, Lombok, jjwt 0.11.5, and AWS SDK v1 <br>&emsp; + Structure directories under `com.example.fitme`: `common/`, `config/`, `module/` | 01/07/2026 | 01/07/2026 | <https://start.spring.io/> |
+| 4   | - Deploy local **PostgreSQL** via Docker Compose <br>&emsp; + Write `docker-compose.yml` to run the `postgres:15` service <br>&emsp; + Configure `application.properties`: database info, JPA `ddl-auto=create-drop`, Flyway settings <br>&emsp; + Establish `.env` and `.env.example` files to secure sensitive information <br> - Build the `EntityBase` class with `@MappedSuperclass` containing: `id (UUID)`, `createdAt`, `updatedAt` | 01/08/2026 | 01/08/2026 | <https://docs.docker.com/compose/> |
+| 4   | - Set up the **Frontend** project: React Native + Expo ~54 (with TypeScript ~5.9) <br>&emsp; + Execute `npx create-expo-app --template` <br>&emsp; + Customize `tsconfig.json`, `babel.config.js`, and `metro.config.js` files <br>&emsp; + Integrate NativeWind v4 and update `tailwind.config.js` | 01/08/2026 | 01/08/2026 | <https://docs.expo.dev/> |
+| 5   | - Design the system **entity-relationship diagram** (ERD) <br>&emsp; + Define tables: UserProfile, Food, Meal, Exercise, WorkoutPlan, BodyMetric, Session, Image… <br>&emsp; + Clarify relationships and cardinalities between entities <br> - Create a standardized **ApiResponse\<T\>** wrapper class consisting of: `code`, `message`, `result`, `timestamp`, `path` | 01/09/2026 | 01/09/2026 | |
+| 6   | - Configure **Redux Toolkit** for Frontend state management <br>&emsp; + Install `@reduxjs/toolkit` and `react-redux` packages <br>&emsp; + Wrap `store/index.ts` and `app/providers.tsx` into the root `App.tsx` file <br> - Set up **Axios** client to fetch data using the base URL from the env file (`EXPO_PUBLIC_BACKEND_API_URL`) <br> - Initialize **TanStack React Query** v5 with `QueryClient` | 01/10/2026 | 01/10/2026 | <https://redux-toolkit.js.org/> |
 
-### Week 1 Achievements:
+### Week 1 Achievements
 
-* Successfully bootstrapped both backend and frontend project skeletons running locally.
+* Successfully built the basic skeleton for both the backend and frontend, ensuring smooth operation in the local environment.
 * **Backend (Spring Boot)**:
-  * Project starts and connects to PostgreSQL via Docker Compose in one command (`docker-compose up -d`).
-  * `EntityBase` with UUID primary key and audit timestamps ready for all entities.
-  * `ApiResponse<T>` response envelope standardized across all future endpoints.
-  * Maven build passes with zero compile errors.
+  * The system boots successfully and maintains a stable connection with PostgreSQL running in the background via Docker Compose (`docker-compose up -d`).
+  * The `EntityBase` class, integrating a UUID primary key and audit timestamps, is fully complete and ready for inheritance.
+  * Standardized the API response format across all future endpoints through the `ApiResponse<T>` wrapper class.
+  * The Maven build process runs smoothly without any compilation errors.
 * **Frontend (React Native + Expo)**:
-  * App renders on Android emulator via `npx expo start`.
-  * NativeWind v4 configured — TailwindCSS utility classes work in RN components.
-  * Redux Toolkit store and React Query `QueryClient` wired via `providers.tsx`.
-  * Axios client reads base URL from `.env` (`EXPO_PUBLIC_BACKEND_API_URL=http://localhost:8080`).
-* Docker Compose environment can be reproduced consistently across team members.
-* `.env` security pattern established — no hardcoded credentials. (Backend URL added and environment variables prepared for CloudFront distribution CDN).
+  * The app interface renders successfully on the Android emulator using the `npx expo start` command.
+  * NativeWind v4 operates stably, allowing the direct use of TailwindCSS utility classes within React Native components.
+  * State management (Redux store) and data fetching (React Query `QueryClient`) have been fully integrated into the system via `providers.tsx`.
+  * Axios successfully reads the base URL configuration from the `.env` file (`EXPO_PUBLIC_BACKEND_API_URL=http://localhost:8080`).
+* Ensured the consistency of the Docker Compose environment, allowing team members to easily reproduce it without configuration discrepancies.
+* Applied the standard practice of managing environment variables via `.env`, completely eliminating the hardcoding of sensitive credentials and paving the way for future Backend API and CloudFront CDN integration.
 
-### AWS Knowledge Learned:
+### AWS Knowledge Accumulated
 
-* Learned AWS account bootstrap in a production-minded way: MFA enforcement, admin separation, and least-privilege IAM design for both engineers and CI.
-* Understood how to split identities by purpose: human access, deployment role, and runtime application role to reduce blast radius.
-* Practiced AWS CLI profile strategy for `dev` and `staging`, combined with fixed region selection to avoid accidental cross-environment actions.
-* Learned how the AWS credential provider chain works, and why environment-sourced credentials must never be committed into the repository.
-* Applied tagging standards such as `Project`, `Environment`, `Owner`, and `CostCenter` to support cost tracking and future operations.
-* Understood the AWS Shared Responsibility Model with concrete mapping to the project: application logic, IAM policy, and secret hygiene still belong to the team.
-* Established a cloud-ready configuration mindset early by keeping all sensitive values outside source code and preparing for a future move to Secrets Manager or SSM.
+* Gained a clear understanding of the process for setting up a production-standard AWS account: enforcing MFA, clearly separating admin privileges, and applying the least-privilege principle for both developer and CI roles.
+* Grasped the method of separating identities based on purpose (manual user access, deployment role, runtime application role) to strictly limit the blast radius in case of risks.
+* Proficiently used AWS CLI profile strategies for `dev` and `staging` environments, combined with fixed region selection to prevent accidental cross-environment operations.
+* Deeply understood the AWS credential provider chain and recognized the critical importance of never committing access keys or secret keys to the source code repository.
+* Practiced tagging resources according to standards (`Project`, `Environment`, `Owner`, `CostCenter`) to optimize cost tracking and future system management.
+* Mastered the AWS Shared Responsibility Model with concrete project mapping: AWS manages the core infrastructure, while the team remains responsible for the application logic, IAM policies, and sensitive data security.
+* Built a cloud-ready system configuration mindset early on: all sensitive information is decoupled from the code base, ready to be migrated to AWS Secrets Manager or Systems Manager (SSM).
 
-In summary, week 1 built the foundational AWS operating mindset needed before any service-specific implementation started.
+In summary, the first week helped shape a professional AWS infrastructure management mindset before diving into specific service implementations.
 
-### Next Week Plan:
+### Next Week's Plan
 
-* **Backend**: Integrate AWS Cognito — configure `SecurityConfig` with JWT resource server, write custom `OAuth2TokenValidator`, build `UserProfile` entity + `UserProfileController` with sync/CRUD endpoints.
-* **Frontend**: Implement the full Authentication flow — `LoginScreen` with PKCE OAuth via `expo-auth-session`, token storage in `expo-secure-store`, `authSlice` Redux state.
+* **Backend**: Begin AWS Cognito integration — set up `SecurityConfig` to support a JWT resource server, develop a custom `OAuth2TokenValidator`, and finalize the `UserProfile` entity alongside the `UserProfileController` with sync/CRUD endpoints.
+* **Frontend**: Develop the full Authentication flow — implement `LoginScreen` applying the PKCE OAuth standard via the `expo-auth-session` library, securely store tokens using `expo-secure-store`, and control the login state via `authSlice`.

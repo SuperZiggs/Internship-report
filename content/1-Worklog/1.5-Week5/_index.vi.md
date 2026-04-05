@@ -8,47 +8,47 @@ pre: " <b> 1.5. </b> "
 
 ### Mục tiêu tuần 5:
 
-* **Backend**: Xây dựng module `UserWorkoutPlan` — kế hoạch cá nhân với clone từ system template, soft-delete, và logic chỉ một kế hoạch active.
-* **Frontend**: Xây dựng các màn hình quản lý kế hoạch — `MyPlansScreen`, `CreatePlanScreen`, `PlanEditScreen` với tab chỉnh sửa theo ngày.
-* Cho phép user tự quản lý lịch tập cá nhân linh hoạt.
+* **Backend**: Thiết kế và triển khai module `UserWorkoutPlan` — hỗ trợ quản lý kế hoạch tập luyện cá nhân hóa thông qua cơ chế nhân bản (clone) từ system template, áp dụng chiến lược xóa mềm (soft-delete), và đảm bảo logic duy nhất một kế hoạch được kích hoạt (active) tại một thời điểm.
+* **Frontend**: Xây dựng tổ hợp giao diện quản lý kế hoạch — bao gồm `MyPlansScreen`, `CreatePlanScreen`, và `PlanEditScreen` được tích hợp tab navigation để tinh chỉnh lộ trình theo từng ngày.
+* Trao quyền cho người dùng tự do cá nhân hóa và quản trị lịch trình tập luyện một cách linh hoạt, tối ưu.
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 | --- | --------- | ------------ | --------------- | -------------- |
-| 2   | - Xây dựng **UserWorkoutPlan** entity <br>&emsp; + Trường: `user (@ManyToOne)`, `name (≤150)`, `description`, `goalTypeId (UUID)`, `isActive`, `isDeleted` <br>&emsp; + Soft-delete qua `@SQLRestriction("is_deleted = false")` <br>&emsp; + Viết Flyway **V1**: tạo bảng `user_workout_plan`, `user_workout_plan_exercises` | 03/02/2026 | 03/02/2026 | |
-| 2   | - Viết Flyway **V2**: thêm cột `is_deleted BOOLEAN DEFAULT FALSE` | 03/02/2026 | 03/02/2026 | |
-| 3   | - Xây dựng **UserWorkoutPlanExercise** entity <br>&emsp; + `dayOfWeek`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + Reference `Exercise` và `UserWorkoutPlan` | 04/02/2026 | 04/02/2026 | |
-| 3   | - Triển khai business logic trong **UserWorkoutPlanService** <br>&emsp; + `userId` luôn lấy từ `Jwt.getSubject()` — ngăn chặn IDOR <br>&emsp; + **Clone**: sao chép sâu toàn bộ `WorkoutPlanExercise` — không giữ FK về kế hoạch gốc <br>&emsp; + **Activate**: đặt `isActive=true` cho plan mục tiêu, `isActive=false` cho tất cả plan khác | 04/02/2026 | 04/02/2026 | |
-| 4   | - Xây dựng **UserWorkoutPlanController** (`/api/user-workout-plans`) <br>&emsp; + `POST /me` (tạo kế hoạch), `POST /me/clone/{systemPlanId}` (clone) <br>&emsp; + `GET /me`, `GET /me/active`, `GET /{id}` <br>&emsp; + `PUT /{id}`, `PUT /{id}/activate`, `DELETE /{id}` (soft) <br>&emsp; + CRUD bài tập trong kế hoạch | 05/02/2026 | 05/02/2026 | |
-| 5   | - Xây dựng **MyPlansScreen** (Frontend) <br>&emsp; + Liệt kê tất cả kế hoạch với badge trạng thái active <br>&emsp; + Toggle kích hoạt; xóa với `ConfirmModal` <br> - Xây dựng **CreatePlanScreen** (Frontend) <br>&emsp; + Form: tên, mô tả, dropdown goal type | 06/02/2026 | 06/02/2026 | |
-| 6   | - Xây dựng **PlanEditScreen** (Frontend) <br>&emsp; + Tab bar theo ngày (Thứ 2 - Chủ nhật) để xem bài tập từng ngày <br>&emsp; + Reorder (lên/xuống), xóa bài tập <br>&emsp; + Điến `PlanExercisePicker` để thêm bài tập | 07/02/2026 | 07/02/2026 | |
+| 2   | - Khởi tạo thực thể **UserWorkoutPlan** <br>&emsp; + Định nghĩa schema: `user (@ManyToOne)`, `name (≤150)`, `description`, `goalTypeId (UUID)`, `isActive`, `isDeleted` <br>&emsp; + Tích hợp cơ chế Soft-delete thông qua `@SQLRestriction("is_deleted = false")` <br>&emsp; + Khởi tạo script Flyway **V1**: thiết lập bảng `user_workout_plan` và `user_workout_plan_exercises` | 03/02/2026 | 03/02/2026 | |
+| 2   | - Triển khai script Flyway **V2**: bổ sung trường `is_deleted BOOLEAN DEFAULT FALSE` nhằm chuẩn bị cho cơ chế xóa mềm | 03/02/2026 | 03/02/2026 | |
+| 3   | - Kiến tạo thực thể **UserWorkoutPlanExercise** <br>&emsp; + Thiết lập mapping chi tiết: `dayOfWeek`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + Khai báo các mối quan hệ (Reference) tới `Exercise` và `UserWorkoutPlan` | 04/02/2026 | 04/02/2026 | |
+| 3   | - Cài đặt business logic tại **UserWorkoutPlanService** <br>&emsp; + Đảm bảo `userId` được trích xuất trực tiếp từ `Jwt.getSubject()` — đóng triệt để rủi ro IDOR <br>&emsp; + **Clone**: Thực thi sao chép sâu (deep copy) toàn bộ `WorkoutPlanExercise` — ngắt hoàn toàn khóa ngoại (FK) với kế hoạch gốc <br>&emsp; + **Activate**: Xử lý logic transaction chuyển đổi trạng thái `isActive=true` cho plan được chọn và `isActive=false` cho phần còn lại | 04/02/2026 | 04/02/2026 | |
+| 4   | - Xây dựng **UserWorkoutPlanController** (`/api/user-workout-plans`) <br>&emsp; + API Khởi tạo: `POST /me` (tạo mới), `POST /me/clone/{systemPlanId}` (nhân bản) <br>&emsp; + API Truy xuất: `GET /me`, `GET /me/active`, `GET /{id}` <br>&emsp; + API Cập nhật/Xóa: `PUT /{id}`, `PUT /{id}/activate`, `DELETE /{id}` (áp dụng xóa mềm) <br>&emsp; + API CRUD thao tác chi tiết bài tập trong kế hoạch | 05/02/2026 | 05/02/2026 | |
+| 5   | - Phát triển **MyPlansScreen** trên Frontend <br>&emsp; + Hiển thị danh sách kế hoạch trực quan kèm badge định dạng trạng thái active <br>&emsp; + Tích hợp tính năng toggle kích hoạt và thao tác xóa có cảnh báo qua `ConfirmModal` <br> - Phát triển **CreatePlanScreen** <br>&emsp; + Xây dựng form nhập liệu chuẩn mực: tên, mô tả, kèm dropdown lựa chọn goal type | 06/02/2026 | 06/02/2026 | |
+| 6   | - Phát triển **PlanEditScreen** trên Frontend <br>&emsp; + Tích hợp Tab bar phân tách theo thứ (Thứ 2 - Chủ nhật) để rà soát lịch tập chi tiết <br>&emsp; + Hỗ trợ thao tác vuốt để sắp xếp (reorder) và xóa bài tập linh hoạt <br>&emsp; + Điều hướng mượt mà sang `PlanExercisePicker` để bổ sung bài tập mới | 07/02/2026 | 07/02/2026 | |
 
 ### Kết quả đạt được tuần 5:
 
-* **Backend — Module UserWorkoutPlan**:
-  * Flyway V1 + V2 migrations được apply thành công.
-  * Soft-delete với `@SQLRestriction` hoạt động — kế hoạch đã xóa không bao giờ xuất hiện trong query.
-  * Chức năng Clone tạo bản sao độc lập hoàn toàn từ kế hoạch mẫu — xác nhận không có khóa ngoại (FK) trỏ ngược về bản gốc, đảm bảo tính tự do tùy biến cho người dùng mà không làm thay đổi dữ liệu hệ thống.
-  * Quy tắc một plan active được thực thi tại service layer.
-  * `userId` luôn lấy từ JWT — bảo mật IDOR hoàn toàn.
+* **Backend — module UserWorkoutPlan**:
+  * Hệ thống script migration Flyway (V1 & V2) được áp dụng thành công, đảm bảo tính nhất quán của schema cơ sở dữ liệu.
+  * Cơ chế xóa mềm (Soft-delete) thông qua `@SQLRestriction` vận hành chính xác — loại bỏ hoàn toàn rủi ro rò rỉ dữ liệu đã xóa trong các truy vấn.
+  * Thuật toán Clone hoạt động xuất sắc, tạo ra các bản sao (deep copy) độc lập tuyệt đối từ các template hệ thống — không duy trì khóa ngoại (FK) trỏ ngược, bảo toàn quyền tự do tùy biến của người dùng mà không gây rủi ro toàn vẹn cho dữ liệu gốc.
+  * Quy tắc kinh doanh (Business rule) "duy nhất một kế hoạch active" được kiểm soát chặt chẽ ở tầng Service thông qua database transaction.
+  * Bảo mật tuyệt đối thông tin định danh: `userId` được trích xuất trực tiếp từ JWT payload, vá triệt để mọi lỗ hổng liên quan đến IDOR.
 * **Frontend — Quản lý kế hoạch**:
-  * `MyPlansScreen` hiển thị đồng bộ trạng thái active/inactive.
-  * `CreatePlanScreen` validate trước khi submit.
-  * `PlanEditScreen` theo ngày dễ dùng, sử dụng `uiSlice` để sync trạng thái.
+  * Giao diện `MyPlansScreen` phản ánh đồng bộ, theo thời gian thực trạng thái kích hoạt của các kế hoạch.
+  * `CreatePlanScreen` vận hành trơn tru với bộ rules validation nghiêm ngặt phía client trước khi dispatch API submit.
+  * `PlanEditScreen` mang lại trải nghiệm người dùng (UX) tối ưu nhờ thiết kế phân trang theo ngày, kết hợp cùng Redux `uiSlice` để đồng bộ hóa trạng thái state một cách mượt mà.
 
 ### Kiến thức AWS đã học:
 
-* Nắm các khái niệm quan trọng khi vận hành PostgreSQL trên Amazon RDS: backup managed, maintenance window, parameter group và giới hạn dịch vụ.
-* Hiểu cách cô lập database qua private subnet và security group chỉ cho backend truy cập.
-* Nghiên cứu snapshot và point-in-time recovery để bảo vệ dữ liệu kế hoạch tập và dữ liệu cá nhân của người dùng.
-* Củng cố kỷ luật migration bằng cách xem Flyway script như artifact deploy bắt buộc phải deterministic giữa nhiều môi trường.
-* Hiểu vì sao kết nối tới cloud database là tài nguyên hữu hạn và connection pooling phía ứng dụng cần được cấu hình cẩn thận.
-* Nắm hướng scale đọc bằng read replica khi sau này hệ thống phát sinh nhiều truy vấn thống kê hoặc báo cáo.
-* Liên hệ chiến lược lưu trữ và khôi phục dữ liệu với nhu cầu audit, phục hồi lỗi thao tác và niềm tin người dùng.
+* Nắm bắt chuyên sâu các khái niệm cốt lõi khi vận hành PostgreSQL trên **Amazon RDS**: quản trị bản sao lưu (managed backups), thiết lập cửa sổ bảo trì (maintenance windows), điều chỉnh parameter groups và hiểu rõ các giới hạn dịch vụ (service quotas).
+* Thực hành chiến lược cô lập cơ sở dữ liệu: triển khai database hoàn toàn trong Private Subnet và thắt chặt Security Group, chỉ cấp quyền truy cập nội bộ cho Backend.
+* Nghiên cứu cơ chế snapshot và khả năng khôi phục dữ liệu theo thời điểm (Point-in-Time Recovery - PITR) nhằm đảm bảo an toàn tuyệt đối cho lộ trình tập luyện và dữ liệu cá nhân của người dùng.
+* Thiết lập kỷ luật quản lý schema nghiêm ngặt: coi các script Flyway như một loại artifact deploy (deployment artifact), bắt buộc phải có tính tất định (deterministic) xuyên suốt các môi trường.
+* Nhận thức rõ bản chất tài nguyên hữu hạn của các kết nối đến cloud database, từ đó thiết lập và tối ưu hóa cơ chế Connection Pooling phía ứng dụng.
+* Tìm hiểu chiến lược mở rộng năng lực đọc (read scaling) thông qua Read Replicas, chuẩn bị sẵn sàng kiến trúc cho các truy vấn thống kê và báo cáo phức tạp trong tương lai.
+* Tích hợp tư duy giữa chiến lược sao lưu/khôi phục dữ liệu trên Cloud với các yêu cầu về kiểm toán (audit), khả năng phục hồi do lỗi con người và mục tiêu tối thượng là củng cố niềm tin của người dùng.
 
 Tóm lại, tuần 5 gắn thiết kế dữ liệu của dự án với các nguyên tắc vận hành database managed service trên AWS.
 
 ### Kế hoạch tuần tiếp theo:
 
-* **Backend**: Xây dựng module `UserWorkoutSession` và `WorkoutLog` để theo dõi buổi tập thực tế.
-* **Frontend**: Xây dựng `PlanDetailScreen` (dashboard kế hoạch active) và `WorkoutSessionScreen` (màn hình tập thực tế với Redux session state).
+* **Backend**: Khởi tạo và phát triển module `UserWorkoutSession` cùng `WorkoutLog` nhằm lưu trữ và theo dõi sát sao tiến trình của từng buổi tập thực tế.
+* **Frontend**: Triển khai `PlanDetailScreen` (dashboard tổng quan cho kế hoạch đang active) và `WorkoutSessionScreen` (không gian tương tác trực tiếp trong buổi tập, được quản lý chặt chẽ bởi Redux session state).

@@ -10,49 +10,49 @@ pre: " <b> 4.2. </b> "
 
 ### Event Objectives
 
-- Understand the limitations of standalone LLMs and how to overcome them using AI Agents.
-- Master the art of communicating with AI through proper Prompt Engineering to optimize costs and output quality.
-- Explore practical applications of AIoT integrated with AWS Cloud services (IoT Core, Rekognition).
+- Analyze the inherent limitations of standalone Large Language Models (LLMs) and implement comprehensive mitigation strategies utilizing AI Agent architectures.
+- Master the engineering discipline of AI communication via standardized Prompt Engineering methodologies to optimize token expenditure and elevate response fidelity.
+- Explore the practical potential of AIoT ecosystems when seamlessly integrated with AWS Cloud managed services (specifically AWS IoT Core and Amazon Rekognition).
 
 ### Speakers
 
-- **Banh Cam Vinh** - Speaker on Building AI Agent with Strands
-- **Nguyen Tuan Thinh** - DevOps Engineer, Speaker on Automated Prompt Engineering
-- **Aiden Dinh** - Operation Engineers (Katalon), Speakers on AIoT Projects
+- **Banh Cam Vinh** - Speaker on: Architecting AI Agents with the Strands Framework
+- **Nguyen Tuan Thinh** - DevOps Engineer, Speaker on: Automated Prompt Engineering Methodologies
+- **Aiden Dinh** - Operation Engineer (Katalon), Speaker on: Applied AIoT Projects
 
 ### Key Highlights
 
 #### Building AI Agent with Strands
 
-Standalone Large Language Models (LLMs) often face limitations due to a lack of real-time data and the inability to interact with external systems. AI Agents resolve this by providing:
-- **Multi-step reasoning:** Planning and executing complex workflows.
-- **Tool integration:** Accessing APIs, databases, and external services.
-- Leveraging the **Strands Agents** framework with an **Agentic Loop** (tool calling mechanism), combining System Prompts and Knowledge Bases to make autonomous decisions and adapt dynamically.
+Standalone Large Language Models (LLMs) frequently exhibit limitations due to the absence of real-time data access and the inability to directly interface with external systems. AI Agent architectures overcome these operational barriers by providing:
+- **Multi-step reasoning:** The capability to autonomously plan and execute highly complex, sequential workflows.
+- **Tool integration:** Granting AI the authority to actively invoke APIs, query databases, and communicate with external services.
+- Leveraging the **Strands Agents** framework operating on an **Agentic Loop** (tool-invocation mechanism), which tightly couples System Prompts and Knowledge Bases to make autonomous decisions and adapt dynamically to shifting contexts.
 
 ![AI Agent Workflow](/images/4-Event/Agent.png "AI Agent Architecture")
 
 #### Automated Prompt Engineering
 
-Communicating with AI is an art. Generic prompts lead to poor results, wasted Tokens (increasing costs), and inconsistent outputs. 
-A standard, high-quality Prompt should contain 7 core components:
-1. **Role** (Persona for the AI)
-2. **Instruction** (Specific task)
-3. **Context** (Background information)
-4. **Input Data** (Information to process)
-5. **Output Format** (Expected structure)
-6. **Examples** (Few-shot demonstrations)
-7. **Constraints** (Guidelines or limitations to follow)
+Effective communication with AI is an engineering discipline requiring high precision. Ambiguous prompts not only yield sub-optimal outputs but also cause excessive token consumption and operational inconsistency. 
+A standardized, enterprise-grade Prompt must synthesize 7 essential components:
+1. **Role** (Assigning an expert persona to the AI)
+2. **Instruction** (Explicit and unambiguous task directives)
+3. **Context** (Providing foundational background information)
+4. **Input Data** (The specific payload to be processed)
+5. **Output Format** (Strictly dictating the expected data structure)
+6. **Examples** (Supplying reference paradigms via Few-shot prompting)
+7. **Constraints** (Establishing strict guardrails and operational limitations)
 
-The optimized AWS architecture for managing prompts includes **Amazon DynamoDB** (for millisecond response storage), **Amazon CloudWatch** (for monitoring logs, latency, and errors), and **Amazon Bedrock**.
+The optimized AWS architecture for enterprise prompt management is engineered using: **Amazon DynamoDB** (for low-latency, millisecond metadata storage), **Amazon CloudWatch** (for comprehensive telemetry, logging, and error-rate monitoring), integrated with the core **Amazon Bedrock** platform.
 
 ![Prompt Structure and AWS Architecture](/images/4-Event/prompt.png "Prompt Engineering & AWS")
 
 #### AIoT Projects: Smart Locker Management
 
-Solving the manual borrowing process in clubs with an automated smart locker system:
-- **Hardware:** Using Raspberry Pi as the Main Controller and local MQTT Broker; Arduino for sensor data collection; integrated with Reed Switches, RFID Card Readers, and Cameras.
-- **AWS Cloud Integration:** - **AWS IoT Core:** Acts as the central hub routing sensor events (RFID scans, door states) to Lambda and DynamoDB, enabling scalability without a local server.
-  - **AWS Rekognition:** Performs facial recognition, comparing captured images with the member database to authorize access.
+Digitizing and automating manual equipment borrowing processes in clubs via a smart locker ecosystem:
+- **Hardware Infrastructure:** Deploying a Raspberry Pi to serve as the Main Controller and local MQTT Broker; utilizing Arduino microcontrollers for sensor telemetry acquisition; synchronously integrating Reed Switches, RFID Card Readers, and surveillance Cameras.
+- **AWS Cloud Integration:** - **AWS IoT Core:** Functions as the centralized routing hub, securely directing sensor telemetry (RFID scans, door actuation states) to AWS Lambda and persisting state in DynamoDB, thereby guaranteeing elastic scalability independent of local server constraints.
+  - **Amazon Rekognition:** Applies advanced Computer Vision to analyze images, cross-referencing user facial biometrics against member databases to grant highly secure access authorization.
 
 ![Hardware and AWS Architecture for AIoT](/images/4-Event/AIot.png "AIoT Smart Locker Architecture")
 
@@ -60,5 +60,6 @@ Solving the manual borrowing process in clubs with an automated smart locker sys
 
 ![Event Check-in](/images/4-Event/event1a.jpg "Check-in")
 ![Photo with speakers](/images/4-Event/event1b.jpg "Networking")
+![Photo with speakers](/images/4-Event/event2c.jpg "Networking")
 
-> Overall, the event not only provided deep insights into modern AI trends like Agents and Prompt Engineering but also offered practical knowledge on how to combine IoT hardware with the flexible AWS infrastructure to solve real-world problems.
+> In summary, the event not only provided profound perspectives on cutting-edge AI trends such as Agentic Systems and Prompt Engineering, but also delivered invaluable, battle-tested insights into converging IoT hardware with flexible AWS cloud infrastructures to resolve complex, real-world challenges.

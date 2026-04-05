@@ -9,77 +9,76 @@ pre: " <b> 1.10. </b> "
 ### Week 10 Objectives:
 
 * **Frontend**:
-  * Build the `ChatScreen` integrating **AWS Bedrock (Claude 3.5 Haiku)** with a sliding-window memory, and `ProfileScreen` with user account management.
-  * Implement robust **token refresh logic** via Axios interceptor queues for seamless UX during session expiration.
-  * Build `HomeScreen` as the central dashboard, resolve all outstanding bugs, and polish the overall UX across the app.
+  * Develop the `ChatScreen` integrating the **AWS Bedrock (Claude 3.5 Haiku)** virtual assistant featuring a sliding-window context memory mechanism. Finalize the `ProfileScreen` for comprehensive user identity management.
+  * Implement robust **token refresh logic** utilizing an Axios interceptor queue, guaranteeing a seamless and uninterrupted user experience (UX) during session expirations.
+  * Construct the `HomeScreen` to serve as the central unified dashboard, comprehensively resolve all outstanding bugs, and heavily polish the global UX across the application.
 * **Backend**:
-  * Prepare for deployment: Docker Compose health checks, push image to **Amazon ECR**, define **ECS Fargate** task, enable **AWS WAF**.
+  * Prepare the production deployment infrastructure: configure Docker Compose health checks, push immutable images to **Amazon ECR**, provision task definitions for **ECS Fargate**, and activate the **AWS WAF** security shield.
 
 ### Tasks to be carried out this week:
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | ---- | ---------- | --------------- | ------------------ |
-| 2   | - Backend endpoint refinements <br>&emsp; + Add `@Valid` annotations and custom constraint validators to all request DTOs <br>&emsp; + Standardize paginated responses: `PageResponse<T>` with `page`, `size`, `totalPages`, `totalElements` <br>&emsp; + Add `GET /api/sessions/user/{userId}?startDate=&endDate=` date-range filter for session history | 03/16/2026 | 03/16/2026 | |
-| 3   | - Write **unit tests** (Spring Boot Test + JUnit 5 + Mockito) <br>&emsp; + `UserWorkoutPlanServiceTest`: clone method, activate logic, IDOR prevention <br>&emsp; + `HealthCalculationServiceTest`: BMI/BMR/TDEE formulas for various inputs <br>&emsp; + `UserWorkoutSessionServiceTest`: active session query, deactivate behavior | 03/17/2026 | 03/17/2026 | |
-| 4   | - Build **chatService** (Frontend) <br>&emsp; + Direct AWS Bedrock Runtime API call (no Lambda proxy) <br>&emsp; + Model: `anthropic.claude-3-5-haiku-20241022-v1:0` <br>&emsp; + Vietnamese system prompt: fitness coach persona <br>&emsp; + Send last 12 conversation turns as context (sliding window memory) | 03/18/2026 | 03/18/2026 | <https://docs.aws.amazon.com/bedrock/> |
-| 5   | - Build **ChatScreen** (Frontend) <br>&emsp; + Full-screen chat UI with message bubble list (user / bot) <br>&emsp; + Animated "typing" indicator (3 bouncing dots) while waiting for response <br>&emsp; + 4 quick-option chips: "Suggest exercises", "Today’s menu", "Calorie goal", "Weight loss advice" <br>&emsp; + Vietnamese initial greeting from the fitness bot <br>&emsp; + Animated keyboard avoidance <br>&emsp; + `notifyAlert` error handling via global alert proxy | 03/19/2026 | 03/19/2026 | |
-| 6   | - Build **ProfileScreen** (Frontend) <br>&emsp; + Display avatar (initial-letter fallback), name, email, username, birthdate, gender <br>&emsp; + Edit modal: update birthdate (YYYY-MM-DD) and gender via `updateUserProfile` API + `dispatch(updateUserProfile)` <br>&emsp; + Logout: `signOut` (Cognito revoke) + `dispatch(logout)` + clear secure storage <br>&emsp; + Delete account: `deleteUserProfile` + `signOut` — both gated by `ConfirmModal` | 03/20/2026 | 03/20/2026 | |
-| 7   | - Build **HomeScreen** (Frontend) — 5 parallel data fetches on mount <br>&emsp; + Today’s meals: sum MealFood calories → daily calorie progress bar vs. 2500 kcal target <br>&emsp; + Latest `HealthCalculation` → show BMI <br>&emsp; + Latest `BodyMetric` → show current height/weight <br>&emsp; + Active workout plan name → quick link to PlanDetail <br>&emsp; + This-week session count → weekly progress vs. 4 sessions target | 03/21/2026 | 03/21/2026 | |
-| 7   | - Backend deployment preparation <br>&emsp; + Refine Docker Compose with `postgres` health checks and `Spring Actuator` liveness/readiness probes <br>&emsp; + CI/CD: Push immutable backend image to **Amazon ECR** <br>&emsp; + Define **ECS Fargate** task definition mapped to **ALB** for serverless runtime <br>&emsp; + Protect public endpoints with **AWS WAF** | 03/21/2026 | 03/21/2026 | |
-| 8   | - Comprehensive **bug fix** session across key Frontend screens <br>&emsp; + Fix `WorkoutSessionScreen`: edge case when all exercises completed before timer finishes <br>&emsp; + Fix `DietScreen`: ensure `ensureDailyMeals` not called on every render — move to `useEffect` with empty deps <br>&emsp; + Fix `HealthDashboardScreen`: loading state shown during `calculateMetrics` call | 03/22/2026 | 03/22/2026 | |
+| 2   | - Optimize backend endpoints <br>&emsp; + Rigorously apply `@Valid` annotations and custom constraint validators across all request DTOs <br>&emsp; + Standardize paginated responses utilizing the `PageResponse<T>` envelope alongside metadata: `page`, `size`, `totalPages`, `totalElements` <br>&emsp; + Inject the date-range filter `GET /api/sessions/user/{userId}?startDate=&endDate=` to facilitate session history queries | 03/16/2026 | 03/16/2026 | |
+| 3   | - Engineer comprehensive **Unit tests** (Spring Boot Test + JUnit 5 + Mockito) <br>&emsp; + `UserWorkoutPlanServiceTest`: validate cloning logic, activation mechanisms, and IDOR vulnerability prevention <br>&emsp; + `HealthCalculationServiceTest`: test edge cases for BMI/BMR/TDEE mathematical formulas <br>&emsp; + `UserWorkoutSessionServiceTest`: verify active session queries and deactivation behaviors | 03/17/2026 | 03/17/2026 | |
+| 4   | - Architect **chatService** (Frontend) <br>&emsp; + Establish direct communication with the AWS Bedrock Runtime API (bypassing Lambda proxies) <br>&emsp; + Integrate the `anthropic.claude-3-5-haiku-20241022-v1:0` model <br>&emsp; + Design a Vietnamese system prompt: shaping a professional fitness coach persona <br>&emsp; + Transmit the last 12 conversation turns as context (applying the sliding window memory algorithm) | 03/18/2026 | 03/18/2026 | <https://docs.aws.amazon.com/bedrock/> |
+| 5   | - Construct the **ChatScreen** interface (Frontend) <br>&emsp; + Design a full-screen chat UI featuring an intuitive user/bot message bubble layout <br>&emsp; + Integrate a typing indicator animation (3 bouncing dots) during AI inference wait times <br>&emsp; + Deploy 4 quick-access action chips: "Suggest exercises", "Today's menu", "Calorie goal", "Weight loss advice" <br>&emsp; + Initialize a default Vietnamese greeting from the AI coach <br>&emsp; + Optimize UX with seamless Keyboard Avoiding mechanics <br>&emsp; + Intercept and process errors via a centralized `notifyAlert` proxy | 03/19/2026 | 03/19/2026 | |
+| 6   | - Develop the **ProfileScreen** (Frontend) <br>&emsp; + Render personal data: avatar (initial-letter fallback), name, email, username, birthdate, gender <br>&emsp; + Edit modal: update birthdate (YYYY-MM-DD) and gender via the `updateUserProfile` API combined with `dispatch(updateUserProfile)` <br>&emsp; + Logout flow: execute `signOut` (revoke Cognito session) + `dispatch(logout)` + purge secure storage <br>&emsp; + Account deletion flow: `deleteUserProfile` + `signOut` — strictly safeguarded by a `ConfirmModal` | 03/20/2026 | 03/20/2026 | |
+| 7   | - Implement the **HomeScreen** (Frontend) — synchronize 5 parallel data fetching streams on mount <br>&emsp; + Nutrition: aggregate calories from `MealFood` → render daily progress bar against the 2500 kcal target <br>&emsp; + Health: extract the latest `HealthCalculation` → display BMI index <br>&emsp; + Metrics: extract the latest `BodyMetric` → reflect current height/weight <br>&emsp; + Plan: display the active Workout Plan name → provide quick navigation to `PlanDetail` <br>&emsp; + Weekly progress: compute this-week session count → compare against the 4-session target | 03/21/2026 | 03/21/2026 | |
+| 7   | - Prepare **Backend deployment environment** <br>&emsp; + Refine Docker Compose configurations integrating `postgres` health checks and `Spring Actuator` liveness/readiness probes <br>&emsp; + CI/CD pipeline: Build and push immutable images to **Amazon ECR** <br>&emsp; + Establish task definitions for **ECS Fargate** coupled with an **ALB** for serverless runtime architecture <br>&emsp; + Deploy **AWS WAF** to protect public-facing endpoints | 03/21/2026 | 03/21/2026 | |
+| 8   | - Execute a comprehensive **bug fix** and UX optimization campaign across core Frontend screens <br>&emsp; + `WorkoutSessionScreen`: definitively resolve the edge case where a user completes all exercises before the rest timer concludes <br>&emsp; + `DietScreen`: restructure `ensureDailyMeals` logic into a `useEffect` with empty dependencies, eliminating redundant re-renders <br>&emsp; + `HealthDashboardScreen`: inject loading skeleton states while awaiting the `calculateMetrics` API resolution | 03/22/2026 | 03/22/2026 | |
 
 
 ### Week 10 Achievements:
 
 * **Backend**:
-  * All request DTOs have `@Valid` constraints and validation was completed in Week 9.
-  * API tested and ready: `PageResponse<T>` standardizes all paginated endpoints, date-range filtering works, unit tests all pass.
-  * Production image pushed successfully to **Amazon ECR**, task definition created for **ECS Fargate** behind **ALB**.
-  * **AWS WAF** configured and protecting public endpoints from common attacks.
-  * Health checks on PostgreSQL and Spring Actuator ensure reliable container startup.
-  * `.env.example` fully documents all 10+ required environment variables with descriptions.
+  * All request DTOs are successfully encapsulated with `@Valid` constraints, finalizing the rigorous validation pipeline inherited from Week 9.
+  * The API system has achieved production-ready status: standardizing `PageResponse<T>` for all paginated endpoints, ensuring flawless date-range filtering, and passing 100% of test cases.
+  * Production images were successfully pushed to **Amazon ECR**; task definitions are fully initialized for **ECS Fargate** operating behind an **ALB**.
+  * **AWS WAF** is fully configured, providing a robust defensive shield for public endpoints against common web attack vectors.
+  * Integrated health checks for PostgreSQL and Spring Actuator guarantee resilient container startups and stable operations.
+  * Comprehensively documented `.env.example`, detailing over 10 essential environment variables with precise technical descriptions.
 * **Frontend**:
-  * `chatService.sendChatToBedrock` calls AWS Bedrock Runtime directly using credentials from `.env`.
-  * Sliding window of 12 turns maintains conversation context economically.
-  * Quick-option chips provide instant first interaction without typing.
-  * Typing indicator creates natural chat feel; keyboard avoidance works on both iOS and Android.
-  * Profile data loaded from Redux `authSlice` — no extra API call needed on screen mount.
-  * Edit modal updates local state optimistically and confirms via API.
-  * Logout and delete account flows both require confirmation — no accidental data loss.
-  * 5 parallel `Promise.all` API calls complete in under 1.5s on localhost.
-  * Daily calorie + weekly session progress indicators give users clear at-a-glance goals.
-  * BMI and body metric snapshot visible on home without navigating away.
-  * Workout session completion edge case resolved — app no longer freezes on final set.
-  * `ensureDailyMeals` called only once on first mount — eliminated 4 redundant API calls per render.
-  * Token refresh queue prevents logged-out flash when multiple concurrent requests get 401.
-  * `NotificationBox` replaces native alerts — consistent in-app notification style.
-  * All loading states and error messages standardized across the application.
-  * Vietnamese labels complete and consistent throughout the UI.
+  * The `chatService.sendChatToBedrock` module establishes direct communication with AWS Bedrock Runtime, securely interpolating credentials from the `.env` file.
+  * The sliding window memory architecture (12 conversational turns) excellently maintains AI context while heavily optimizing token expenditure.
+  * The action chips system provides an instantaneous interactive experience requiring zero typing from the user.
+  * Typing indicator effects deliver a natural conversational feel; keyboard avoidance mechanisms operate flawlessly across iOS and Android ecosystems.
+  * Profile data is hydrated directly from the Redux `authSlice` — achieving zero API calls upon screen mount.
+  * The edit modal employs an optimistic UI update philosophy (updating local state prior to API confirmation), maximizing interface responsiveness.
+  * Sensitive actions (logout, account deletion) are routed through multi-layered confirmation flows — completely neutralizing the risk of accidental data loss.
+  * Parallel API invocation architecture via `Promise.all` on the `HomeScreen` achieved impressive performance, resolving in under 1.5s in local environments.
+  * The data visualization dashboard (daily calories, workout progress, BMI) provides a comprehensive health snapshot directly from the main screen.
+  * Completely eradicated application freeze (crash) bugs occurring during the final set within the `WorkoutSessionScreen`.
+  * Eliminated 4 redundant API calls per re-render on the `DietScreen` by strictly controlling the `ensureDailyMeals` lifecycle.
+  * The Axios interceptor queue mechanism perfectly resolves race conditions when multiple concurrent requests yield 401 errors, preventing logout screen flickering.
+  * Consolidated all alert prompts into the internal `NotificationBox` component, unifying the application's design language.
+  * Comprehensively standardized loading states and error handling mechanisms throughout the entire system.
+  * Finalized localization efforts, ensuring all Vietnamese labels are accurate, consistent, and professional.
 
 ### AWS Knowledge Learned:
 
 * **Backend**:
-  * Learned the full container artifact flow: optimized Docker builds, immutable image tagging, and publishing backend images to Amazon ECR.
-  * Understood how ECS Fargate models deployment through task definitions, services, health checks, and desired task count.
-  * Studied container networking on AWS, including private subnets, outbound access through NAT, and ALB target group integration.
-  * Learned safe rollout patterns such as rolling updates and minimum healthy percent to reduce release risk.
-  * Practiced separating runtime configuration from the image itself through task-level environment variables and secret injection.
-  * Understood how GitHub Actions quality gates should protect AWS deployment stages by requiring lint, test, and build success first.
-  * Connected release observability with rollback decisions so deployment safety is based on measurable runtime behavior.
-  * In summary, connected AWS container platform knowledge directly to a realistic deployment path for the backend.
+  * Mastered the container artifact packaging workflow: optimizing Docker builds, applying immutable tags, and publishing images to **Amazon ECR**.
+  * Deeply understood how **ECS Fargate** abstracts infrastructure via task definitions, services, health checks, and auto-scaling mechanisms based on desired counts.
+  * Architected AWS container networking: establishing private subnets, routing egress traffic through NAT Gateways, and configuring integrated ALB target groups.
+  * Strategized zero-downtime deployment rollouts leveraging rolling updates and fine-tuning minimum healthy percent parameters.
+  * Practiced the principle of strictly decoupling runtime configurations from container images via task-level environment variables and secure secret injection.
+  * Established quality gates within CI/CD GitHub Actions: mandating the successful passage of all linting, testing, and building phases prior to triggering AWS deployment pipelines.
+  * Correlated release observability with rollback decision-making, ensuring deployment safety is grounded in measurable, real-world runtime behavior.
+  * In summary, successfully translated theoretical AWS container architecture into a production-grade deployment pipeline for the Backend.
 * **Frontend**:
-  * Learned frontend delivery architecture using S3 static hosting together with CloudFront for global caching and lower latency.
-  * Studied HTTPS setup from end to end: ACM certificate issuance, validation workflow, and Route 53 DNS routing.
-  * Understood the Origin Access Control model so S3 can remain private while CloudFront serves user traffic securely.
-  * Learned cache-key and invalidation strategy to balance fresh UI delivery with strong CDN efficiency.
-  * Studied AWS WAF as a baseline web-protection layer for common attacks and noisy traffic patterns.
-  * Understood edge error handling and fallback strategies required to support SPA routing without broken deep links.
-  * Practiced frontend release thinking with cache busting, controlled propagation, and rollback-friendly asset versioning.
-  * In summary, focused on the AWS delivery layer that would make the frontend production-ready and globally accessible.
+  * Internalized static SPA delivery architecture: synergizing **Amazon S3** static hosting with **Amazon CloudFront** to establish global caching and minimize page load latency.
+  * Mastered end-to-end TLS/HTTPS setup processes: from certificate issuance via **ACM** and domain validation to configuring DNS routing on **Route 53**.
+  * Deployed the **Origin Access Control (OAC)** model, securing the S3 bucket in an absolute private state while enabling CloudFront to safely distribute content to end-users.
+  * Designed intelligent cache-key and invalidation strategies, successfully balancing the trade-off between real-time UI updates and maximizing CDN caching efficiency.
+  * Deployed **AWS WAF** at the edge layer as a proactive defense shield against scraper bots and common web application attack vectors.
+  * Resolved SPA-specific client-side routing challenges by configuring custom error responses on CloudFront, ensuring deep links remain consistently functional.
+  * Cultivated modern frontend release mentalities: applying cache busting techniques, resource versioning, and guaranteeing instant rollback capabilities.
+  * In summary, finalized the delivery layer architecture on AWS, elevating the Frontend to the standards of a globally accessible, production-ready application.
 
 ### Next Week Plan:
 
-* Run full end-to-end integration testing of the entire application (all features, all screens) — 6 user journeys.
-* Write comprehensive project documentation (Backend README, Frontend guide, architecture overview).
-* Code cleanup: remove debug statements, fix linting, ensure CI/CD builds pass.
-* Response interceptor refinement + UX polish + final bug fixes (BMITrendChart empty state handling).
-* Project retrospective and preparation for handoff.
+* Execute a comprehensive **End-to-End (E2E) Integration Testing** campaign encompassing all screens and features — guaranteeing flawless execution across 6 core user journeys.
+* Draft in-depth **project documentation** (including the Backend README, Frontend Development Guide, and an overarching Architecture Diagram).
+* **Eradicate Technical Debt (Code Cleanup)**: purge console/debug statements, resolve all linting warnings, and secure a consistent CI/CD build pass status.
+* Perform final refinements: optimize the Response Interceptor, apply final UX polishing, and squash remaining residual bugs (e.g., handling the empty state of `BMITrendChart`).
+* Conduct a comprehensive project Retrospective meeting and initiate formal handoff procedures.

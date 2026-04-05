@@ -8,47 +8,47 @@ pre: " <b> 1.4. </b> "
 
 ### Week 4 Objectives:
 
-* **Backend**: Build the System Workout module — the master exercise and workout plan data managed by admins.
-* **Frontend**: Build core workout browsing screens — suggested plan wizard and exercise picker.
-* Establish the relationship between `GoalType` ↔ `WorkoutPlan` ↔ `Exercise` for plan recommendations.
+* **Backend**: Design and implement the System Workout module — focusing on the centralized management of master exercise repositories and standardized workout plans (System Plans) governed by administrators.
+* **Frontend**: Develop core workout browsing interfaces — specifically, a personalized suggested plan wizard and a highly interactive exercise picker component.
+* Establish and solidify the relational data model between `GoalType` ↔ `WorkoutPlan` ↔ `Exercise`, forming the logical foundation for the workout plan recommendation engine.
 
 ### Tasks to be carried out this week:
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | ---- | ---------- | --------------- | ------------------ |
-| 2   | - Build **MuscleGroup** entity & admin CRUD <br>&emsp; + Entity fields: `name (UNIQUE, ≤100 chars)`, `description (≤500 chars)` <br>&emsp; + `AdminMuscleGroupController` (`/api/admin/muscle-groups`) with `@PreAuthorize("hasRole('ADMIN')")` <br>&emsp; + CRUD: `POST`, `GET /`, `GET /{id}`, `PUT /{id}`, `DELETE /{id}` | 01/27/2026 | 01/27/2026 | |
-| 3   | - Build **Exercise** entity & admin CRUD <br>&emsp; + Entity: `name (≤150)`, `description (≤500)`, `equipment`, `muscleGroup (@ManyToOne)` <br>&emsp; + `AdminExerciseController` (`/api/admin/exercises`): full CRUD + filter by muscle group <br>&emsp; + Public: `GET /api/workouts/exercises`, `GET /api/workouts/exercises/{id}`, `GET /api/workouts/exercises/by-muscle-group/{id}`, `POST /api/workouts/exercises/custom` | 01/28/2026 | 01/28/2026 | |
-| 4   | - Build **WorkoutPlan** & **WorkoutPlanExercise** entities <br>&emsp; + `WorkoutPlan`: `name`, `description`, `goalType (@ManyToOne)`, `difficultyLevel`, `estimatedDurationMinutes`, `isSystemPlan` <br>&emsp; + `WorkoutPlanExercise`: `dayOfWeek (1-7)`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + `AdminWorkoutPlanController` with full CRUD + filter by goal type | 01/29/2026 | 01/29/2026 | |
-| 4   | - Expose **public workout endpoints** via `WorkoutController` (`/api/workouts`) <br>&emsp; + `GET /muscle-groups`, `GET /muscle-groups/{id}` <br>&emsp; + `GET /exercises`, `GET /exercises/{id}`, `GET /exercises/by-muscle-group/{id}` <br>&emsp; + `GET /plans`, `GET /plans/{id}`, `GET /plans/by-goal-type/{id}` | 01/29/2026 | 01/29/2026 | |
-| 5   | - Build **SuggestedPlanScreen** (Frontend) — 3-step wizard <br>&emsp; + Step 1: Select fitness goal type (fetches from `GET /api/goal-types`) <br>&emsp; + Step 2: Browse system workout plan tiles with images and difficulty level <br>&emsp; + Step 3: View full plan detail with exercises grouped by day → clone via `cloneFromSystemPlan` | 01/30/2026 | 01/30/2026 | |
-| 6   | - Build **PlanExercisePicker** screen (Frontend) <br>&emsp; + List all system exercises with images and muscle group labels <br>&emsp; + Search/filter by name <br>&emsp; + On select: call `addExerciseToPlan(planId, dayOfWeek, exerciseId)` <br> - Seed initial exercise and muscle group data into the local database via `DatabaseSeeder` | 01/31/2026 | 01/31/2026 | |
+| 2   | - Construct the **MuscleGroup** entity and administrative CRUD APIs <br>&emsp; + Define Entity schema: `name (UNIQUE, ≤100 chars)`, `description (≤500 chars)` <br>&emsp; + Implement `AdminMuscleGroupController` (`/api/admin/muscle-groups`) strictly secured with `@PreAuthorize("hasRole('ADMIN')")` <br>&emsp; + Deliver full CRUD operations: `POST`, `GET /`, `GET /{id}`, `PUT /{id}`, `DELETE /{id}` | 01/27/2026 | 01/27/2026 | |
+| 3   | - Develop the **Exercise** entity and corresponding admin APIs <br>&emsp; + Define Entity: `name (≤150)`, `description (≤500)`, `equipment`, `muscleGroup (@ManyToOne)` <br>&emsp; + Build `AdminExerciseController` (`/api/admin/exercises`): featuring comprehensive CRUD capabilities paired with muscle group filtering <br>&emsp; + Expose Public Endpoints: `GET /api/workouts/exercises`, `GET /api/workouts/exercises/{id}`, `GET /api/workouts/exercises/by-muscle-group/{id}`, `POST /api/workouts/exercises/custom` | 01/28/2026 | 01/28/2026 | |
+| 4   | - Architect the **WorkoutPlan** and **WorkoutPlanExercise** entities <br>&emsp; + `WorkoutPlan` schema: `name`, `description`, `goalType (@ManyToOne)`, `difficultyLevel`, `estimatedDurationMinutes`, `isSystemPlan` <br>&emsp; + `WorkoutPlanExercise` mapping: granular scheduling via `dayOfWeek (1-7)`, `sets`, `reps`, `restSeconds`, `dayIndex`, `weekIndex`, `orderIndex` <br>&emsp; + Implement `AdminWorkoutPlanController` supporting full CRUD and filtering by goal type | 01/29/2026 | 01/29/2026 | |
+| 4   | - Deploy **public workout endpoints** via the `WorkoutController` (`/api/workouts`) <br>&emsp; + Muscle Groups: `GET /muscle-groups`, `GET /muscle-groups/{id}` <br>&emsp; + Exercises: `GET /exercises`, `GET /exercises/{id}`, `GET /exercises/by-muscle-group/{id}` <br>&emsp; + Workout Plans: `GET /plans`, `GET /plans/{id}`, `GET /plans/by-goal-type/{id}` | 01/29/2026 | 01/29/2026 | |
+| 5   | - Construct the **SuggestedPlanScreen** (3-step wizard frontend) <br>&emsp; + Step 1: Survey fitness goal types (invoking `GET /api/goal-types`) <br>&emsp; + Step 2: Render system workout plan tiles showcasing visual assets and difficulty levels <br>&emsp; + Step 3: Preview granular daily exercise routines → enable template cloning via the `cloneFromSystemPlan` mechanism | 01/30/2026 | 01/30/2026 | |
+| 6   | - Develop the **PlanExercisePicker** screen <br>&emsp; + Render a comprehensive list of system exercises with visual context and muscle group categorizations <br>&emsp; + Integrate dynamic search and filtering by exercise name <br>&emsp; + Handle selection events: trigger `addExerciseToPlan(planId, dayOfWeek, exerciseId)` <br> - Engineer a **DatabaseSeeder** to auto-populate initial exercise and muscle group master data into the local database upon application startup | 01/31/2026 | 01/31/2026 | |
 
 ### Week 4 Achievements:
 
 * **Backend — System Workout**:
-  * `MuscleGroup` entity + admin CRUD fully operational; seeded with common muscle groups (Chest, Back, Legs, Shoulders, Arms, Core).
-  * `Exercise` entity + admin CRUD + public read endpoints working.
-  * `WorkoutPlan` with `WorkoutPlanExercise` (day-of-week scheduling, multi-week support via `weekIndex`) implemented.
-  * All admin endpoints protected by `ROLE_ADMIN`; public read endpoints accessible without auth.
-  * `GET /api/workouts/plans/by-goal-type/{id}` correctly filters system plans by goal type.
+  * The core `MuscleGroup` entity and admin CRUD suite are fully operational; successfully seeded with standard anatomical groups (Chest, Back, Legs, Shoulders, Arms, Core).
+  * The `Exercise` module seamlessly integrates both administrative management and public read access, reliably serving client requests.
+  * The complex `WorkoutPlan` and `WorkoutPlanExercise` relationship is complete, accommodating daily scheduling and flexible multi-week progressions via the `weekIndex` field.
+  * Maintained strict authorization boundaries: all admin endpoints are rigorously protected by `ROLE_ADMIN`, while public read endpoints operate independently without authentication requirements.
+  * The `GET /api/workouts/plans/by-goal-type/{id}` endpoint accurately filters and retrieves system-curated plans aligned with specific user fitness goals.
 * **Frontend — Workout Browsing**:
-  * `SuggestedPlanScreen` guides users through goal → plan selection in 3 clear steps.
-  * Plan tiles display name, difficulty level, estimated duration, and goal type.
-  * `PlanExercisePicker` lists all exercises with muscle group context; exercise selection adds to user plan.
-* `DatabaseSeeder` robustly parses `s3_images_upload.json` to seed muscle groups + exercise data on app start, solving mapping issues with special characters and whitespace to ensure 100% S3/CloudFront image URL alignment.
+  * The `SuggestedPlanScreen` fluidly navigates users through a logical 3-step pipeline, from goal definition to customized plan selection.
+  * Plan tiles are visually optimized, displaying essential metadata including name, difficulty level, estimated duration, and associated goal type.
+  * The `PlanExercisePicker` intuitively catalogs exercises with muscle group context, providing a frictionless experience for users adding custom exercises to their routines.
+* The `DatabaseSeeder` robustly parses the `s3_images_upload.json` configuration to automatically provision foundational muscle group and exercise data. It thoroughly resolves data mapping anomalies caused by special characters and whitespace, guaranteeing 100% alignment between the local database and S3/CloudFront image URLs.
 
 ### AWS Knowledge Learned:
 
-* Learned to design media architecture with Amazon S3 for binary objects and PostgreSQL for metadata, keeping each storage system in the role it handles best.
-* Designed object key naming conventions such as `workouts/`, `exercises/`, and `foods/` to simplify organization, cleanup, and lifecycle policy targeting.
-* Understood private-by-default bucket access and why broad public ACL usage should be avoided for application assets.
-* Studied server-side encryption options, especially SSE-S3 and SSE-KMS, and when KMS-backed control is worth the extra complexity.
-* Learned the value of S3 versioning for protection against accidental overwrite or deletion of important media files.
-* Understood storage and transfer cost tradeoffs for image-heavy applications, especially why optimization of size and format matters.
-* Prepared the storage model so CloudFront can later sit in front of S3 without forcing business logic changes in the app.
+* Internalized the design principles of a scalable media architecture: utilizing Amazon S3 for binary object storage and PostgreSQL for metadata, ensuring each system operates within its optimal domain.
+* Established standardized object key naming conventions (e.g., `workouts/`, `exercises/`, `foods/`) to streamline storage organization, simplify cleanup processes, and facilitate targeted lifecycle policies.
+* Solidified the "private-by-default" access paradigm for S3 buckets, deeply understanding the security risks of applying broad Public ACLs to internal application assets.
+* Analyzed server-side encryption methodologies (SSE-S3 and SSE-KMS), clearly distinguishing scenarios where the enhanced access control of KMS justifies the additional architectural complexity.
+* Recognized the strategic value of S3 Versioning as an automated defense mechanism against the accidental overwriting or deletion of critical media assets.
+* Evaluated the trade-offs between S3 storage costs and data transfer bandwidth for image-intensive applications, underscoring the necessity of pre-upload file size and format optimization.
+* Architected a "cloud-ready" storage model strategically positioned to seamlessly integrate Amazon CloudFront as a CDN ahead of S3, requiring zero modifications to the existing application business logic.
 
-In summary, week 4 translated AWS storage knowledge into a maintainable media architecture for exercises and plans.
+In summary, Week 4 successfully translated theoretical AWS storage concepts into a highly maintainable, production-ready media architecture for the workout and exercise modules.
 
 ### Next Week Plan:
 
-* **Backend**: Build the `UserWorkoutPlan` module with plan cloning from system templates, soft-delete, and activate/deactivate logic.
-* **Frontend**: Build `MyPlansScreen`, `CreatePlanScreen`, and `PlanEditScreen` (day-tabbed exercise editor).
+* **Backend**: Implement the advanced `UserWorkoutPlan` module, featuring capabilities to clone system templates, enforce soft-delete mechanisms, and execute dynamic plan activation/deactivation logic.
+* **Frontend**: Construct the personal plan management interface suite, including `MyPlansScreen`, `CreatePlanScreen`, and the day-tabbed `PlanEditScreen` for granular routine customization.

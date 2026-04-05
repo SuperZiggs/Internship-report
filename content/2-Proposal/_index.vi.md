@@ -1,108 +1,259 @@
 ---
-title: "Bản đề xuất"
-date: 2024-01-01
+title: "Proposal"
+date:  2026-04-03
 weight: 2
+slug: "myfit-aws-architecture"
 chapter: false
 pre: " <b> 2. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
-Tại phần này, bạn cần tóm tắt các nội dung trong workshop mà bạn **dự tính** sẽ làm.
+## 1. Tổng quan dự án
 
-# IoT Weather Platform for Lab Research  
-## Giải pháp AWS Serverless hợp nhất cho giám sát thời tiết thời gian thực  
+MyFit là nền tảng công nghệ toàn diện được thiết kế để đồng hành cùng người dùng trong hành trình chăm sóc sức khỏe và quản lý tập luyện. Để mang lại trải nghiệm mượt mà và đáng tin cậy nhất, hệ thống được xây dựng dựa trên 3 nền tảng cốt lõi:
 
-### 1. Tóm tắt điều hành  
-IoT Weather Platform được thiết kế dành cho nhóm *ITea Lab* tại TP. Hồ Chí Minh nhằm nâng cao khả năng thu thập và phân tích dữ liệu thời tiết. Nền tảng hỗ trợ tối đa 5 trạm thời tiết, có khả năng mở rộng lên 10–15 trạm, sử dụng thiết bị biên Raspberry Pi kết hợp cảm biến ESP32 để truyền dữ liệu qua MQTT. Nền tảng tận dụng các dịch vụ AWS Serverless để cung cấp giám sát thời gian thực, phân tích dự đoán và tiết kiệm chi phí, với quyền truy cập giới hạn cho 5 thành viên phòng lab thông qua Amazon Cognito.  
+* Trải nghiệm người dùng (Frontend): Giao diện ứng dụng trực quan, thân thiện, giúp người dùng dễ dàng theo dõi tiến độ, chỉ số cá nhân và tương tác với các tính năng.
+* Hệ thống xử lý trung tâm (Backend): Nền tảng xử lý dữ liệu mạnh mẽ, đảm bảo tính chính xác, đồng bộ hóa theo thời gian thực và bảo mật tối đa thông tin của người dùng.
+* Hạ tầng vận hành (Cloud Infrastructure): Hệ thống được triển khai hoàn toàn trên nền tảng điện toán đám mây AWS.
 
-### 2. Tuyên bố vấn đề  
-*Vấn đề hiện tại*  
-Các trạm thời tiết hiện tại yêu cầu thu thập dữ liệu thủ công, khó quản lý khi có nhiều trạm. Không có hệ thống tập trung cho dữ liệu hoặc phân tích thời gian thực, và các nền tảng bên thứ ba thường tốn kém và quá phức tạp.  
+Với định hướng ứng dụng các dịch vụ đám mây (Cloud Managed Services), MyFit không chỉ tối ưu hóa chi phí vận hành mà còn cam kết mang đến một hệ thống hoạt động ổn định 24/7. Kiến trúc này đảm bảo ứng dụng luôn sẵn sàng mở rộng quy mô linh hoạt để đáp ứng sự gia tăng không ngừng của lượng người dùng trong tương lai mà không làm gián đoạn trải nghiệm.
 
-*Giải pháp*  
-Nền tảng sử dụng AWS IoT Core để tiếp nhận dữ liệu MQTT, AWS Lambda và API Gateway để xử lý, Amazon S3 để lưu trữ (bao gồm data lake), và AWS Glue Crawlers cùng các tác vụ ETL để trích xuất, chuyển đổi, tải dữ liệu từ S3 data lake sang một S3 bucket khác để phân tích. AWS Amplify với Next.js cung cấp giao diện web, và Amazon Cognito đảm bảo quyền truy cập an toàn. Tương tự như Thingsboard và CoreIoT, người dùng có thể đăng ký thiết bị mới và quản lý kết nối, nhưng nền tảng này hoạt động ở quy mô nhỏ hơn và phục vụ mục đích sử dụng nội bộ. Các tính năng chính bao gồm bảng điều khiển thời gian thực, phân tích xu hướng và chi phí vận hành thấp.  
+---
 
-*Lợi ích và hoàn vốn đầu tư (ROI)*  
-Giải pháp tạo nền tảng cơ bản để các thành viên phòng lab phát triển một nền tảng IoT lớn hơn, đồng thời cung cấp nguồn dữ liệu cho những người nghiên cứu AI phục vụ huấn luyện mô hình hoặc phân tích. Nền tảng giảm bớt báo cáo thủ công cho từng trạm thông qua hệ thống tập trung, đơn giản hóa quản lý và bảo trì, đồng thời cải thiện độ tin cậy dữ liệu. Chi phí hàng tháng ước tính 0,66 USD (theo AWS Pricing Calculator), tổng cộng 7,92 USD cho 12 tháng. Tất cả thiết bị IoT đã được trang bị từ hệ thống trạm thời tiết hiện tại, không phát sinh chi phí phát triển thêm. Thời gian hoàn vốn 6–12 tháng nhờ tiết kiệm đáng kể thời gian thao tác thủ công.  
+## 2. Mục tiêu
 
-### 3. Kiến trúc giải pháp  
-Nền tảng áp dụng kiến trúc AWS Serverless để quản lý dữ liệu từ 5 trạm dựa trên Raspberry Pi, có thể mở rộng lên 15 trạm. Dữ liệu được tiếp nhận qua AWS IoT Core, lưu trữ trong S3 data lake và xử lý bởi AWS Glue Crawlers và ETL jobs để chuyển đổi và tải vào một S3 bucket khác cho mục đích phân tích. Lambda và API Gateway xử lý bổ sung, trong khi Amplify với Next.js cung cấp bảng điều khiển được bảo mật bởi Cognito.  
+### 2.1. Mục tiêu tổng thể:
 
-![IoT Weather Station Architecture](/images/2-Proposal/edge_architecture.jpeg)
+* Xây dựng hệ thống fitness app có khả năng phục vụ đồng thời mobile/web.
+* Xây dựng nền tảng fitness hoạt động ổn định trên hạ tầng của AWS.
+* Đảm bảo tính sẵn sàng và khả năng scale theo tài nguyên cloud.
+* Đảm bảo trải nghiệm người dùng xuyên suốt từ đăng nhập đến theo dõi chỉ số sức khỏe
+* Thiết lập quy trình deploy rõ ràng, có thể lặp lại và giảm lỗi vận hành
 
-![IoT Weather Platform Architecture](/images/2-Proposal/platform_architecture.jpeg)
+### 2.2. Mục tiêu cụ thể về đầu ra:
 
-*Dịch vụ AWS sử dụng*  
-- *AWS IoT Core*: Tiếp nhận dữ liệu MQTT từ 5 trạm, mở rộng lên 15.  
-- *AWS Lambda*: Xử lý dữ liệu và kích hoạt Glue jobs (2 hàm).  
-- *Amazon API Gateway*: Giao tiếp với ứng dụng web.  
-- *Amazon S3*: Lưu trữ dữ liệu thô (data lake) và dữ liệu đã xử lý (2 bucket).  
-- *AWS Glue*: Crawlers lập chỉ mục dữ liệu, ETL jobs chuyển đổi và tải dữ liệu.  
-- *AWS Amplify*: Lưu trữ giao diện web Next.js.  
-- *Amazon Cognito*: Quản lý quyền truy cập cho người dùng phòng lab.  
+* API backend bảo mật bằng JWT Cognito
+* Frontend truy cập qua CloudFront, tải nhanh và ổn định
+* Dashboard/biểu đồ theo dõi sức khỏe và dữ liệu tập luyện
+* Quy trình deploy infra và app tách biệt, có khả năng theo dõi trạng thái rollout
 
-*Thiết kế thành phần*  
-- *Thiết bị biên*: Raspberry Pi thu thập và lọc dữ liệu cảm biến, gửi tới IoT Core.  
-- *Tiếp nhận dữ liệu*: AWS IoT Core nhận tin nhắn MQTT từ thiết bị biên.  
-- *Lưu trữ dữ liệu*: Dữ liệu thô lưu trong S3 data lake; dữ liệu đã xử lý lưu ở một S3 bucket khác.  
-- *Xử lý dữ liệu*: AWS Glue Crawlers lập chỉ mục dữ liệu; ETL jobs chuyển đổi để phân tích.  
-- *Giao diện web*: AWS Amplify lưu trữ ứng dụng Next.js cho bảng điều khiển và phân tích thời gian thực.  
-- *Quản lý người dùng*: Amazon Cognito giới hạn 5 tài khoản hoạt động.  
+---
 
-### 4. Triển khai kỹ thuật  
-*Các giai đoạn triển khai*  
-Dự án gồm 2 phần — thiết lập trạm thời tiết biên và xây dựng nền tảng thời tiết — mỗi phần trải qua 4 giai đoạn:  
-1. *Nghiên cứu và vẽ kiến trúc*: Nghiên cứu Raspberry Pi với cảm biến ESP32 và thiết kế kiến trúc AWS Serverless (1 tháng trước kỳ thực tập).  
-2. *Tính toán chi phí và kiểm tra tính khả thi*: Sử dụng AWS Pricing Calculator để ước tính và điều chỉnh (Tháng 1).  
-3. *Điều chỉnh kiến trúc để tối ưu chi phí/giải pháp*: Tinh chỉnh (ví dụ tối ưu Lambda với Next.js) để đảm bảo hiệu quả (Tháng 2).  
-4. *Phát triển, kiểm thử, triển khai*: Lập trình Raspberry Pi, AWS services với CDK/SDK và ứng dụng Next.js, sau đó kiểm thử và đưa vào vận hành (Tháng 2–3).  
+## 3. Vấn đề cần giải quyết
 
-*Yêu cầu kỹ thuật*  
-- *Trạm thời tiết biên*: Cảm biến (nhiệt độ, độ ẩm, lượng mưa, tốc độ gió), vi điều khiển ESP32, Raspberry Pi làm thiết bị biên. Raspberry Pi chạy Raspbian, sử dụng Docker để lọc dữ liệu và gửi 1 MB/ngày/trạm qua MQTT qua Wi-Fi.  
-- *Nền tảng thời tiết*: Kiến thức thực tế về AWS Amplify (lưu trữ Next.js), Lambda (giảm thiểu do Next.js xử lý), AWS Glue (ETL), S3 (2 bucket), IoT Core (gateway và rules), và Cognito (5 người dùng). Sử dụng AWS CDK/SDK để lập trình (ví dụ IoT Core rules tới S3). Next.js giúp giảm tải Lambda cho ứng dụng web fullstack.  
+Các vấn đề thực tế dự án cần xử lý:
 
-### 5. Lộ trình & Mốc triển khai  
-- *Trước thực tập (Tháng 0)*: 1 tháng lên kế hoạch và đánh giá trạm cũ.  
-- *Thực tập (Tháng 1–3)*:  
-    - Tháng 1: Học AWS và nâng cấp phần cứng.  
-    - Tháng 2: Thiết kế và điều chỉnh kiến trúc.  
-    - Tháng 3: Triển khai, kiểm thử, đưa vào sử dụng.  
-- *Sau triển khai*: Nghiên cứu thêm trong vòng 1 năm.  
+* Vấn đề tích hợp: frontend, backend và hạ tầng cần đồng bộ cấu hình môi trường
+* Vấn đề bảo mật: tránh lộ credentials, kiểm soát truy cập API, hạn chế public resource không cần thiết
+* Vấn đề vận hành: cần quan sát log/health để phát hiện lỗi sớm khi deploy
+* Vấn đề mở rộng: đảm bảo hệ thống chịu tải tốt khi số lượng người dùng tăng
 
-### 6. Ước tính ngân sách  
-Có thể xem chi phí trên [AWS Pricing Calculator](https://calculator.aws/#/estimate?id=621f38b12a1ef026842ba2ddfe46ff936ed4ab01)  
-Hoặc tải [tệp ước tính ngân sách](../attachments/budget_estimation.pdf).  
+---
 
-*Chi phí hạ tầng*  
-- AWS Lambda: 0,00 USD/tháng (1.000 request, 512 MB lưu trữ).  
-- S3 Standard: 0,15 USD/tháng (6 GB, 2.100 request, 1 GB quét).  
-- Truyền dữ liệu: 0,02 USD/tháng (1 GB vào, 1 GB ra).  
-- AWS Amplify: 0,35 USD/tháng (256 MB, request 500 ms).  
-- Amazon API Gateway: 0,01 USD/tháng (2.000 request).  
-- AWS Glue ETL Jobs: 0,02 USD/tháng (2 DPU).  
-- AWS Glue Crawlers: 0,07 USD/tháng (1 crawler).  
-- MQTT (IoT Core): 0,08 USD/tháng (5 thiết bị, 45.000 tin nhắn).  
+## 4. Kiến trúc giải pháp
 
-*Tổng*: 0,7 USD/tháng, 8,40 USD/12 tháng  
-- *Phần cứng*: 265 USD một lần (Raspberry Pi 5 và cảm biến).  
+### 4.1. Ý tưởng và mục tiêu
 
-### 7. Đánh giá rủi ro  
-*Ma trận rủi ro*  
-- Mất mạng: Ảnh hưởng trung bình, xác suất trung bình.  
-- Hỏng cảm biến: Ảnh hưởng cao, xác suất thấp.  
-- Vượt ngân sách: Ảnh hưởng trung bình, xác suất thấp.  
+**Bối cảnh và bài toán**
 
-*Chiến lược giảm thiểu*  
-- Mạng: Lưu trữ cục bộ trên Raspberry Pi với Docker.  
-- Cảm biến: Kiểm tra định kỳ, dự phòng linh kiện.  
-- Chi phí: Cảnh báo ngân sách AWS, tối ưu dịch vụ.  
+Hệ thống được xây dựng cho nhu cầu quản lý sức khỏe cá nhân và kế hoạch tập luyện.
 
-*Kế hoạch dự phòng*  
-- Quay lại thu thập thủ công nếu AWS gặp sự cố.  
-- Sử dụng CloudFormation để khôi phục cấu hình liên quan đến chi phí.  
+**Hệ thống dùng để làm gì:**
 
-### 8. Kết quả kỳ vọng  
-*Cải tiến kỹ thuật*: Dữ liệu và phân tích thời gian thực thay thế quy trình thủ công. Có thể mở rộng tới 10–15 trạm.  
-*Giá trị dài hạn*: Nền tảng dữ liệu 1 năm cho nghiên cứu AI, có thể tái sử dụng cho các dự án tương lai.
+* Quản lý hồ sơ người dùng và đồng bộ thông tin đăng nhập
+* Theo dõi chỉ số cơ thể, tính toán chỉ số sức khỏe
+* Quản lý kế hoạch tập luyện, session và nhật ký tập
+* Quản lý dữ liệu dinh dưỡng theo bữa và theo ngày
+
+**Khách hàng là ai:**
+
+* Người dùng cá nhân cần theo dõi sức khỏe và luyện tập
+
+**Giải quyết vấn đề gì:**
+
+* Thống nhất dữ liệu sức khỏe trong một nền tảng duy nhất
+* Giảm thao tác thủ công bằng API và ứng dụng realtime theo nhu cầu người dùng
+* Đảm bảo hệ thống có thể triển khai, vận hành và mở rộng trên AWS
+
+**Use-case gắn với FCAJ/AWS:**
+
+* Đây là use-case cloud-native rõ ràng, bám sát managed services AWS
+* Không lệch chủ đề vì tập trung vào triển khai ứng dụng trên hạ tầng AWS có bảo mật, scale và monitoring
+
+**Mục tiêu cụ thể và tiêu chí thành công**
+
+**Đầu ra mong muốn:**
+
+* Ứng dụng frontend phục vụ qua CloudFront
+* Backend API chạy ổn định trên ECS Fargate
+* Xác thực người dùng qua Cognito Hosted UI và JWT
+* Logging tập trung qua CloudWatch
+
+**Tiêu chí đánh giá thành công:**
+
+* Người dùng đăng nhập thành công và gọi được các API chính
+* Các luồng cốt lõi workout, health metrics, nutrition hoạt động end-to-end
+* ECS service rollout thành công và đạt trạng thái stable
+* Có thể truy vết lỗi nhanh qua log và health check
+
+---
+
+### 4.2. Kiến trúc hệ thống:
+
+![kiến trúc hệ thống](/images/2-Proposal/image11.png)
+
+---
+
+### 4.3. Luồng dữ liệu chính:
+
+* Tầng Xác thực: Mobile app kết nối trực tiếp với Amazon Cognito để quản lý định danh và đăng nhập.
+* Tầng Truy cập & Phân phối: Yêu cầu đi qua Route 53 (DNS) đến CloudFront (CDN). CloudFront tải giao diện từ S3 Frontend Bucket hoặc định tuyến API qua ALB.
+* Tầng Xử lý Backend: ALB cân bằng tải, chuyển request đến container Spring Boot trên ECS Fargate. ECS Fargate lấy image từ ECR và truy xuất thông tin từ Secrets Manager.
+* Tầng Lưu trữ & Dữ liệu: Fargate thực hiện logic, đọc/ghi vào RDS PostgreSQL và thao tác file với S3 Media Bucket. Amazon Bedrock được tích hợp làm chatbot AI hỗ trợ người dùng.
+
+---
+
+### 4.4. Lựa chọn dịch vụ AWS và lý do:
+
+**Các dịch vụ hiện dùng trong dự án:**
+
+* Amazon CloudFront: Phân phối nội dung (CDN), giảm độ trễ, gom chung endpoint public cho cả frontend và API routing.
+* Amazon S3: Lưu trữ static frontend và các tệp media một cách bền vững với chi phí thấp.
+* Application Load Balancer (ALB): Đảm nhiệm cân bằng tải HTTP/HTTPS cho các dịch vụ backend chạy trên ECS.
+* Amazon ECS Fargate: Chạy các container backend theo mô hình managed, giúp hệ thống tự động mở rộng mà không cần quản lý server vật lý.
+* Amazon RDS PostgreSQL: Cơ sở dữ liệu quan hệ được quản lý toàn diện (managed), hoàn toàn phù hợp với các nghiệp vụ lưu trữ dữ liệu có tính ràng buộc cao.
+* Amazon Bedrock: Tích hợp chatbot AI thông minh cho ứng dụng để hỗ trợ tương tác với người dùng.
+* Amazon Cognito: Cung cấp giải pháp xác thực người dùng, giảm thiểu thời gian và chi phí tự xây dựng hệ thống quản lý danh tính (auth).
+* Amazon ECR: Lưu trữ và quản lý an toàn các image container của backend.
+* Amazon CloudWatch: Nơi tập trung log của toàn hệ thống, hỗ trợ giám sát hiệu suất và cảnh báo vận hành.
+* AWS Route 53 và ACM: Quản lý domain và cung cấp/tự động gia hạn TLS certificate để đảm bảo truy cập an toàn qua giao thức HTTPS.
+
+**Lý do không chọn Lambda/API Gateway ở giai đoạn hiện tại:**
+
+* Backend hiện là ứng dụng Spring Boot nguyên khối, phù hợp mô hình container dài hạn trên ECS
+* Giảm công sức tách nhỏ thành serverless functions trong giai đoạn đầu
+* Tối ưu thời gian delivery và đơn giản hóa vận hành ban đầu
+
+---
+
+### 4.5. Bảo mật và IAM cơ bản:
+
+**Nguyên tắc áp dụng:**
+
+* Principle of Least Privilege cho role runtime
+* Không hard-code access key trong source
+* Hạn chế public resource ở lớp dữ liệu
+
+**Triển khai bảo mật hiện có:**
+
+* ECS Task Execution Role dùng policy chuẩn để pull image/log
+* ECS Task Role chỉ cấp quyền đọc ghi media bucket cần thiết
+* Secret DB lấy từ Secrets Manager thay vì hard-code
+* RDS đặt private subnet, không public
+* ALB giới hạn traffic vào từ CloudFront prefix list
+* Backend chỉ chấp nhận access token hợp lệ từ Cognito
+
+---
+
+### 4.6. Khả năng mở rộng và vận hành:
+
+**Scale:**
+
+* ECS auto scaling theo CPU, cấu hình hiện tại min 2 và max 4 tasks
+* Kiến trúc tách lớp CloudFront và ECS để scale frontend/backend độc lập
+
+**Logging và Monitoring:**
+
+* CloudWatch Logs cho backend container
+* RDS export log để theo dõi truy vấn/lỗi DB
+* ALB health check endpoint để phát hiện instance không khỏe
+
+---
+
+### 4.7. Quy trình Quản lý và Triển khai tự động (CI/CD & IaC)
+
+Để tối ưu hóa thời gian vận hành và giảm thiểu sai sót thủ công, hệ thống áp dụng phương pháp quản lý hạ tầng bằng mã và luồng triển khai tự động:
+
+* Quản lý hạ tầng (IaC) với AWS CloudFormation: Toàn bộ cấu hình tài nguyên AWS được định nghĩa và quản lý tập trung bằng code, đảm bảo tính nhất quán và khả năng đồng bộ nhanh chóng giữa các môi trường.
+
+* Luồng triển khai liên tục (CI/CD):
+
+  1. Dev: Cập nhật và đẩy (push) mã nguồn lên GitHub.
+  2. GitHub Actions: Build Docker image và push lên Amazon ECR.
+  3. Amazon ECS: Cập nhật service → rolling update không downtime.
+
+---
+
+## 5. Code Snippet
+
+### 5.1 Dockerfile Backend
+
+![S3 bucket properties tab](/images/2-Proposal/image5.png)
+
+
+### 5.2 CDK Route API Qua CloudFront
+
+
+![S3 bucket properties tab](/images/2-Proposal/image4.png)
+
+
+### 5.3 Script Deploy App
+
+![S3 bucket properties tab](/images/2-Proposal/image2.png)
+![S3 bucket properties tab](/images/2-Proposal/image10.png)
+
+
+
+### 5.4 Khởi tạo Stack
+
+
+![S3 bucket properties tab](/images/2-Proposal/image6.png)
+
+
+### 5.5 Ảnh app:
+
+![App](/images/2-Proposal/image9.png)
+![S3 bucket properties tab](/images/2-Proposal/image1.png)
+![S3 bucket properties tab](/images/2-Proposal/image8.png)
+![S3 bucket properties tab](/images/2-Proposal/image7.png)
+![S3 bucket properties tab](/images/2-Proposal/image3.png)
+
+
+---
+
+## 6. Ngân sách dự kiến
+
+**Region: us-east-1**
+
+| Hạng mục      | Dịch vụ         | Cấu hình  | Ước tính/tháng |
+| ------------- | --------------- | --------- | -------------- |
+| Frontend CDN  | CloudFront      | ~10GB     | 1–5 USD        |
+| Storage       | S3              | 2 buckets | 0.5–2 USD      |
+| Backend       | ECS             | 2 tasks   | 15–20 USD      |
+| Database      | RDS             | t4g.micro | 30–35 USD      |
+| ECR           | Registry        | 1GB       | 0.1–1 USD      |
+| Logging       | CloudWatch      | logs      | 5–15 USD       |
+| Secrets       | Secrets Manager | 2 secrets | ~1 USD         |
+| Load Balancer | ALB             | 1 ALB     | 18–22 USD      |
+| Cognito       | Auth            | free tier | 0 USD          |
+| DNS + SSL     | Route53 + ACM   |           | 0.5–1 USD      |
+
+**Tổng: ~71–100 USD/tháng**
+
+**Lưu ý:**
+
+* Không dùng NAT Gateway → tiết kiệm ~32 USD/tháng
+* Chi phí phụ thuộc traffic
+
+
+---
+
+## 7. Rủi Ro Và Giải Pháp Giảm Thiểu
+
+| Rủi ro          | Tác động  | Mức ưu tiên | Giải pháp       |
+| --------------- | --------- | ----------- | --------------- |
+| Lộ thông tin    | Cao       | P0          | Secrets Manager |
+| Sai path deploy | Trung-Cao | P0          | Pre-check       |
+| OAuth mismatch  | Cao       | P0          | Sync env        |
+| Health check    | Trung     | P1          | Chuẩn hóa       |
+| Chi phí tăng    | Trung     | P1          | Budget alarm    |
+---
