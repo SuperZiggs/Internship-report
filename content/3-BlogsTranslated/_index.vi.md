@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 3. </b> "
 ---
 
-Phần này liệt kê và giới thiệu sáu bài blog đã được dịch và tóm tắt trong quá trình thực tập.
+Phần này liệt kê và giới thiệu bốn bài blog đã được dịch và tóm tắt trong quá trình thực tập.
 
 ### [Blog 1 - AWS Weekly Roundup: AWS AI/ML Scholars program, Agent Plugin for AWS Serverless, and more](3.1-Blog1/)
 Phần này tổng hợp những tin tức và thông báo mới nhất từ AWS, bao gồm việc ra mắt chương trình AWS AI and ML Scholars 2026, Agent Plugin mới dành cho AWS Serverless, cùng nhiều cập nhật khác. Nội dung nhấn mạnh các bước tiến quan trọng trong các dịch vụ AWS, các sự kiện sắp tới như AWS Summits, và những thay đổi đáng chú ý mà nhà phát triển và người đổi mới nên theo dõi để luôn cập nhật về hệ sinh thái AWS đang không ngừng phát triển.

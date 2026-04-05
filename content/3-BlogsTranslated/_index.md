@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 3. </b> "
 ---
 
-This section lists and introduces the six blogs that were translated and summarized during the internship.
+This section lists and introduces the four blogs that were translated and summarized during the internship.
 
 ### [Blog 1 - AWS Weekly Roundup: AWS AI/ML Scholars program, Agent Plugin for AWS Serverless, and more](3.1-Blog1/)
 This blog provides a roundup of the latest AWS news and announcements, including the launch of the 2026 AWS AI and ML Scholars program, the new Agent Plugin for AWS Serverless, and other updates. It highlights key developments in AWS services, upcoming events like AWS Summits, and important changes that builders and innovators should be aware of to stay informed about the evolving AWS ecosystem.
