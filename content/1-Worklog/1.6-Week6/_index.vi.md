@@ -31,6 +31,7 @@ pre: " <b> 1.6. </b> "
   * `PlanDetailScreen` load kế hoạch active; bộ chọn ngày lọc bài tập theo `dayOfWeek`.
   * Redux `workoutSessionSlice` quản lý toàn bộ trạng thái buổi tập, lưu AsyncStorage.
   * `WorkoutSessionScreen` hướng dẫn user qua tất cả bài tập/set với timer nghỉ.
+  * **Tối ưu hóa UI Frontend**: Khắc phục thành công lỗi *stale closure* (biến lỗi đóng) trong vòng lặp đếm giờ timer và gộp các `useEffect` dư thừa. Áp dụng `useRef` để duy trì trạng thái active session, đảm bảo UI cập nhật mượt mà 60fps mà không block luồng render chính.
   * Vòng lặp tập luyện hoàn chỉnh được test end-to-end.
 
 ### Kiến thức AWS đã học:

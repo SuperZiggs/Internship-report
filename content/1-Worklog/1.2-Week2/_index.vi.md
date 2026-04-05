@@ -8,9 +8,9 @@ pre: " <b> 1.2. </b> "
 
 ### Mục tiêu tuần 2:
 
-* **Backend**: Tích hợp AWS Cognito vào Spring Security. Xây dựng module `UserProfile`.
-* **Frontend**: Triển khai luồng xác thực hoàn chỉnh — từ màn hình đăng nhập đến lưu trữ token và quản lý trạng thái.
-* Thiết lập pattern xử lý token an toàn được tái sử dụng xuyên suốt ứng dụng.
+* **Backend**: Tích hợp luồng xác thực bảo mật chuẩn Enterprise với **Amazon Cognito User Pools** vào Spring Security. Xây dựng module `UserProfile`.
+* **Frontend**: Triển khai luồng xác thực hoàn chỉnh bằng **PKCE (Proof Key for Code Exchange)** — từ màn hình đăng nhập đến lưu trữ token và quản lý trạng thái.
+* Thiết lập pattern quản lý vòng đời token an toàn, bao gồm tự động làm mới và xử lý thu hồi quyền (Token Revocation).
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
@@ -26,19 +26,19 @@ pre: " <b> 1.2. </b> "
 ### Kết quả đạt được tuần 2:
 
 * **Backend — Security**:
-  * Spring Security cấu hình hoàn chỉnh với AWS Cognito làm JWT issuer.
+  * Spring Security cấu hình hoàn chỉnh với **Amazon Cognito** làm JWT issuer, áp dụng phân quyền RBAC chuẩn Enterprise.
   * `OAuth2TokenValidator` tự định nghĩa chặn ID token — chỉ Access Token được chấp nhận tại API.
-  * Phân quyền theo role hoạt động: `ROLE_ADMIN` từ Cognito group cấp quyền admin.
+  * Phân quyền theo role hoạt động: `cognito:groups` map chuẩn xác thành `ROLE_ADMIN` cấp quyền admin.
   * Các quy tắc bảo mật được định nghĩa: public health check, authenticated routes, admin-only `/admin/**`.
 * **Backend — Module UserProfile**:
   * `POST /user/sync` upsert user từ Cognito JWT claims an toàn, không có lỗ hổng IDOR.
   * Full CRUD (`GET`, `PUT`, `DELETE`) trên `/user/{id}` với kiểm tra phân quyền.
   * Entity `UserProfile` lưu thành công vào PostgreSQL qua JPA.
 * **Frontend — Xác thực**:
-  * `LoginScreen` hiển thị đúng; nhấn nút mở Cognito Hosted UI trong trình duyệt.
-  * PKCE code exchange hoạt động end-to-end — tokens được trả về và lưu an toàn.
+  * `LoginScreen` hiển thị đúng; nhấn nút mở an toàn Cognito Hosted UI trong trình duyệt hệ thống.
+  * **PKCE code exchange** hoạt động end-to-end qua `expo-auth-session`, loại bỏ hoàn toàn việc lưu Secret Key ở client.
   * `authSlice` chuyển được `isAuthenticated`; `RootNavigator` điều hướng đúng stack.
-  * Axios interceptor tự gắn Bearer token cho mọi API call tiếp theo.
+  * Axios interceptor tự gắn Bearer token và **quản lý vòng đời Token** (tự động làm mới background, force logout khi token bị thu hồi).
 
 ### Kiến thức AWS đã học:
 

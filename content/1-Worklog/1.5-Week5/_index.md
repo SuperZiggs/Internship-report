@@ -29,7 +29,7 @@ pre: " <b> 1.5. </b> "
 * **Backend — UserWorkoutPlan module**:
   * Flyway V1 + V2 migrations applied cleanly alongside Hibernate `ddl-auto=create-drop`.
   * Soft-delete pattern with `@SQLRestriction` works — deleted plans never appear in queries.
-  * Clone endpoint creates a fully independent copy — verified by checking no FK pointer to source exists.
+  * Clone endpoint creates a fully independent copy of system plans — verified by checking no FK pointer to source exists, ensuring robust customizability without mutating system data.
   * One-active-plan rule enforced at service layer — activating plan X correctly deactivates all others for that user.
   * `userId` always taken from the validated JWT `sub` claim — zero risk of IDOR attacks.
 * **Frontend — Plan Management**:

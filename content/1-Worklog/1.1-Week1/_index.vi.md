@@ -17,7 +17,7 @@ pre: " <b> 1.1. </b> "
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |
 | --- | --------- | ------------ | --------------- | -------------- |
 | 2   | - Kickoff dự án: xác định phạm vi, tính năng và yêu cầu MVP <br>&emsp; + Tính năng cốt lõi: kế hoạch tập luyện, theo dõi dinh dưỡng, chỉ số cơ thể, ghi log buổi tập <br>&emsp; + Xác thực qua AWS Cognito <br>&emsp; + Admin panel quản lý bài tập & kế hoạch | 06/01/2026 | 06/01/2026 | |
-| 3   | - Khởi tạo dự án **Backend** Spring Boot 3 + Maven <br>&emsp; + Thêm dependencies: `spring-boot-starter-web`, `spring-data-jpa`, `spring-security` <br>&emsp; + Cấu hình `pom.xml`: Flyway, Lombok, jjwt 0.11.5, AWS SDK v1 <br>&emsp; + Tổ chức package: `common/`, `config/`, `module/` | 07/01/2026 | 07/01/2026 | <https://start.spring.io/> |
+| 3   | - Khởi tạo dự án **Backend** Spring Boot 3 + Maven <br>&emsp; + Thêm dependencies: `spring-boot-starter-web`, `spring-data-jpa`, `spring-security` <br>&emsp; + Cấu hình `pom.xml`: Flyway, Lombok, jjwt 0.11.5, AWS SDK v1 <br>&emsp; + Tổ chức package thuộc `com.example.fitme`: `common/`, `config/`, `module/` | 07/01/2026 | 07/01/2026 | <https://start.spring.io/> |
 | 4   | - Cài PostgreSQL local bằng Docker Compose <br>&emsp; + Viết `docker-compose.yml` với service `postgres:15` <br>&emsp; + Cấu hình `application.properties`: datasource, JPA `ddl-auto=create-drop`, Flyway <br>&emsp; + Tạo file `.env` / `.env.example` quản lý secrets <br> - Định nghĩa `EntityBase` `@MappedSuperclass`: `id (UUID)`, `createdAt`, `updatedAt` | 08/01/2026 | 08/01/2026 | <https://docs.docker.com/compose/> |
 | 4   | - Khởi tạo dự án **Frontend** React Native + Expo ~54 với TypeScript <br>&emsp; + Dùng `npx create-expo-app --template` <br>&emsp; + Cấu hình `tsconfig.json`, `babel.config.js`, `metro.config.js` <br>&emsp; + Cài đặt NativeWind v4 và cấu hình `tailwind.config.js` | 08/01/2026 | 08/01/2026 | <https://docs.expo.dev/> |
 | 5   | - Thiết kế sơ đồ **Entity-Relationship** <br>&emsp; + Các entity: UserProfile, Food, Meal, Exercise, WorkoutPlan, BodyMetric, Session, Image… <br>&emsp; + Xác định quan hệ và cardinality <br> - Tạo **ApiResponse\<T\>** thống nhất: `code`, `message`, `result`, `timestamp`, `path` | 09/01/2026 | 09/01/2026 | |
@@ -37,7 +37,7 @@ pre: " <b> 1.1. </b> "
   * Redux store và React Query `QueryClient` kết nối qua `providers.tsx`.
   * Axios client đọc base URL từ `.env` (`EXPO_PUBLIC_BACKEND_API_URL=http://localhost:8080`).
 * Môi trường Docker Compose có thể tái tạo nhất quán trên các máy khác nhau trong nhóm.
-* Pattern quản lý secrets qua `.env` được thiết lập — không có credential hardcode trong source code.
+* Pattern quản lý secrets qua `.env` được thiết lập — không hardcode credential trong source code (cấu hình sẵn biến môi trường cho Backend API và CloudFront sau này).
 
 ### Kiến thức AWS đã học:
 

@@ -1,28 +1,22 @@
 ---
 title: "Workshop"
-date : 2026-03-25 
-weight : 5
-chapter : false
-pre : " <b> 5. </b> "
+date: 2024-01-01
+weight: 5
+chapter: false
+pre: " <b> 5. </b> "
 ---
 
-## Chạy Apache Iceberg trên AWS
+## Cloud-Native Fitness App Deployment on AWS
 
-Workshop này nhằm cung cấp trải nghiệm thực tế để xây dựng Data Lake giao dịch bằng cách sử dụng [Apache Iceberg](https://iceberg.apache.org/) trên Amazon EMR và Amazon Athena. Apache Iceberg là một định dạng bảng mới để lưu trữ dữ liệu dạng bảng lớn, ít thay đổi. Nó được thiết kế để cải thiện bố cục bảng tiêu chuẩn thực tế được tích hợp trong Hive, Trino và Spark. Các định dạng bảng Apache Iceberg hiện được hỗ trợ bởi hai dịch vụ AWS:
+## Tổng quan
 
-1. Amazon Athena.  
-2. Amazon EMR.
+Đây là workshop console-first cho Cloud-Native Fitness App Deployment on AWS. Nội dung được tổ chức theo phase và ưu tiên độ chính xác theo AWS CLI describe output.
 
-Là một phần của workshop này, chúng ta sẽ phân tích Amazon S3 Data Lake sử dụng cả Amazon Athena và Amazon EMR có hỗ trợ định dạng bảng Iceberg. Đối với workshop này, bạn sẽ cần một số kiến thức về các lệnh SQL cơ bản cho các bài lab Athena và pyspark cho các bài lab EMR.
+## Cấu trúc hiện tại
 
----
-
-**Đối tượng mục tiêu:** Kỹ sư dữ liệu (Data Engineers), Nhà phân tích dữ liệu (Data Analysts), Kỹ sư điện toán đám mây (Cloud Engineers), Nhà phát triển Big Data (Big Data Developers)
-
-**Các Use Case:** Xây dựng transactional data lakes, truy vấn dữ liệu S3 với Athena, xử lý dữ liệu với EMR & PySpark, quản lý dữ liệu dạng bảng quy mô lớn với Apache Iceberg, và hiện đại hóa kiến trúc data lake
-
----
-
-✅ **Thời lượng ước tính:** 2-3 giờ
-
-⚠️ **Dọn dẹp:** Khi bạn hoàn thành workshop, hãy tham khảo phần **Dọn dẹp** (Cleanup) để xóa các tài nguyên và tránh phát sinh chi phí không cần thiết.
+1. [5.1 Tổng quan Workshop](./5.1-workshop-overview/)
+2. [5.2 Prerequisite - IAM roles và policy baseline](./5.2-prerequiste/)
+3. [5.3 Hướng dẫn từng bước theo phase](./5.3-step-by-step/)
+4. [5.4 Kết quả ứng dụng](./5.4-app-result/)
+5. [5.5 Triển khai CloudFormation bằng CDK và script](./5.5-cloudformation-deploy-cdk-and-script/)
+6. [5.6 Dọn dẹp tài nguyên](./5.6-clean-up-resource/)

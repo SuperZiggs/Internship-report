@@ -8,9 +8,9 @@ pre: " <b> 1.8. </b> "
 
 ### Mục tiêu tuần 8:
 
-* **Backend**: Xây dựng module Food & Nutrition — `Food`, `Meal`, `MealFood`, `DailyNutrition` với tính toán macro tự động.
-* **Frontend**: Xây dựng `DietScreen` với layout 4 bữa, tìm kiếm thực phẩm, modal thêm food; `DietHistoryScreen`.
-* Cho phép user theo dõi lượng calo và macro hàng ngày.
+* **Backend**: Xây dựng module Food & Nutrition và chuẩn bị nền tảng dữ liệu (data layer) để làm ngữ cảnh động cho **Amazon Bedrock AI Coach** sắp tới.
+* **Frontend**: Xây dựng `DietScreen` tận dụng logic `ensureDailyMeals` đảm bảo cấu trúc 4 bữa nhất quán mỗi ngày.
+* Bắt đầu thử nghiệm các kỹ thuật Prompt Engineering phục vụ phân tích dinh dưỡng và thể hình.
 
 ### Các công việc cần triển khai trong tuần này:
 | Thứ | Công việc | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu |

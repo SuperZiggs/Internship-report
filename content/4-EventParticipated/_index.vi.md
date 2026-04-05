@@ -38,3 +38,18 @@ Trong quá trình thực tập, em đã tham gia các events, với mỗi event 
 &emsp;**Kết quả và giá trị đạt được:** Thông qua sự kiện này, em hiểu rõ hơn về kiến trúc của AI Agents, cách thiết kế prompt hiệu quả cho các hệ thống AI, cũng như cách tích hợp trí tuệ nhân tạo với các thiết bị IoT trong các hệ thống thực tế. Đồng thời, em cũng có thêm góc nhìn về cách các dịch vụ AWS hỗ trợ xây dựng các hệ thống AI có khả năng mở rộng và vận hành trên nền tảng cloud.
 
 ---
+
+### [Event 3](4.3-Event3/)
+&emsp;**Tên sự kiện:** Cloud Mastery 2026 #2 - Kubernetes, IaC và Elixir trong DevOps
+
+&emsp;**Thời gian:** Tháng 4 năm 2026
+
+&emsp;**Địa điểm:** Trường đại học FPT cơ sở Hồ Chí Minh
+
+&emsp;**Vai trò trong sự kiện:** Người tham dự
+
+&emsp;**Mô tả sự kiện:** Sự kiện gồm 3 phiên kỹ thuật: kiến trúc và vận hành Kubernetes, Elixir/OTP cho hệ thống đồng thời cao và chịu lỗi tốt, cùng các phương pháp Infrastructure as Code trên AWS với CloudFormation, AWS CDK và Terraform. Nội dung Kubernetes tập trung vào control plane, worker node, các object cốt lõi và công cụ thực hành như Helm, K9s. Nội dung Elixir nhấn mạnh mô hình đồng thời của BEAM, supervision và triết lý "Let It Crash" để xây dựng hệ thống bền vững. Nội dung IaC so sánh cách tiếp cận AWS-native và multi-cloud, bao gồm khái niệm template/stack, CDK constructs, quy trình Terraform và quản lý state.
+
+&emsp;**Kết quả và giá trị đạt được:** Thông qua sự kiện này, em có góc nhìn tổng thể hơn về cloud engineering trên 3 lớp: điều phối hệ thống, độ bền runtime và tự động hóa hạ tầng. Em cũng định hình rõ hơn lộ trình thực hành: bắt đầu với Kubernetes local, áp dụng IaC nhất quán khi triển khai, và cân nhắc Elixir cho các dịch vụ có tải đồng thời cao.
+
+---

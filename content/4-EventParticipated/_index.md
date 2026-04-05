@@ -39,3 +39,18 @@ During my internship, I participated in some events. Each one was a memorable ex
 
 ---
 
+### [Event 3](4.3-Event3/)  
+&emsp;**Event Name:** Cloud Mastery 2026 #2 - Kubernetes, IaC, and Elixir in DevOps  
+
+&emsp;**Date & Time:** April 2026  
+
+&emsp;**Location:** FPT University HCM campus  
+
+&emsp;**Role:** Attendee  
+
+&emsp;**Description:** This event combined three technical sessions: Kubernetes architecture and operations, Elixir/OTP for highly concurrent and fault-tolerant systems, and Infrastructure as Code practices on AWS with CloudFormation, AWS CDK, and Terraform. The Kubernetes track covered control plane and worker node components, core objects, and practical tooling such as Helm and K9s. The Elixir track emphasized BEAM concurrency, supervision, and the "Let It Crash" philosophy for resilient platforms. The IaC track compared AWS-native and multi-cloud approaches, including template/stack concepts, CDK constructs, Terraform workflows, and state management.
+
+&emsp;**Outcomes / Value Gained:** Through this event, I gained a more connected cloud engineering perspective across orchestration, runtime reliability, and infrastructure automation. I also developed a clearer practical roadmap: start with local Kubernetes practice, apply IaC consistently for deployments, and evaluate resilient runtime technologies such as Elixir for high-throughput services.
+
+---
+

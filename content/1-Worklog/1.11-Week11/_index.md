@@ -20,7 +20,8 @@ pre: " <b> 1.11. </b> "
 | 4   | - Write **Backend README** (`myFit-api/README.md`) <br>&emsp; + Project overview & architecture diagram (API ↔ PostgreSQL ↔ Cognito ↔ S3) <br>&emsp; + Module documentation: Auth, Food, SystemWorkout, UserWorkoutPlan, Session, UserMetric, Media, GoalType <br>&emsp; + Setup guide: prerequisites, `.env` variables, Docker Compose commands <br>&emsp; + API endpoint reference table (all routes, methods, descriptions, auth requirements) | 03/25/2026 | 03/25/2026 | |
 | 4   | - Update **Frontend** `guide.md` <br>&emsp; + Tech stack summary table <br>&emsp; + Navigation structure diagram (AuthStack / OnboardingStack / MainTabs) <br>&emsp; + Setup guide: `npm install`, `.env` variables, `npx expo start` <br>&emsp; + Screen inventory with feature descriptions <br>&emsp; + AWS Cognito PKCE + Bedrock setup notes | 03/25/2026 | 03/25/2026 | |
 | 5   | - **Code cleanup** — Backend <br>&emsp; + Remove all `TODO`, `FIXME`, debug `System.out.println` statements <br>&emsp; + Ensure public non-trivial methods have Javadoc comments <br>&emsp; + Review security config for inadvertent public route exposure <br>&emsp; + Final build: `mvn clean package -DskipTests` → confirm JAR builds cleanly | 03/26/2026 | 03/26/2026 | |
-| 6   | - **Code cleanup** — Frontend <br>&emsp; + Remove all `console.log` debug statements <br>&emsp; + Run `eslint` and fix remaining lint warnings <br>&emsp; + Remove unused imports <br>&emsp; + Final export: `npx expo export` → confirm zero TypeScript errors <br> - **Project retrospective**: document lessons learned, tech decisions in hindsight, potential future improvements | 03/27/2026 | 03/27/2026 | |
+| 5   | - **Response interceptor** improvements + **UX polish** + **Final bug fix** (deferred from Week 10) <br>&emsp; + Implement token refresh with request queue: concurrent `401` responses queued, one refresh attempted, all retried <br>&emsp; + Add `NotificationBox` global alert component (replaces native `Alert.alert` via `installAlertProxy`) <br>&emsp; + Add pull-to-refresh on `HomeScreen` + fix `HealthDashboardScreen` loading state <br>&emsp; + Add `ActivityLevelLabels` Vietnamese display names for all enum values <br>&emsp; + Ensure consistent loading spinners and error states across all screens | 03/26/2026 | 03/26/2026 | |
+| 6   | - **Code cleanup** — Frontend + **Final bug fix** <br>&emsp; + Remove all `console.log` debug statements <br>&emsp; + Run `eslint` and fix remaining lint warnings <br>&emsp; + Remove unused imports <br>&emsp; + Fix `BMITrendChart` empty state (deferred from Week 10) <br>&emsp; + Final export: `npx expo export` → confirm zero TypeScript errors <br> - **Project retrospective**: document lessons learned, tech decisions in hindsight, potential future improvements | 03/27/2026 | 03/27/2026 | |
 
 ### Week 11 Achievements:
 
@@ -33,10 +34,11 @@ pre: " <b> 1.11. </b> "
   * `myFit-api/README.md` covers full setup guide, environment variable reference, and all endpoint descriptions.
   * Frontend `guide.md` updated with navigation diagram, screen inventory, and AWS service configuration.
   * Architecture overview documented: Spring Boot API ↔ PostgreSQL ↔ AWS Cognito ↔ AWS S3 ↔ React Native App ↔ AWS Bedrock.
-* **Code Quality**:
+* **CI/CD & Code Quality**:
+  * Implemented GitHub Actions workflows (`.github/workflows`) that automatically lint, test, build, and trigger rolling deployment updates to **Amazon ECS Fargate** upon merge.
   * Zero `console.log` or `System.out.println` remaining in production paths.
-  * TypeScript build (`npx expo export`) passes with zero errors.
-  * Maven `mvn clean package` builds final JAR cleanly.
+  * Automated TypeScript build (`npx expo export`) passes with zero errors in CI.
+  * Automated Maven `mvn clean package` builds final JAR cleanly in CI.
 * **Project Retrospective — Key Lessons Learned**:
   * **IDOR prevention** via JWT `sub` extraction is a critical security pattern that must be applied consistently throughout a user-scoped REST API.
   * **Soft delete** with `@SQLRestriction` is more user-friendly than hard delete for user-owned data — allows potential recovery.

@@ -8,9 +8,9 @@ pre: " <b> 1.2. </b> "
 
 ### Week 2 Objectives:
 
-* **Backend**: Integrate AWS Cognito authentication into Spring Security. Build the `UserProfile` module.
-* **Frontend**: Implement the complete authentication flow — from the Login screen through token storage and state management.
-* Establish secure token handling patterns that will be reused across the entire application.
+* **Backend**: Integrate Enterprise-grade authentication via **Amazon Cognito User Pools** into Spring Security. Build the `UserProfile` module.
+* **Frontend**: Implement the complete authentication flow — from the Login screen using secure **PKCE (Proof Key for Code Exchange)** through token storage and state management.
+* Establish secure token lifecycle management, including automatic refresh and revocation handling.
 
 ### Tasks to be carried out this week:
 | Day | Task | Start Date | Completion Date | Reference Material |
@@ -26,19 +26,19 @@ pre: " <b> 1.2. </b> "
 ### Week 2 Achievements:
 
 * **Backend — Security**:
-  * Spring Security fully configured with AWS Cognito as JWT issuer.
+  * Spring Security fully configured with **Amazon Cognito** as the JWT issuer, implementing Enterprise-grade RBAC (Role-Based Access Control).
   * Custom `OAuth2TokenValidator` blocks ID tokens — only Access Tokens accepted at the API layer.
-  * Role-based access control works: `ROLE_ADMIN` group from Cognito grants admin privileges.
+  * Role-based access control works: `ROLE_ADMIN` group from `cognito:groups` correctly mapped to grant admin privileges.
   * All security rules defined: public health check, authenticated user routes, admin-only `/admin/**` routes.
 * **Backend — UserProfile module**:
   * `POST /user/sync` correctly upserts user from Cognito JWT claims without IDOR vulnerability.
   * Full CRUD (`GET`, `PUT`, `DELETE`) on `/user/{id}` with proper authorization checks.
   * `UserProfile` entity persisted to PostgreSQL via JPA.
 * **Frontend — Authentication**:
-  * `LoginScreen` renders correctly; tapping the button opens Cognito Hosted UI in browser.
-  * PKCE code exchange works end-to-end — tokens returned and stored securely.
+  * `LoginScreen` renders correctly; tapping the button securely opens Cognito Hosted UI in the system browser.
+  * **PKCE code exchange** works end-to-end via `expo-auth-session`, completely eliminating the need for client-side Secret Keys.
   * `authSlice` correctly toggles `isAuthenticated`; `RootNavigator` redirects to the right stack.
-  * Axios interceptor auto-attaches Bearer token — subsequent API calls authenticated.
+  * Axios interceptor auto-attaches Bearer token and manages **Token Lifecycle** (automatic background refresh and forced logout on revocation).
 
 ### AWS Knowledge Learned:
 

@@ -8,9 +8,9 @@ pre: " <b> 1.7. </b> "
 
 ### Week 7 Objectives:
 
-* **Backend**: Build the Media module — `Image` entity with polymorphic association (food / exercise / workout plan), AWS S3 integration.
-* **Frontend**: Build `SessionDetailScreen` (past workout recap) and `SessionCalendarScreen` (monthly calendar view), plus the `mediaService` with image caching.
-* Enable images to be displayed for exercises and workout plans throughout the app.
+* **Backend**: Build the Media module — `Image` entity with polymorphic association, AWS S3 integration, and **Amazon CloudFront** distribution.
+* **Frontend**: Build `SessionDetailScreen`, `SessionCalendarScreen`, and the `mediaService` mapped to CloudFront URLs for lightning-fast image caching.
+* Enable media to be delivered globally through an optimized CDN architecture.
 
 ### Tasks to be carried out this week:
 | Day | Task | Start Date | Completion Date | Reference Material |
@@ -24,11 +24,11 @@ pre: " <b> 1.7. </b> "
 
 ### Week 7 Achievements:
 
-* **Backend — Media module**:
-  * Flyway V3 migration applied with exclusive FK constraint on `image` table — DB-level data integrity for polymorphic images.
-  * `POST /api/images` registers image URL records linked to food/exercise/plan.
-  * `GET /api/images/exercise/{id}` and similar endpoints return all images for a given entity.
-  * AWS S3 `AmazonS3` bean configured locally (uses environment variables; real uploads tested with `generate_s3_json.py` tooling).
+* **Backend & Cloud Architecture — Media module**:
+  * Flyway V3 migration applied with exclusive FK constraint.
+  * AWS S3 bucket configured securely (private, no public ACLs).
+  * **Amazon CloudFront** distribution implemented with **Origin Access Control (OAC)** to serve S3 media globally with low latency.
+  * JSON configuration files (`s3_images_upload.json`) migrated to use CloudFront domains instead of direct S3 URLs, dramatically reducing data transfer costs.
 * **Frontend — Session History**:
   * `SessionDetailScreen` correctly groups workout logs by exercise and renders sets/reps/weight clearly.
   * `SessionCalendarScreen` marks training days with dots; tap to reveal session details inline.

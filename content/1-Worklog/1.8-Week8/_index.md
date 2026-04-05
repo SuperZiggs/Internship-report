@@ -8,9 +8,9 @@ pre: " <b> 1.8. </b> "
 
 ### Week 8 Objectives:
 
-* **Backend**: Build the complete Food & Nutrition module — `Food`, `Meal`, `MealFood`, `DailyNutrition` with auto-calculated macro nutrients.
-* **Frontend**: Build the `DietScreen` with today’s 4-meal layout, food search modal, and add-food-to-meal flow; plus `DietHistoryScreen`.
-* Enable users to track daily calorie and macro intake across all meal types.
+* **Backend**: Build the complete Food & Nutrition module (`Food`, `Meal`, `MealFood`) and prepare the data layer to act as dynamic context for the upcoming **Amazon Bedrock AI Coach**.
+* **Frontend**: Build the `DietScreen` relying on the core `ensureDailyMeals` logic for a consistent 4-meal layout, plus `DietHistoryScreen`.
+* Enable users to track daily macro intake and begin experimenting with AI prompt engineering for fitness contexts.
 
 ### Tasks to be carried out this week:
 | Day | Task | Start Date | Completion Date | Reference Material |

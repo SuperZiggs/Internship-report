@@ -36,6 +36,7 @@ pre: " <b> 1.6. </b> "
   * `WorkoutSessionScreen` guides user through all exercises/sets with automatic rest timer.
   * Each set logged to backend via `addWorkoutLog` API call before advancing.
   * `WorkoutSuccessScreen` shows achieved stats and prevents accidental back navigation.
+  * **Frontend UI Optimization**: Resolved critical stale closure bugs in the timer loop and consolidated redundant `useEffect` hooks. Utilized `useRef` to maintain active session states, ensuring smooth 60fps timer updates without blocking main thread re-renders.
   * Complete workout loop tested end-to-end: plan → start session → log sets → rest timer → finish → success.
 
 ### AWS Knowledge Learned:

@@ -34,7 +34,7 @@ pre: " <b> 1.4. </b> "
   * `SuggestedPlanScreen` guides users through goal → plan selection in 3 clear steps.
   * Plan tiles display name, difficulty level, estimated duration, and goal type.
   * `PlanExercisePicker` lists all exercises with muscle group context; exercise selection adds to user plan.
-* `DatabaseSeeder` populates initial muscle group + exercise data on app start for local dev.
+* `DatabaseSeeder` robustly parses `s3_images_upload.json` to seed muscle groups + exercise data on app start, solving mapping issues with special characters and whitespace to ensure 100% S3/CloudFront image URL alignment.
 
 ### AWS Knowledge Learned:
 

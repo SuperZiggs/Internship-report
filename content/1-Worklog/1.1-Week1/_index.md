@@ -17,7 +17,7 @@ pre: " <b> 1.1. </b> "
 | Day | Task | Start Date | Completion Date | Reference Material |
 | --- | ---- | ---------- | --------------- | ------------------ |
 | 2   | - Project kickoff: define scope, features, and MVP requirements <br>&emsp; + Core features: workout plans, nutrition tracking, body metrics, session logging <br>&emsp; + Auth via AWS Cognito <br>&emsp; + Admin panel for exercise & plan management | 01/06/2026 | 01/06/2026 | |
-| 3   | - Initialize **Backend** project with Spring Boot 3 + Maven <br>&emsp; + Scaffold with `spring-boot-starter-web`, `spring-data-jpa`, `spring-security` <br>&emsp; + Configure `pom.xml`: Flyway, Lombok, jjwt 0.11.5, AWS SDK v1 <br>&emsp; + Establish package structure: `common/`, `config/`, `module/` | 01/07/2026 | 01/07/2026 | <https://start.spring.io/> |
+| 3   | - Initialize **Backend** project with Spring Boot 3 + Maven <br>&emsp; + Scaffold with `spring-boot-starter-web`, `spring-data-jpa`, `spring-security` <br>&emsp; + Configure `pom.xml`: Flyway, Lombok, jjwt 0.11.5, AWS SDK v1 <br>&emsp; + Establish `com.example.fitme` package structure: `common/`, `config/`, `module/` | 01/07/2026 | 01/07/2026 | <https://start.spring.io/> |
 | 4   | - Set up **PostgreSQL** locally with Docker Compose <br>&emsp; + Write `docker-compose.yml` with `postgres:15` service <br>&emsp; + Configure `application.properties`: datasource, JPA `ddl-auto=create-drop`, Flyway <br>&emsp; + Create `.env` / `.env.example` pattern for secrets <br> - Define `EntityBase` `@MappedSuperclass`: `id (UUID)`, `createdAt`, `updatedAt` | 01/08/2026 | 01/08/2026 | <https://docs.docker.com/compose/> |
 | 4   | - Initialize **Frontend** project: React Native + Expo ~54 with TypeScript ~5.9 <br>&emsp; + Scaffold with `npx create-expo-app --template` <br>&emsp; + Configure `tsconfig.json`, `babel.config.js`, `metro.config.js` <br>&emsp; + Install and configure NativeWind v4 + `tailwind.config.js` | 01/08/2026 | 01/08/2026 | <https://docs.expo.dev/> |
 | 5   | - Design system **entity-relationship diagram** <br>&emsp; + Entities: UserProfile, Food, Meal, Exercise, WorkoutPlan, BodyMetric, Session, Image… <br>&emsp; + Agree on relationships and cardinalities <br> - Create uniform **ApiResponse\<T\>** envelope: `code`, `message`, `result`, `timestamp`, `path` | 01/09/2026 | 01/09/2026 | |
@@ -36,8 +36,8 @@ pre: " <b> 1.1. </b> "
   * NativeWind v4 configured — TailwindCSS utility classes work in RN components.
   * Redux Toolkit store and React Query `QueryClient` wired via `providers.tsx`.
   * Axios client reads base URL from `.env` (`EXPO_PUBLIC_BACKEND_API_URL=http://localhost:8080`).
-* Docker Compose environment reproducible across team machines.
-* `.env` secret management pattern established — no hardcoded credentials in source.
+* Docker Compose environment can be reproduced consistently across team members.
+* `.env` security pattern established — no hardcoded credentials. (Backend URL added and environment variables prepared for CloudFront distribution CDN).
 
 ### AWS Knowledge Learned:
 

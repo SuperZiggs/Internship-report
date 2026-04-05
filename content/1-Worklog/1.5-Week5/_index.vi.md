@@ -28,7 +28,7 @@ pre: " <b> 1.5. </b> "
 * **Backend — Module UserWorkoutPlan**:
   * Flyway V1 + V2 migrations được apply thành công.
   * Soft-delete với `@SQLRestriction` hoạt động — kế hoạch đã xóa không bao giờ xuất hiện trong query.
-  * Clone tạo bản sao độc lập — xem xét xác nhận không có FK về source.
+  * Chức năng Clone tạo bản sao độc lập hoàn toàn từ kế hoạch mẫu — xác nhận không có khóa ngoại (FK) trỏ ngược về bản gốc, đảm bảo tính tự do tùy biến cho người dùng mà không làm thay đổi dữ liệu hệ thống.
   * Quy tắc một plan active được thực thi tại service layer.
   * `userId` luôn lấy từ JWT — bảo mật IDOR hoàn toàn.
 * **Frontend — Quản lý kế hoạch**:

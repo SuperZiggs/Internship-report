@@ -32,7 +32,7 @@ pre: " <b> 1.4. </b> "
 * **Frontend — Duyệt bài tập**:
   * `SuggestedPlanScreen` hướng dẫn user qua mục tiêu → chọn kế hoạch trong 3 bước rõ ràng.
   * `PlanExercisePicker` liệt kê bài tập với context nhóm cơ; chọn bài tập thêm vào kế hoạch user.
-* `DatabaseSeeder` seed dữ liệu nhóm cơ + bài tập ban đầu khi khởi động ứng dụng.
+* `DatabaseSeeder` xử lý việc đọc file cấu hình JSON (`s3_images_upload.json`) để seed dữ liệu nhóm cơ + bài tập ban đầu, khắc phục triệt để lỗi mapping do ký tự đặc biệt, dấu nháy kép để bảo đảm 100% URL hình ảnh hiển thị khớp với CSDL.
 
 ### Kiến thức AWS đã học:
 
