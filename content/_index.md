@@ -21,7 +21,7 @@ chapter: false
 
 &emsp; **Major:** Artificial Intelligence
 
-&emsp; **Class:** FCAJ - FPT - Season 2
+&emsp; **Class:** SE193110
 
 &emsp; **Internship Company:** Bootcamp - First Cloud AI Journey @AWS Study Group
 

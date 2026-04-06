@@ -17,7 +17,7 @@ chapter: false
 
 &emsp; **Ngành:** Trí tuệ Nhân tạo
 
-&emsp; **Lớp:** FCAJ - FPT - Season 2
+&emsp; **Lớp:** SE193110
 
 &emsp; **Công ty thực tập:** Bootcamp - First Cloud AI Journey @AWS Study Group
 
