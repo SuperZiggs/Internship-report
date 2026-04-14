@@ -42,7 +42,7 @@ During my internship, I participated in some events. Each one was a memorable ex
 ### [Event 3](4.3-Event3/)  
 &emsp;**Event Name:** Cloud Mastery 2026 #2 - Kubernetes, IaC, and Elixir in DevOps  
 
-&emsp;**Date & Time:** April 2026  
+&emsp;**Date & Time:** 09:00, April 04, 2026  
 
 &emsp;**Location:** FPT University HCM campus  
 
@@ -54,3 +54,19 @@ During my internship, I participated in some events. Each one was a memorable ex
 
 ---
 
+### [Event 4](4.4-Event4/)
+&emsp;**Event Name:** Cloud Mastery 2026 #3 - Networking, Security, and IAM on AWS  
+
+&emsp;**Time:** 09:00, April 11, 2026  
+
+&emsp;**Location:** FPT University, Ho Chi Minh City Campus  
+
+&emsp;**Role:** Attendee  
+
+&emsp;**Event Description:**  
+The event consisted of three technical sessions focusing on networking, security, and identity management on AWS. The networking session covered VPC design, subnets, Internet Gateway, route tables, and strategies to control traffic flow and minimize blast radius. The IAM session highlighted best practices such as the principle of least privilege, use of IAM roles, MFA, and multi-account management with AWS IAM Identity Center (SSO), along with advanced controls like SCPs and Permission Boundaries. The security session introduced key AWS protection services including AWS WAF, AWS Shield, AWS Network Firewall, and Firewall Manager to defend against DDoS attacks and common web exploits.  
+
+&emsp;**Outcomes and Value Gained:**  
+Through this event, I gained a clearer understanding of designing secure network architectures using VPC and tiered subnets, as well as implementing multi-layered security from network to application level. I also learned how to manage identities and permissions in a multi-account environment and developed a stronger awareness of applying a zero-trust security model in cloud systems.
+
+---

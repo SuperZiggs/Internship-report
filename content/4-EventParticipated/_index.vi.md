@@ -42,7 +42,7 @@ Trong quá trình thực tập, em đã tham gia các events, với mỗi event 
 ### [Event 3](4.3-Event3/)
 &emsp;**Tên sự kiện:** Cloud Mastery 2026 #2 - Kubernetes, IaC và Elixir trong DevOps
 
-&emsp;**Thời gian:** Tháng 4 năm 2026
+&emsp;**Thời gian:** 09:00, ngày 4 Tháng 4 năm 2026
 
 &emsp;**Địa điểm:** Trường đại học FPT cơ sở Hồ Chí Minh
 
@@ -53,3 +53,20 @@ Trong quá trình thực tập, em đã tham gia các events, với mỗi event 
 &emsp;**Kết quả và giá trị đạt được:** Thông qua sự kiện này, em có góc nhìn tổng thể hơn về cloud engineering trên 3 lớp: điều phối hệ thống, độ bền runtime và tự động hóa hạ tầng. Em cũng định hình rõ hơn lộ trình thực hành: bắt đầu với Kubernetes local, áp dụng IaC nhất quán khi triển khai, và cân nhắc Elixir cho các dịch vụ có tải đồng thời cao.
 
 ---
+
+### [Event 4](4.4-Event4/)
+&emsp;**Tên sự kiện:** Cloud Mastery 2026 #3 - Networking, Security, and IAM on AWS  
+
+&emsp;**Thời gian:** 09:00, ngày 11 Tháng 4 năm 2026  
+
+&emsp;**Địa điểm:** Trường đại học FPT cơ sở Hồ Chí Minh  
+
+&emsp;**Vai trò trong sự kiện:** Người tham dự  
+
+&emsp;**Mô tả sự kiện:**  
+Sự kiện gồm 3 phiên kỹ thuật chính xoay quanh networking, bảo mật và quản lý truy cập trên AWS. Nội dung networking tập trung vào thiết kế VPC, Subnet, Internet Gateway, Route Table và cách kiểm soát luồng traffic cũng như "blast radius" trong hệ thống. Session IAM trình bày các best practices như nguyên tắc least privilege, sử dụng IAM Role, MFA và quản lý multi-account với AWS IAM Identity Center (SSO), kết hợp với các cơ chế kiểm soát như SCP và Permission Boundaries. Session bảo mật giới thiệu các dịch vụ bảo vệ hệ thống như AWS WAF, AWS Shield, AWS Network Firewall và Firewall Manager nhằm phòng chống DDoS và các tấn công web phổ biến.  
+
+&emsp;**Kết quả và giá trị đạt được:**  
+Thông qua sự kiện này, em hiểu rõ hơn cách thiết kế kiến trúc mạng an toàn với VPC và subnet phân tầng, kết hợp nhiều lớp bảo mật từ network đến application. Đồng thời, em nắm được cách quản lý danh tính và phân quyền trong môi trường multi-account, cũng như xây dựng tư duy bảo mật theo hướng zero-trust khi làm việc với hệ thống cloud.
+
+
